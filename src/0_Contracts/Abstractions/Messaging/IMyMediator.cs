@@ -1,5 +1,5 @@
 
-namespace MF.Contracts.Abstractions.Messaging;
+namespace ModularGodot.Contracts.Abstractions.Messaging;
 
 // In Phoenix.Abstractions/Messaging/
 // 100% PURE - NO MediatR dependency!

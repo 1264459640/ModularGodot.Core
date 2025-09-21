@@ -1,6 +1,6 @@
-using MF.Contracts.Abstractions.Bases;
-using MF.Contracts.Abstractions.Logging;
-using MF.Contracts.Abstractions.Monitoring;
+using ModularGodot.Contracts.Abstractions.Bases;
+using ModularGodot.Contracts.Abstractions.Logging;
+using ModularGodot.Contracts.Abstractions.Monitoring;
 
 namespace MF.Infrastructure.Monitoring;
 

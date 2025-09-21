@@ -1,4 +1,4 @@
-namespace MF.Contracts.Abstractions.ResourceManagement.DTOs;
+namespace ModularGodot.Contracts.Abstractions.ResourceManagement.DTOs;
 
 /// <summary>
 /// 资源系统配置

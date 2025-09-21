@@ -1,4 +1,4 @@
-namespace MF.Contracts;
+namespace ModularGodot.Contracts;
 
 public class LazySingleton<T> : IDisposable where T : new()
 {
@@ -37,6 +37,7 @@ public class LazySingleton<T> : IDisposable where T : new()
         _disposed = true;
     }
     
-    ~LazySingleton() { // 终结�?        Dispose(false);
-    }
+    ~LazySingleton() { // 终结器
+            Dispose(false);
+        }
 }

@@ -1,4 +1,4 @@
-namespace MF.Contracts.Enums;
+namespace ModularGodot.Contracts.Enums;
 
 /// <summary>
 /// 资源缓存策略枚举
@@ -6,18 +6,15 @@ namespace MF.Contracts.Enums;
 public enum ResourceCacheStrategy
 {
     /// <summary>
-    /// 默认策略 - 使用系统默认的缓存行为
-    /// </summary>
+    /// 默认策略 - 使用系统默认的缓存行�?    /// </summary>
     Default,
     
     /// <summary>
-    /// 不缓存 - 每次都重新加载资源
-    /// </summary>
+    /// 不缓�?- 每次都重新加载资�?    /// </summary>
     NoCache,
     
     /// <summary>
-    /// 内存缓存 - 将资源缓存在内存中
-    /// </summary>
+    /// 内存缓存 - 将资源缓存在内存�?    /// </summary>
     MemoryCache,
     
     /// <summary>
@@ -31,7 +28,7 @@ public enum ResourceCacheStrategy
     PermanentCache,
     
     /// <summary>
-    /// 弱引用缓存 - 使用弱引用缓存，允许垃圾回收
+    /// 弱引用缓�?- 使用弱引用缓存，允许垃圾回收
     /// </summary>
     WeakReference,
     

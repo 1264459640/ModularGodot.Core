@@ -1,4 +1,4 @@
-namespace MF.Contracts.Abstractions.Logging;
+﻿namespace ModularGodot.Contracts.Abstractions.Logging;
 
 /// <summary>
 /// 游戏日志接口 - Standard级别
@@ -13,7 +13,8 @@ public interface IGameLogger
     void LogDebug(string message, params object[] args);
     
     /// <summary>
-    /// 记录一般信�?    /// </summary>
+    /// 记录一般信息
+    /// </summary>
     /// <param name="message">消息</param>
     /// <param name="args">参数</param>
     void LogInformation(string message, params object[] args);
@@ -33,7 +34,8 @@ public interface IGameLogger
     void LogError(string message, params object[] args);
     
     /// <summary>
-    /// 记录错误信息（带异常�?    /// </summary>
+    /// 记录错误信息（带异常）
+    /// </summary>
     /// <param name="exception">异常</param>
     /// <param name="message">消息</param>
     /// <param name="args">参数</param>
@@ -47,7 +49,8 @@ public interface IGameLogger
     void LogCritical(string message, params object[] args);
     
     /// <summary>
-    /// 记录严重错误信息（带异常�?    /// </summary>
+    /// 记录严重错误信息（带异常）
+    /// </summary>
     /// <param name="exception">异常</param>
     /// <param name="message">消息</param>
     /// <param name="args">参数</param>

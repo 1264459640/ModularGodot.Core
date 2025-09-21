@@ -1,5 +1,5 @@
 using Autofac;
-using MF.Contracts;
+using ModularGodot.Contracts;
 
 namespace MF.Context;
 

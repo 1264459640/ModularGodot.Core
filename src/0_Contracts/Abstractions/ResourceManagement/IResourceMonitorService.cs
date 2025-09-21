@@ -1,6 +1,6 @@
-using MF.Contracts.Abstractions.ResourceManagement.DTOs;
+using ModularGodot.Contracts.Abstractions.ResourceManagement.DTOs;
 
-namespace MF.Contracts.Abstractions.ResourceManagement;
+namespace ModularGodot.Contracts.Abstractions.ResourceManagement;
 
 /// <summary>
 /// 资源监控查询服务接口 - Standard级别

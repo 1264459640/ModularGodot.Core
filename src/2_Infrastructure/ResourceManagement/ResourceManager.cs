@@ -1,16 +1,16 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using MF.Contracts.Events.ResourceManagement;
-using MF.Contracts.Abstractions.Bases;
-using MF.Contracts.Abstractions.Caching;
-using MF.Contracts.Abstractions.Messaging;
-using MF.Contracts.Abstractions.Monitoring;
-using MF.Contracts.Abstractions.ResourceLoading;
-using MF.Contracts.Abstractions.ResourceManagement;
-using MF.Contracts.Abstractions.ResourceManagement.DTOs;
-using MF.Contracts.Abstractions.Logging;
-using MF.Contracts.Enums;
-using MemoryPressureLevel = MF.Contracts.Events.ResourceManagement.MemoryPressureLevel;
+using ModularGodot.Contracts.Events.ResourceManagement;
+using ModularGodot.Contracts.Abstractions.Bases;
+using ModularGodot.Contracts.Abstractions.Caching;
+using ModularGodot.Contracts.Abstractions.Messaging;
+using ModularGodot.Contracts.Abstractions.Monitoring;
+using ModularGodot.Contracts.Abstractions.ResourceLoading;
+using ModularGodot.Contracts.Abstractions.ResourceManagement;
+using ModularGodot.Contracts.Abstractions.ResourceManagement.DTOs;
+using ModularGodot.Contracts.Abstractions.Logging;
+using ModularGodot.Contracts.Enums;
+using MemoryPressureLevel = ModularGodot.Contracts.Events.ResourceManagement.MemoryPressureLevel;
 
 namespace MF.Infrastructure.ResourceManagement;
 

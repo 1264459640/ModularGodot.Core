@@ -1,4 +1,4 @@
-namespace MF.Contracts.Abstractions.ResourceManagement.DTOs;
+namespace ModularGodot.Contracts.Abstractions.ResourceManagement.DTOs;
 
 /// <summary>
 /// 缓存统计信息

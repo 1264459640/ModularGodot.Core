@@ -1,6 +1,6 @@
 
 
-namespace MF.Contracts.Abstractions.ResourceManagement.DTOs;
+namespace ModularGodot.Contracts.Abstractions.ResourceManagement.DTOs;
 
 /// <summary>
 /// 内存信息（合并MemoryStatistics和MemorySnapshot�?/// </summary>

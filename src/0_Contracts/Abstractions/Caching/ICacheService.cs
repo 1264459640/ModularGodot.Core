@@ -1,4 +1,4 @@
-namespace MF.Contracts.Abstractions.Caching;
+namespace ModularGodot.Contracts.Abstractions.Caching;
 
 /// <summary>
 /// 缓存服务抽象接口 - Critical级别

@@ -1,4 +1,4 @@
-namespace MF.Contracts.Abstractions.Messaging;
+namespace ModularGodot.Contracts.Abstractions.Messaging;
 
 /// <summary>
 /// 事件基类

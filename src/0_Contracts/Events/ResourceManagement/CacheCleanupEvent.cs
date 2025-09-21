@@ -1,8 +1,8 @@
 
 
-using MF.Contracts.Abstractions.Messaging;
+using ModularGodot.Contracts.Abstractions.Messaging;
 
-namespace MF.Contracts.Events.ResourceManagement;
+namespace ModularGodot.Contracts.Events.ResourceManagement;
 
 /// <summary>
 /// 缓存清理事件

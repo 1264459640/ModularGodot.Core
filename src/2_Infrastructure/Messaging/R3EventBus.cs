@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
-using MF.Contracts.Abstractions.Bases;
-using MF.Contracts.Abstractions.Messaging;
-using MF.Contracts.Abstractions.Logging;
+using ModularGodot.Contracts.Abstractions.Bases;
+using ModularGodot.Contracts.Abstractions.Messaging;
+using ModularGodot.Contracts.Abstractions.Logging;
 using R3;
 using ObservableExtensions = System.ObservableExtensions;
 
@@ -10,7 +10,7 @@ namespace MF.Infrastructure.EventBus;
 /// <summary>
 /// 基于R3的事件总线实现
 /// </summary>
-public class R3EventBus : BaseInfrastructure, IEventBus, IEventSubscriber
+public class R3EventBus : BaseInfrastructure, IEventBus
 {
     private readonly ConcurrentDictionary<Type, System.Reactive.Subjects.Subject<object>> _subjects = new();
     private readonly CompositeDisposable _disposables = new();
@@ -18,13 +18,12 @@ public class R3EventBus : BaseInfrastructure, IEventBus, IEventSubscriber
     private readonly object _lock = new();
     
     /// <summary>
-    /// 基于R3的事件总线实现
+    /// 构造函数
     /// </summary>
-    /// <param name="logger"></param>
+    /// <param name="logger">日志记录器</param>
     public R3EventBus(IGameLogger logger)
     {
-        _logger = logger;
-        
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _logger.LogInformation("R3EventBus initialized");
     }
     
@@ -154,6 +153,8 @@ public class R3EventBus : BaseInfrastructure, IEventBus, IEventSubscriber
         });
         return subscription;
     }
+
+
     
     private System.Reactive.Subjects.Subject<object> GetOrCreateSubject<TEvent>() where TEvent : EventBase
     {

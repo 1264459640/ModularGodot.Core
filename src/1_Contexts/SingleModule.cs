@@ -1,6 +1,6 @@
 using System.Reflection;
 using Autofac;
-using MF.Contracts.Attributes;
+using ModularGodot.Contracts.Attributes;
 using Microsoft.Extensions.Caching.Memory;
 using Module = Autofac.Module;
 
@@ -12,7 +12,7 @@ public class SingleModule : Module
     private readonly string[] _assemblyPatterns;
 
     /// <summary>
-    /// 默认构造函数，使用默认的程序集搜索路径和模式
+    /// 默认构造函数，使用默认的程序集搜索路径和模�?
     /// </summary>
     public SingleModule() : this(GetDefaultSearchPaths(), GetDefaultAssemblyPatterns())
     {
@@ -21,7 +21,7 @@ public class SingleModule : Module
     /// <summary>
     /// 自定义构造函数，允许指定程序集搜索路径和模式
     /// </summary>
-    /// <param name="assemblySearchPaths">程序集搜索路径数组</param>
+    /// <param name="assemblySearchPaths">程序集搜索路径数�?/param>
     /// <param name="assemblyPatterns">程序集文件名模式数组</param>
     public SingleModule(string[] assemblySearchPaths, string[] assemblyPatterns)
     {
@@ -33,12 +33,12 @@ public class SingleModule : Module
     {
         try
         {
-            // 显式注册 IMemoryCache（MemoryCacheService 依赖）
+            // 显式注册 IMemoryCache（MemoryCacheService 依赖�?
             builder.RegisterInstance(new MemoryCache(new MemoryCacheOptions()))
                 .As<IMemoryCache>()
                 .SingleInstance();
 
-            // 动态发现并加载程序集
+            // 动态发现并加载程序�?
             var discoveredAssemblies = DiscoverAssemblies();
             
             foreach (var assembly in discoveredAssemblies)
@@ -77,7 +77,7 @@ public class SingleModule : Module
     }
 
     /// <summary>
-    /// 获取默认的程序集文件名模式
+    /// 获取默认的程序集文件名模�?
     /// </summary>
     private static string[] GetDefaultAssemblyPatterns()
     {
@@ -120,7 +120,7 @@ public class SingleModule : Module
                         {
                             var assemblyName = Path.GetFileNameWithoutExtension(file);
                             
-                            // 避免重复加载同名程序集
+                            // 避免重复加载同名程序�?
                             if (loadedAssemblyNames.Contains(assemblyName))
                             {
                                 continue;
@@ -213,7 +213,7 @@ public class SingleModule : Module
     }
     
     /// <summary>
-    /// 注册程序集中的所有类型
+    /// 注册程序集中的所有类�?
     /// </summary>
     private void RegisterAssemblyTypes(Assembly assembly, ContainerBuilder builder)
     {
@@ -222,9 +222,9 @@ public class SingleModule : Module
             var types = assembly.GetTypes()
                 .Where(t => t.IsClass && !t.IsAbstract)
                 .Where(t => !t.IsDefined(typeof(SkipRegistrationAttribute), false))
-                // 过滤开放泛型，仍包含未闭合类型参数的类型
+                // 过滤开放泛型，仍包含未闭合类型参数的类�?
                 .Where(t => !t.IsGenericTypeDefinition && !t.ContainsGenericParameters)
-                // 过滤编译器生成的类型（闭包类、状态机、匿名类型等）
+                // 过滤编译器生成的类型（闭包类、状态机、匿名类型等�?
                 .Where(t => !IsCompilerGeneratedType(t));
             
             foreach (var type in types)

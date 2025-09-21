@@ -1,4 +1,4 @@
-namespace MF.Contracts.Abstractions.ResourceLoading;
+namespace ModularGodot.Contracts.Abstractions.ResourceLoading;
 
 /// <summary>
 /// 资源加载器统计信�?/// </summary>

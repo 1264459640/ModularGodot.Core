@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>ModularGodot.Core</id>
+    <version>0.1.0</version>
+    <authors>BananaPeel</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <description>A modular architecture framework for Godot applications, providing clean architecture patterns with dependency injection, CQRS, and domain-driven design support.</description>
+    <tags>godot modular architecture clean-architecture ddd cqrs dependency-injection</tags>
+    <repository type="git" url="https://github.com/1264459640/ModularGodot.Core" commit="52748d3097d6529371f4cbf2a5fe5bcea252b66a" />
+    <dependencies>
+      <group targetFramework="net9.0" />
+    </dependencies>
+  </metadata>
+</package>

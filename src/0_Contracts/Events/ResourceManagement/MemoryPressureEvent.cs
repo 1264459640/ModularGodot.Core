@@ -1,6 +1,6 @@
-using MF.Contracts.Abstractions.Messaging;
+using ModularGodot.Contracts.Abstractions.Messaging;
 
-namespace MF.Contracts.Events.ResourceManagement;
+namespace ModularGodot.Contracts.Events.ResourceManagement;
 
 /// <summary>
 /// 内存压力事件

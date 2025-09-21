@@ -1,4 +1,4 @@
-namespace MF.Contracts.Abstractions.Monitoring;
+namespace ModularGodot.Contracts.Abstractions.Monitoring;
 
 /// <summary>
 /// 性能监控接口

@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using Godot;
-using MF.Contracts.Abstractions.Bases;
-using MF.Contracts.Abstractions.Logging;
+using ModularGodot.Contracts.Abstractions.Bases;
+using ModularGodot.Contracts.Abstractions.Logging;
 
 
 namespace MF.Infrastructure.Logging;

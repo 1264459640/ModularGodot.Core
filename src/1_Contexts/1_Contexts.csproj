@@ -5,16 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     
-    <!-- NuGet Package Properties -->
-    <PackageId>ModularGodot.Core.Contexts</PackageId>
-    <Version>0.1.0</Version>
-    <Authors>BananaPeel</Authors>
-    <Company>BananaPeel</Company>
-    <Product>ModularGodot.Core</Product>
-    <Description>Contexts layer for ModularGodot.Core - Contains dependency injection contexts, mediator modules and application contexts</Description>
-    <PackageTags>godot;modular;contexts;mediator;dependency-injection</PackageTags>
-    <RepositoryUrl>https://github.com/1264459640/ModularGodot.Core</RepositoryUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <!-- 禁用独立包生成，由主项目统一打包 -->
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <IsPackable>false</IsPackable>

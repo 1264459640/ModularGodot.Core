@@ -1,4 +1,4 @@
-namespace MF.Contracts.Attributes;
+namespace ModularGodot.Contracts.Attributes;
 
 /// <summary>
 /// 标记类跳过自动容器注册的属�?

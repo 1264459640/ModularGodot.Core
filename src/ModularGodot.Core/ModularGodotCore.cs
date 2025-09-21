@@ -1,18 +1,17 @@
-using MF.Contracts.Abstractions.Logging;
-using MF.Contracts.Abstractions.Messaging;
-using MF.Contracts.Abstractions.ResourceLoading;
-using MF.Contracts.Abstractions.ResourceManagement;
-using MF.Contracts.Abstractions.Caching;
-using MF.Contracts.Abstractions.Monitoring;
-using MF.Contracts.Enums;
-using MF.Contracts.Abstractions.Bases;
+using ModularGodot.Contracts.Abstractions.Logging;
+using ModularGodot.Contracts.Abstractions.Messaging;
+using ModularGodot.Contracts.Abstractions.ResourceLoading;
+using ModularGodot.Contracts.Abstractions.ResourceManagement;
+using ModularGodot.Contracts.Abstractions.Caching;
+using ModularGodot.Contracts.Abstractions.Monitoring;
+using ModularGodot.Contracts.Enums;
+using ModularGodot.Contracts.Abstractions.Bases;
 
 namespace ModularGodot.Core;
 
 /// <summary>
 /// ModularGodot.Core 主入口类
-/// 提供统一的API来访问所有模块功能
-/// </summary>
+/// 提供统一的API来访问所有模块功�?/// </summary>
 public static class ModularGodotCore
 {
     /// <summary>
@@ -21,13 +20,11 @@ public static class ModularGodotCore
     public static string Version => "0.1.0";
     
     /// <summary>
-    /// 获取包描述
-    /// </summary>
+    /// 获取包描�?    /// </summary>
     public static string Description => "Complete ModularGodot.Core package for modular Godot game development";
     
     /// <summary>
-    /// 获取支持的功能列表
-    /// </summary>
+    /// 获取支持的功能列�?    /// </summary>
     public static string[] SupportedFeatures => new[]
     {
         "Dependency Injection (Autofac)",
