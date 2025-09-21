@@ -13,11 +13,11 @@
     <Product>ModularGodot.Core</Product>
     <Description>Infrastructure layer for ModularGodot.Core - Contains caching, logging, messaging, monitoring and resource management implementations</Description>
     <PackageTags>godot;modular;infrastructure;caching;logging;messaging</PackageTags>
-    <RepositoryUrl>https://github.com/BananaPeel/ModularGodot.Core</RepositoryUrl>
+    <RepositoryUrl>https://github.com/1264459640/ModularGodot.Core</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <!-- 禁用独立包生成，由主项目统一打包 -->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

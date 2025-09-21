@@ -15,15 +15,15 @@
     <PackageTags>godot;modular;contexts;mediator;dependency-injection</PackageTags>
     <RepositoryUrl>https://github.com/1264459640/ModularGodot.Core</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <!-- 禁用独立包生成，由主项目统一打包 -->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-      <PackageReference Include="Autofac" Version="8.3.0" />
-      <PackageReference Include="MediatR" Version="12.5.0" />
-      <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="12.3.0" />
+      <PackageReference Include="Autofac" Version="8.4.0" />
+      <PackageReference Include="MediatR" Version="13.0.0" />
+      <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="13.1.0" />
       <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.7" />
     </ItemGroup>
 

@@ -12,7 +12,8 @@ public class MediatorModule : Autofac.Module
         // 注册所有命令处理程序和通知处理程序
         var servicesAssembly = Assembly.Load("MF.Services");
         var cqrsAssembly = Assembly.Load("MF.CQRS");
-        var configuration = MediatRConfigurationBuilder.Create(servicesAssembly, cqrsAssembly)
+        var configuration = MediatRConfigurationBuilder
+            .Create("free-license", servicesAssembly, cqrsAssembly)
             .WithAllOpenGenericHandlerTypesRegistered()
             .Build();
         builder.RegisterMediatR(configuration);
