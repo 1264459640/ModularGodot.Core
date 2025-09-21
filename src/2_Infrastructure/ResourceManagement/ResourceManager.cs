@@ -1,19 +1,21 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using MF.Contracts.Events.ResourceManagement;
-using MF.Contracts.Infrs.Bases;
-using MF.Contracts.Infrs.Caching;
-using MF.Contracts.Infrs.EventBus;
-using MF.Contracts.Infrs.Monitoring;
-using MF.Contracts.Infrs.ResourceLoading;
-using MF.Contracts.Infrs.ResourceManagement;
-using MF.Contracts.Infrs.ResourceManagement.Models;
+using MF.Contracts.Abstractions.Bases;
+using MF.Contracts.Abstractions.Caching;
+using MF.Contracts.Abstractions.Messaging;
+using MF.Contracts.Abstractions.Monitoring;
+using MF.Contracts.Abstractions.ResourceLoading;
+using MF.Contracts.Abstractions.ResourceManagement;
+using MF.Contracts.Abstractions.ResourceManagement.DTOs;
+using MF.Contracts.Abstractions.Logging;
+using MF.Contracts.Enums;
 using MemoryPressureLevel = MF.Contracts.Events.ResourceManagement.MemoryPressureLevel;
 
 namespace MF.Infrastructure.ResourceManagement;
 
 /// <summary>
-/// 资源管理器 - 系统核心协调组件
+/// 资源管理�?- 系统核心协调组件
 /// </summary>
 public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResourceMonitorService
 {
@@ -139,7 +141,7 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
             var expiration = GetExpirationFromStrategy(cacheStrategy);
             await _cacheService.SetAsync(key, resource, expiration, cancellationToken);
             
-            // 记录缓存项，即便是永久缓存（LongLived）也要追踪
+            // 记录缓存项，即便是永久缓存（LongLived）也要追�?
             var expiryTime = expiration.HasValue ? DateTime.UtcNow.Add(expiration.Value) : DateTime.MaxValue;
             _cacheItems.TryAdd(key, expiryTime);
             
@@ -275,7 +277,7 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
         _config.EnablePerformanceMonitoring = config.EnablePerformanceMonitoring;
         _config.MaxCacheItems = config.MaxCacheItems;
         
-        // 更新内存监控器配置
+        // 更新内存监控器配�?
         _memoryMonitor.MemoryPressureThreshold = config.MemoryPressureThreshold;
         
         return Task.CompletedTask;
@@ -316,7 +318,7 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
             var itemsBeforeCleanup = _cacheItems.Count;
             var now = DateTime.UtcNow;
             
-            // 清理过期项
+            // 清理过期�?
             var expiredKeys = _cacheItems
                 .Where(kvp => kvp.Value < now)
                 .Select(kvp => kvp.Key)
@@ -329,7 +331,7 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
             }
             
             var itemsAfterCleanup = _cacheItems.Count;
-            var memoryFreed = (itemsBeforeCleanup - itemsAfterCleanup) * 1024; // 估算释放的内存
+            var memoryFreed = (itemsBeforeCleanup - itemsAfterCleanup) * 1024; // 估算释放的内�?
             
             // 发布清理事件
             await _eventBus.PublishAsync(new CacheCleanupEvent(reason, itemsBeforeCleanup, itemsAfterCleanup, memoryFreed));
@@ -349,7 +351,7 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
                 _performanceMonitor.RecordCounter("cache_cleanup_errors");
             }
             
-            // 可以考虑记录日志或发布错误事件
+            // 可以考虑记录日志或发布错误事�?
         }
     }
     

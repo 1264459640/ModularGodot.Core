@@ -1,8 +1,8 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using MF.Contracts.Infrs.Bases;
-using MF.Contracts.Infrs.Logging;
-using MF.Contracts.Infrs.Monitoring;
+using MF.Contracts.Abstractions.Bases;
+using MF.Contracts.Abstractions.Logging;
+using MF.Contracts.Abstractions.Monitoring;
 
 namespace MF.Infrastructure.Monitoring;
 
@@ -45,7 +45,7 @@ public class PerformanceMonitor : BaseInfrastructure, IPerformanceMonitor
                 metricData.Max = Math.Max(metricData.Max, value);
                 metricData.LastUpdated = DateTime.UtcNow;
                 
-                // 保持最近1000个值
+                // 保持最�?000个�?
                 if (metricData.Values.Count > 1000)
                 {
                     metricData.Values.RemoveAt(0);
@@ -98,7 +98,7 @@ public class PerformanceMonitor : BaseInfrastructure, IPerformanceMonitor
                 timerData.MaxTime = TimeSpan.FromTicks(Math.Max(timerData.MaxTime.Ticks, duration.Ticks));
                 timerData.LastUpdated = DateTime.UtcNow;
                 
-                // 保持最近1000个值
+                // 保持最�?000个�?
                 if (timerData.Durations.Count > 1000)
                 {
                     timerData.Durations.RemoveAt(0);
@@ -160,7 +160,7 @@ public class PerformanceMonitor : BaseInfrastructure, IPerformanceMonitor
         {
             _logger.LogInformation("Disposing PerformanceMonitor");
             
-            // 完成所有活跃的计时器
+            // 完成所有活跃的计时�?
             foreach (var timer in _activeTimers.Values)
             {
                 timer.Dispose();
@@ -194,7 +194,7 @@ internal class MetricData
 }
 
 /// <summary>
-/// 计时器数据
+/// 计时器数�?
 /// </summary>
 internal class TimerData
 {
@@ -209,7 +209,7 @@ internal class TimerData
 }
 
 /// <summary>
-/// 活跃计时器
+/// 活跃计时�?
 /// </summary>
 internal class ActiveTimer : IDisposable
 {

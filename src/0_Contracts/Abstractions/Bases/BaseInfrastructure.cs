@@ -9,11 +9,13 @@ public abstract class BaseInfrastructure : IDisposable
     protected readonly CancellationTokenSource CancellationTokenSource = new();
 
     /// <summary>
-    /// 获取对象是否已释�?    /// </summary>
+    /// 获取对象是否已释放
+    /// </summary>
     protected bool IsDisposed => _disposed;
 
     /// <summary>
-    /// 检查对象是否已释放，如果已释放则抛出异�?    /// </summary>
+    /// 检查对象是否已释放，如果已释放则抛出异常
+    /// </summary>
     /// <exception cref="ObjectDisposedException">对象已释放时抛出</exception>
     protected void CheckDisposed()
     {
@@ -30,7 +32,11 @@ public abstract class BaseInfrastructure : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    // 受保护的虚方法，支持派生类扩�?    protected virtual void Dispose(bool disposing)
+    /// <summary>
+    /// 受保护的虚方法，支持派生类扩展
+    /// </summary>
+    /// <param name="disposing">是否正在释放托管资源</param>
+    protected virtual void Dispose(bool disposing)
     {
         if (_disposed) return;
         Unsubscribe();
@@ -41,10 +47,11 @@ public abstract class BaseInfrastructure : IDisposable
     }
 
     /// <summary>
-    /// 取消订阅事件，派生类应重写此方法以取消订阅相关事�?    /// </summary>
+    /// 取消订阅事件，派生类应重写此方法以取消订阅相关事件
+    /// </summary>
     protected virtual void Unsubscribe() { }
 
-    // 终结器（析构函数），用于未显式调�?Dispose 时的补救
+    // 终结器（析构函数），用于未显式调用Dispose时的补救
     ~BaseInfrastructure()
     {
         Dispose(false);

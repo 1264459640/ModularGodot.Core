@@ -1,6 +1,6 @@
 // In Phoenix.Infrastructure.Mediator.MediatR
 using MediatR;
-using MF.Contracts.Infrs.Messaging;
+using MF.Contracts.Abstractions.Messaging;
 
 namespace MF.Infrastructure.Messaging;
 

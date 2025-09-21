@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    
+    <!-- NuGet Package Properties -->
+    <PackageId>ModularGodot.Core.Contracts</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>BananaPeel</Authors>
+    <Company>BananaPeel</Company>
+    <Product>ModularGodot.Core</Product>
+    <Description>Contracts layer for ModularGodot.Core - Contains interfaces, abstractions, events and core contracts</Description>
+    <PackageTags>godot;modular;contracts;interfaces;events</PackageTags>
+    <RepositoryUrl>https://github.com/BananaPeel/ModularGodot.Core</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Infrs\" />
+  </ItemGroup>
+
+</Project>

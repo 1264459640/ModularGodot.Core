@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    
+    <!-- NuGet Package Properties -->
+    <PackageId>ModularGodot.Core.Repositories</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>BananaPeel</Authors>
+    <Company>BananaPeel</Company>
+    <Product>ModularGodot.Core</Product>
+    <Description>Repositories layer for ModularGodot.Core - Contains data access patterns and repository implementations</Description>
+    <PackageTags>godot;modular;repositories;data-access;patterns</PackageTags>
+    <RepositoryUrl>https://github.com/BananaPeel/ModularGodot.Core</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+</Project>

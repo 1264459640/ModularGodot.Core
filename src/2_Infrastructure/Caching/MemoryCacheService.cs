@@ -1,8 +1,8 @@
 using System.Collections.Concurrent;
 using System.Text.Json;
-using MF.Contracts.Infrs.Bases;
-using MF.Contracts.Infrs.Caching;
-using MF.Contracts.Infrs.Logging;
+using MF.Contracts.Abstractions.Bases;
+using MF.Contracts.Abstractions.Caching;
+using MF.Contracts.Abstractions.Logging;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace MF.Infrastructure.Caching;
@@ -87,7 +87,7 @@ public class MemoryCacheService : BaseInfrastructure, ICacheService
             // 设置缓存大小限制
             options.Size = CalculateSize(value);
             
-            // 设置缓存优先级
+            // 设置缓存优先�?
             options.Priority = CacheItemPriority.Normal;
             
             // 设置过期回调
@@ -159,7 +159,7 @@ public class MemoryCacheService : BaseInfrastructure, ICacheService
         {
             if (_memoryCache is MemoryCache mc)
             {
-                mc.Compact(1.0); // 清空所有缓存
+                mc.Compact(1.0); // 清空所有缓�?
             }
             
             _entries.Clear();
@@ -226,7 +226,7 @@ public class MemoryCacheService : BaseInfrastructure, ICacheService
             // 清理缓存
             if (_memoryCache is MemoryCache mc)
             {
-                mc.Compact(1.0); // 清空所有缓存
+                mc.Compact(1.0); // 清空所有缓�?
             }
             
             _entries.Clear();

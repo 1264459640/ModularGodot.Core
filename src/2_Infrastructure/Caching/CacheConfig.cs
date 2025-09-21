@@ -11,8 +11,7 @@ public class CacheConfig
     public TimeSpan DefaultExpiration { get; set; } = TimeSpan.FromHours(1);
     
     /// <summary>
-    /// 最大缓存大小（字节）
-    /// </summary>
+    /// 最大缓存大小（字节�?    /// </summary>
     public long MaxCacheSize { get; set; } = 100 * 1024 * 1024; // 100MB
     
     /// <summary>
@@ -21,13 +20,11 @@ public class CacheConfig
     public bool EnableStatistics { get; set; } = true;
     
     /// <summary>
-    /// 缓存压缩阈值
-    /// </summary>
+    /// 缓存压缩阈�?    /// </summary>
     public double CompactionPercentage { get; set; } = 0.8;
     
     /// <summary>
-    /// 是否使用分布式缓存
-    /// </summary>
+    /// 是否使用分布式缓�?    /// </summary>
     public bool UseDistributedCache { get; set; } = false;
     
     /// <summary>

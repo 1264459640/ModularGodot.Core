@@ -35,7 +35,7 @@ public class Contexts : LazySingleton<Contexts>
     /// 尝试从容器中解析服务
     /// </summary>
     /// <typeparam name="T">服务类型</typeparam>
-    /// <param name="service">输出的服务实例</param>
+    /// <param name="service">输出的服务实�?/param>
     /// <returns>是否解析成功</returns>
     public bool TryResolveService<T>(out T? service) where T : class
     {
@@ -46,7 +46,7 @@ public class Contexts : LazySingleton<Contexts>
     /// 检查服务是否已注册
     /// </summary>
     /// <typeparam name="T">服务类型</typeparam>
-    /// <returns>是否已注册</returns>
+    /// <returns>是否已注�?/returns>
     public bool IsServiceRegistered<T>() where T : class
     {
         return Container.IsRegistered<T>();

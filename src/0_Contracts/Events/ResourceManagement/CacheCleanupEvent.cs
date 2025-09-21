@@ -1,6 +1,6 @@
 
 
-using MF.Contracts.Infrs.EventBus;
+using MF.Contracts.Abstractions.Messaging;
 
 namespace MF.Contracts.Events.ResourceManagement;
 
@@ -15,27 +15,27 @@ public class CacheCleanupEvent : EventBase
     public CacheCleanupReason Reason { get; }
     
     /// <summary>
-    /// 清理前项目数量
+    /// 清理前项目数�?
     /// </summary>
     public int ItemsBeforeCleanup { get; }
     
     /// <summary>
-    /// 清理后项目数量
+    /// 清理后项目数�?
     /// </summary>
     public int ItemsAfterCleanup { get; }
     
     /// <summary>
-    /// 释放的内存大小（字节）
+    /// 释放的内存大小（字节�?
     /// </summary>
     public long MemoryFreed { get; }
     
     /// <summary>
-    /// 构造函数
+    /// 构造函�?
     /// </summary>
     /// <param name="reason">清理原因</param>
-    /// <param name="itemsBeforeCleanup">清理前项目数量</param>
-    /// <param name="itemsAfterCleanup">清理后项目数量</param>
-    /// <param name="memoryFreed">释放的内存大小</param>
+    /// <param name="itemsBeforeCleanup">清理前项目数�?/param>
+    /// <param name="itemsAfterCleanup">清理后项目数�?/param>
+    /// <param name="memoryFreed">释放的内存大�?/param>
     public CacheCleanupEvent(CacheCleanupReason reason, int itemsBeforeCleanup, int itemsAfterCleanup, long memoryFreed)
         : base("CacheService")
     {

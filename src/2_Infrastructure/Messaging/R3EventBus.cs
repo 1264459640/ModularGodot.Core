@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
-using MF.Contracts.Infrs.Bases;
-using MF.Contracts.Infrs.EventBus;
-using MF.Contracts.Infrs.Logging;
+using MF.Contracts.Abstractions.Bases;
+using MF.Contracts.Abstractions.Messaging;
+using MF.Contracts.Abstractions.Logging;
 using R3;
 using ObservableExtensions = System.ObservableExtensions;
 
@@ -10,7 +10,7 @@ namespace MF.Infrastructure.EventBus;
 /// <summary>
 /// 基于R3的事件总线实现
 /// </summary>
-public class R3EventBus : BaseInfrastructure, IEventBus
+public class R3EventBus : BaseInfrastructure, IEventBus, IEventSubscriber
 {
     private readonly ConcurrentDictionary<Type, System.Reactive.Subjects.Subject<object>> _subjects = new();
     private readonly CompositeDisposable _disposables = new();
@@ -108,7 +108,7 @@ public class R3EventBus : BaseInfrastructure, IEventBus
         }
     }
     
-    public IDisposable Subscribe<TEvent>(Func<TEvent, Task> handler) where TEvent : EventBase
+    public IDisposable Subscribe<TEvent>(Func<TEvent, CancellationToken, Task> handler, CancellationToken cancellationToken = default) where TEvent : EventBase
     {
         return Subscribe<TEvent>(evt =>
         {
@@ -117,13 +117,13 @@ public class R3EventBus : BaseInfrastructure, IEventBus
             {
                 try
                 {
-                    await handler(evt);
+                    await handler(evt, cancellationToken);
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error in async event handler for: {EventType}", typeof(TEvent).Name);
                 }
-            });
+            }, cancellationToken);
         });
     }
     

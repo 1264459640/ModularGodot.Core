@@ -4,7 +4,6 @@ namespace MF.Contracts.Abstractions.Messaging;
 // In Phoenix.Abstractions/Messaging/
 // 100% PURE - NO MediatR dependency!
 
-// 我们的命�?查询接口
 public interface ICommand<out TResponse> { }
 public interface IQuery<out TResponse> { }
 
