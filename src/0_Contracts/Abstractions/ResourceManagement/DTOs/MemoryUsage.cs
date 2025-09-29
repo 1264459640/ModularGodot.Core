@@ -6,7 +6,7 @@ namespace ModularGodot.Contracts.Abstractions.ResourceManagement.DTOs;
 public class MemoryUsage
 {
     /// <summary>
-    /// 当前内存使用量（字节�?
+    /// 当前内存使用量（字节�?
     /// </summary>
     public long CurrentUsage { get; set; }
     
@@ -16,7 +16,7 @@ public class MemoryUsage
     public long MaxUsage { get; set; }
     
     /// <summary>
-    /// 内存使用百分�?
+    /// 内存使用百分�?
     /// </summary>
     public double UsagePercentage { get; set; }
     
@@ -31,7 +31,7 @@ public class MemoryUsage
     public int GCCollectionCount { get; set; }
     
     /// <summary>
-    /// 最后检查时�?
+    /// 最后检查时�?
     /// </summary>
     public DateTime LastChecked { get; set; } = DateTime.UtcNow;
 }

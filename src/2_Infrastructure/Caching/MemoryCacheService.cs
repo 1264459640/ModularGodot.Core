@@ -5,12 +5,15 @@ using ModularGodot.Contracts.Abstractions.Caching;
 using ModularGodot.Contracts.Abstractions.Logging;
 using ModularGodot.Infrastructure.Caching;
 using Microsoft.Extensions.Caching.Memory;
+using ModularGodot.Contracts.Attributes;
 
-namespace MF.Infrastructure.Caching;
+namespace ModularGodot.Infrastructure.Caching;
 
 /// <summary>
 /// 内存缓存服务实现
 /// </summary>
+/// /// 
+[Injectable]
 public class MemoryCacheService : BaseInfrastructure, ICacheService
 {
     private readonly IMemoryCache _memoryCache;

@@ -8,12 +8,12 @@ namespace ModularGodot.Contracts.Events.ResourceManagement;
 public class MemoryPressureEvent : EventBase
 {
     /// <summary>
-    /// 当前内存使用量（字节�?
+    /// 当前内存使用量（字节�?
     /// </summary>
     public long CurrentMemoryUsage { get; }
     
     /// <summary>
-    /// 内存使用百分�?
+    /// 内存使用百分�?
     /// </summary>
     public double UsagePercentage { get; }
     
@@ -23,10 +23,10 @@ public class MemoryPressureEvent : EventBase
     public MemoryPressureLevel PressureLevel { get; }
     
     /// <summary>
-    /// 构造函�?
+    /// 构造函�?
     /// </summary>
-    /// <param name="currentMemoryUsage">当前内存使用�?/param>
-    /// <param name="usagePercentage">使用百分�?/param>
+    /// <param name="currentMemoryUsage">当前内存使用�?/param>
+    /// <param name="usagePercentage">使用百分�?/param>
     /// <param name="pressureLevel">压力级别</param>
     public MemoryPressureEvent(long currentMemoryUsage, double usagePercentage, MemoryPressureLevel pressureLevel)
         : base("ResourceManager")

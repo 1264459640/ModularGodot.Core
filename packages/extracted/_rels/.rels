@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Type="http://schemas.microsoft.com/packaging/2010/07/manifest" Target="/ModularGodot.Core.nuspec" Id="R6B58403F7AEE0F31" />
-  <Relationship Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="/package/services/metadata/core-properties/ab9b7a594ccc4c35bdc8bb58d6295d86.psmdcp" Id="R34BA4686A910FD70" />
-</Relationships>

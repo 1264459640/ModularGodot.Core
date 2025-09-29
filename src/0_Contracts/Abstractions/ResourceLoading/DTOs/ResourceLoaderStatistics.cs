@@ -1,11 +1,11 @@
 namespace ModularGodot.Contracts.Abstractions.ResourceLoading;
 
 /// <summary>
-/// 资源加载器统计信�?/// </summary>
+/// 资源加载器统计信�?/// </summary>
 public class ResourceLoaderStatistics
 {
     /// <summary>
-    /// 总加载次�?    /// </summary>
+    /// 总加载次�?    /// </summary>
     public long TotalLoads { get; set; }
     
     /// <summary>
@@ -24,15 +24,15 @@ public class ResourceLoaderStatistics
     public long CacheHits { get; set; }
     
     /// <summary>
-    /// 缓存未命中次�?    /// </summary>
+    /// 缓存未命中次�?    /// </summary>
     public long CacheMisses { get; set; }
     
     /// <summary>
-    /// 预加载次�?    /// </summary>
+    /// 预加载次�?    /// </summary>
     public long PreloadCount { get; set; }
     
     /// <summary>
-    /// 总加载时�?    /// </summary>
+    /// 总加载时�?    /// </summary>
     public TimeSpan TotalLoadTime { get; set; }
     
     /// <summary>
@@ -41,11 +41,11 @@ public class ResourceLoaderStatistics
     public TimeSpan AverageLoadTime => TotalLoads > 0 ? TimeSpan.FromTicks(TotalLoadTime.Ticks / TotalLoads) : TimeSpan.Zero;
     
     /// <summary>
-    /// 最快加载时�?    /// </summary>
+    /// 最快加载时�?    /// </summary>
     public TimeSpan FastestLoadTime { get; set; } = TimeSpan.MaxValue;
     
     /// <summary>
-    /// 最慢加载时�?    /// </summary>
+    /// 最慢加载时�?    /// </summary>
     public TimeSpan SlowestLoadTime { get; set; }
     
     /// <summary>
@@ -54,15 +54,15 @@ public class ResourceLoaderStatistics
     public long TotalBytesLoaded { get; set; }
     
     /// <summary>
-    /// 当前活跃加载�?    /// </summary>
+    /// 当前活跃加载�?    /// </summary>
     public int ActiveLoads { get; set; }
     
     /// <summary>
-    /// 缓存命中�?    /// </summary>
+    /// 缓存命中�?    /// </summary>
     public double CacheHitRate => (CacheHits + CacheMisses) > 0 ? (double)CacheHits / (CacheHits + CacheMisses) : 0.0;
     
     /// <summary>
-    /// 成功�?    /// </summary>
+    /// 成功�?    /// </summary>
     public double SuccessRate => TotalLoads > 0 ? (double)SuccessfulLoads / TotalLoads : 0.0;
     
     /// <summary>
@@ -76,11 +76,11 @@ public class ResourceLoaderStatistics
     public List<ResourceLoadError> RecentErrors { get; set; } = new();
     
     /// <summary>
-    /// 统计开始时�?    /// </summary>
+    /// 统计开始时�?    /// </summary>
     public DateTime StartTime { get; set; } = DateTime.UtcNow;
     
     /// <summary>
-    /// 最后更新时�?    /// </summary>
+    /// 最后更新时�?    /// </summary>
     public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
     
     public override string ToString()
@@ -105,7 +105,7 @@ public class ResourceTypeStatistics
     public long LoadCount { get; set; }
     
     /// <summary>
-    /// 总加载时�?    /// </summary>
+    /// 总加载时�?    /// </summary>
     public TimeSpan TotalLoadTime { get; set; }
     
     /// <summary>

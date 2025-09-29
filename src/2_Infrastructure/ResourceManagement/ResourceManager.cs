@@ -5,18 +5,18 @@ using ModularGodot.Contracts.Abstractions.Bases;
 using ModularGodot.Contracts.Abstractions.Caching;
 using ModularGodot.Contracts.Abstractions.Messaging;
 using ModularGodot.Contracts.Abstractions.Monitoring;
-using ModularGodot.Contracts.Abstractions.ResourceLoading;
 using ModularGodot.Contracts.Abstractions.ResourceManagement;
 using ModularGodot.Contracts.Abstractions.ResourceManagement.DTOs;
-using ModularGodot.Contracts.Abstractions.Logging;
 using ModularGodot.Contracts.Enums;
 using MemoryPressureLevel = ModularGodot.Contracts.Events.ResourceManagement.MemoryPressureLevel;
+using ModularGodot.Contracts.Attributes;
 
-namespace MF.Infrastructure.ResourceManagement;
+namespace ModularGodot.Infrastructure.ResourceManagement;
 
 /// <summary>
 /// 资源管理�?- 系统核心协调组件
 /// </summary>
+[Injectable]
 public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResourceMonitorService
 {
     private readonly ICacheService _cacheService;

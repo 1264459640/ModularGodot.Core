@@ -31,12 +31,12 @@ public class PerformanceReport
     public TimeSpan AverageResponseTime { get; set; }
     
     /// <summary>
-    /// 最快响应时�?
+    /// 最快响应时�?
     /// </summary>
     public TimeSpan FastestResponseTime { get; set; }
     
     /// <summary>
-    /// 最慢响应时�?
+    /// 最慢响应时�?
     /// </summary>
     public TimeSpan SlowestResponseTime { get; set; }
     

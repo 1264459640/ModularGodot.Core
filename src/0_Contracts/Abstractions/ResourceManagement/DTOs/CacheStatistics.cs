@@ -11,7 +11,7 @@ public class CacheStatistics
     public int TotalItems { get; set; }
     
     /// <summary>
-    /// 缓存总大小（字节�?
+    /// 缓存总大小（字节�?
     /// </summary>
     public long TotalSize { get; set; }
     
@@ -21,22 +21,22 @@ public class CacheStatistics
     public int HitCount { get; set; }
     
     /// <summary>
-    /// 缓存未命中次�?
+    /// 缓存未命中次�?
     /// </summary>
     public int MissCount { get; set; }
     
     /// <summary>
-    /// 缓存命中�?
+    /// 缓存命中�?
     /// </summary>
     public double HitRate => (HitCount + MissCount) > 0 ? (double)HitCount / (HitCount + MissCount) : 0;
     
     /// <summary>
-    /// 过期项数�?
+    /// 过期项数�?
     /// </summary>
     public int ExpiredItems { get; set; }
     
     /// <summary>
-    /// 最后更新时�?
+    /// 最后更新时�?
     /// </summary>
     public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
 }

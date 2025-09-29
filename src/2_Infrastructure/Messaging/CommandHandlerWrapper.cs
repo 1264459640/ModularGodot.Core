@@ -1,40 +1,13 @@
-using Autofac;
 using MediatR;
 using ModularGodot.Contracts.Abstractions.Messaging;
 
-namespace ModularGodot.Infrastructure.Messaging
+namespace ModularGodot.Infrastructure.Messaging;
+
+public class CommandHandlerWrapper<TCommand, TResponse> : IRequestHandler<CommandWrapper<TCommand, TResponse>, TResponse>
+    where TCommand : ICommand<TResponse>
 {
-    public class MediatRHandlerAdapter<TResponse> : IRequestHandler<MediatRRequestAdapter<TResponse>, TResponse>
-    {
-        private readonly IComponentContext _context;
-
-        public MediatRHandlerAdapter(IComponentContext context)
-        {
-            _context = context;
-        }
-
-        public Task<TResponse> Handle(MediatRRequestAdapter<TResponse> requestWrapper, CancellationToken cancellationToken)
-        {
-            var request = requestWrapper.Request;
-            var requestType = request.GetType();
-            
-            dynamic handler;
-            if (request is ICommand<TResponse>)
-            {
-                var handlerType = typeof(ICommandHandler<,>).MakeGenericType(requestType, typeof(TResponse));
-                handler = _context.Resolve(handlerType);
-            }
-            else if (request is IQuery<TResponse>)
-            {
-                var handlerType = typeof(IQueryHandler<,>).MakeGenericType(requestType, typeof(TResponse));
-                handler = _context.Resolve(handlerType);
-            }
-            else
-            {
-                throw new System.ArgumentException($"Unsupported request type: {requestType.Name}");
-            }
-
-            return handler.Handle((dynamic)request, cancellationToken);
-        }
-    }
+    private readonly ICommandHandler<TCommand, TResponse> _handler;
+    public CommandHandlerWrapper(ICommandHandler<TCommand, TResponse> handler) => _handler = handler;
+    public Task<TResponse> Handle(CommandWrapper<TCommand, TResponse> request, CancellationToken ct)
+        => _handler.Handle(request.Command, ct);
 }

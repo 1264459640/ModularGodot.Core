@@ -38,6 +38,6 @@ public class LazySingleton<T> : IDisposable where T : new()
     }
     
     ~LazySingleton() { // 终结器
-            Dispose(false);
-        }
+        Dispose(false);
+    }
 }

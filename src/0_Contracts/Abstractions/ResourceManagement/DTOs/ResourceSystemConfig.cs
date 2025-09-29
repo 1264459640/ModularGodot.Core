@@ -6,7 +6,7 @@ namespace ModularGodot.Contracts.Abstractions.ResourceManagement.DTOs;
 public class ResourceSystemConfig
 {
     /// <summary>
-    /// 最大内存大小（字节�?
+    /// 最大内存大小（字节�?
     /// </summary>
     public long MaxMemorySize { get; set; } = 100 * 1024 * 1024; // 100MB
     
@@ -16,7 +16,7 @@ public class ResourceSystemConfig
     public TimeSpan DefaultExpiration { get; set; } = TimeSpan.FromHours(1);
     
     /// <summary>
-    /// 内存压力阈值（0.0-1.0�?
+    /// 内存压力阈值（0.0-1.0�?
     /// </summary>
     public double MemoryPressureThreshold { get; set; } = 0.8; // 80%
     

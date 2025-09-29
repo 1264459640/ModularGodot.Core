@@ -4,21 +4,22 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    
-    <!-- 禁用独立包生成，由主项目统一打包 -->
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <IsPackable>false</IsPackable>
+    <AssemblyName>ModularGodot.Contexts</AssemblyName>
+    <RootNamespace>ModularGodot.Contexts</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
       <PackageReference Include="Autofac" Version="8.4.0" />
       <PackageReference Include="MediatR" Version="13.0.0" />
       <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="13.1.0" />
-      <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.7" />
+      <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.9" />
+      <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.9" />
     </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\0_Contracts\0_Contracts.csproj" />
+    <ProjectReference Include="..\2_Infrastructure\2_Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

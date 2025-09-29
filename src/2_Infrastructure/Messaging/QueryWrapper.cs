@@ -1,6 +1,9 @@
-namespace 2_Infrastructure.Messaging;
+using MediatR;
 
-public class QueryWrapper
+namespace ModularGodot.Infrastructure.Messaging;
+
+public class QueryWrapper<TQuery,TResponse> : IRequest<TResponse>
 {
-    
+    public TQuery Query { get; }
+    public QueryWrapper(TQuery query) => Query = query;
 }

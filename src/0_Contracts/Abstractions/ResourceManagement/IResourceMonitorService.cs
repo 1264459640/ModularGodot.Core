@@ -4,7 +4,7 @@ namespace ModularGodot.Contracts.Abstractions.ResourceManagement;
 
 /// <summary>
 /// 资源监控查询服务接口 - Standard级别
-/// 供管理和监控使用的查询接�?/// </summary>
+/// 供管理和监控使用的查询接�?/// </summary>
 public interface IResourceMonitorService
 {
     /// <summary>
@@ -39,7 +39,7 @@ public interface IResourceMonitorService
     /// <summary>
     /// 异步更新系统配置
     /// </summary>
-    /// <param name="config">新配�?/param>
+    /// <param name="config">新配�?/param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>更新任务</returns>
     Task UpdateConfigurationAsync(ResourceSystemConfig config, CancellationToken cancellationToken = default);

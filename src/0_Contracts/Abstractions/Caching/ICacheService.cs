@@ -6,18 +6,18 @@ namespace ModularGodot.Contracts.Abstractions.Caching;
 public interface ICacheService
 {
     /// <summary>
-    /// 异步获取缓存�?    /// </summary>
-    /// <typeparam name="T">值类�?/typeparam>
-    /// <param name="key">缓存�?/param>
+    /// 异步获取缓存�?    /// </summary>
+    /// <typeparam name="T">值类�?/typeparam>
+    /// <param name="key">缓存�?/param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>缓存值，如果不存在则返回null</returns>
     Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default) where T : class;
     
     /// <summary>
-    /// 异步设置缓存�?    /// </summary>
-    /// <typeparam name="T">值类�?/typeparam>
-    /// <param name="key">缓存�?/param>
-    /// <param name="value">缓存�?/param>
+    /// 异步设置缓存�?    /// </summary>
+    /// <typeparam name="T">值类�?/typeparam>
+    /// <param name="key">缓存�?/param>
+    /// <param name="value">缓存�?/param>
     /// <param name="expiration">过期时间</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>设置任务</returns>
@@ -26,20 +26,20 @@ public interface ICacheService
     /// <summary>
     /// 检查缓存键是否存在
     /// </summary>
-    /// <param name="key">缓存�?/param>
+    /// <param name="key">缓存�?/param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>是否存在</returns>
     Task<bool> ExistsAsync(string key, CancellationToken cancellationToken = default);
     
     /// <summary>
-    /// 移除缓存�?    /// </summary>
-    /// <param name="key">缓存�?/param>
+    /// 移除缓存�?    /// </summary>
+    /// <param name="key">缓存�?/param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>移除任务</returns>
     Task RemoveAsync(string key, CancellationToken cancellationToken = default);
     
     /// <summary>
-    /// 清空所有缓�?    /// </summary>
+    /// 清空所有缓�?    /// </summary>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>清空任务</returns>
     Task ClearAsync(CancellationToken cancellationToken = default);

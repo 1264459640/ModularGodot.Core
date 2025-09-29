@@ -1,10 +1,11 @@
 // In Phoenix.Infrastructure.Mediator.MediatR
 using MediatR;
 using ModularGodot.Contracts.Abstractions.Messaging;
+using ModularGodot.Contracts.Attributes;
 
-namespace MF.Infrastructure.Messaging;
+namespace ModularGodot.Infrastructure.Messaging;
 
-public class MediatRAdapter : IMyMediator
+public class MediatRAdapter : IDispatcher
 {
     private readonly IMediator _mediatR;
 
@@ -13,17 +14,14 @@ public class MediatRAdapter : IMyMediator
         _mediatR = mediatR;
     }
 
-    public Task<TResponse> Send<TResponse>(ICommand<TResponse> command, CancellationToken cancellationToken = default)
+    public Task<TResponse> Send<TResponse>(ICommand<TResponse> command, CancellationToken ct = default)
     {
-        // 发送前，用适配器包装我们的命令
-        var requestWrapper = new MediatRRequestAdapter<TResponse>(command);
-        return _mediatR.Send(requestWrapper, cancellationToken);
+        var wrapper = new CommandWrapper<ICommand<TResponse>, TResponse>(command);
+        return _mediatR.Send(wrapper, ct);
     }
-
-    public Task<TResponse> Send<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default)
+    public Task<TResponse> Send<TResponse>(IQuery<TResponse> query, CancellationToken ct = default)
     {
-        // 发送前，用适配器包装我们的查询
-        var requestWrapper = new MediatRRequestAdapter<TResponse>(query);
-        return _mediatR.Send(requestWrapper, cancellationToken);
+        var wrapper = new QueryWrapper<IQuery<TResponse>, TResponse>(query);
+        return _mediatR.Send(wrapper, ct);
     }
 }

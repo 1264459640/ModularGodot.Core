@@ -4,12 +4,14 @@ using ModularGodot.Contracts.Abstractions.Messaging;
 using ModularGodot.Contracts.Abstractions.Logging;
 using R3;
 using ObservableExtensions = System.ObservableExtensions;
+using ModularGodot.Contracts.Attributes;
 
-namespace MF.Infrastructure.EventBus;
+namespace ModularGodot.Infrastructure.EventBus;
 
 /// <summary>
 /// 基于R3的事件总线实现
 /// </summary>
+[Injectable]
 public class R3EventBus : BaseInfrastructure, IEventBus
 {
     private readonly ConcurrentDictionary<Type, System.Reactive.Subjects.Subject<object>> _subjects = new();

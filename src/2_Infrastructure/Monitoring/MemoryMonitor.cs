@@ -1,12 +1,14 @@
 using ModularGodot.Contracts.Abstractions.Bases;
 using ModularGodot.Contracts.Abstractions.Logging;
 using ModularGodot.Contracts.Abstractions.Monitoring;
+using ModularGodot.Contracts.Attributes;
 
-namespace MF.Infrastructure.Monitoring;
+namespace ModularGodot.Infrastructure.Monitoring;
 
 /// <summary>
 /// 内存监控服务实现
 /// </summary>
+[Injectable]
 public class MemoryMonitor : BaseInfrastructure, IMemoryMonitor
 {
     private readonly IGameLogger _logger;
@@ -17,17 +19,17 @@ public class MemoryMonitor : BaseInfrastructure, IMemoryMonitor
     public event Action? AutoReleaseTriggered;
     
     /// <summary>
-    /// 自动释放阈值（字节�?
+    /// 自动释放阈值（字节�?
     /// </summary>
     public long AutoReleaseThreshold { get; set; } = 800 * 1024 * 1024; // 800MB
     
     /// <summary>
-    /// 检查间�?
+    /// 检查间�?
     /// </summary>
     public TimeSpan CheckInterval { get; set; } = TimeSpan.FromSeconds(15);
     
     /// <summary>
-    /// 内存压力阈�?
+    /// 内存压力阈�?
     /// </summary>
     public double MemoryPressureThreshold { get; set; } = 0.8; // 80%
     
@@ -40,7 +42,7 @@ public class MemoryMonitor : BaseInfrastructure, IMemoryMonitor
     }
     
     /// <summary>
-    /// 开始监�?
+    /// 开始监�?
     /// </summary>
     public void StartMonitoring()
     {
@@ -62,9 +64,9 @@ public class MemoryMonitor : BaseInfrastructure, IMemoryMonitor
     }
     
     /// <summary>
-    /// 检查内存压�?
+    /// 检查内存压�?
     /// </summary>
-    /// <param name="currentUsage">当前内存使用�?/param>
+    /// <param name="currentUsage">当前内存使用�?/param>
     public void CheckMemoryPressure(long currentUsage)
     {
         if (currentUsage > AutoReleaseThreshold)
@@ -74,7 +76,7 @@ public class MemoryMonitor : BaseInfrastructure, IMemoryMonitor
             
             MemoryPressureDetected?.Invoke(currentUsage);
             
-            // 如果内存压力很高，触发自动释�?
+            // 如果内存压力很高，触发自动释�?
             var pressureLevel = CalculatePressureLevel(currentUsage);
             if (pressureLevel == "High" || pressureLevel == "Critical")
             {
@@ -84,9 +86,9 @@ public class MemoryMonitor : BaseInfrastructure, IMemoryMonitor
     }
     
     /// <summary>
-    /// 获取当前内存使用�?
+    /// 获取当前内存使用�?
     /// </summary>
-    /// <returns>内存使用量（字节�?/returns>
+    /// <returns>内存使用量（字节�?/returns>
     public long GetCurrentMemoryUsage()
     {
         return GC.GetTotalMemory(false);
@@ -128,7 +130,7 @@ public class MemoryMonitor : BaseInfrastructure, IMemoryMonitor
         {
             var currentUsage = GetCurrentMemoryUsage();
             
-            // 检查内存压�?
+            // 检查内存压�?
             CheckMemoryPressure(currentUsage);
             
             // 记录内存使用变化
@@ -137,7 +139,7 @@ public class MemoryMonitor : BaseInfrastructure, IMemoryMonitor
                 var change = currentUsage - _lastMemoryUsage;
                 var changePercent = (double)change / _lastMemoryUsage * 100;
                 
-                if (Math.Abs(changePercent) > 10) // 变化超过10%时记�?
+                if (Math.Abs(changePercent) > 10) // 变化超过10%时记�?
                 {
                     _logger.LogDebug("Memory usage changed: {Change} ({ChangePercent:F1}%), Current: {CurrentUsage}", 
                         FormatBytes(change), changePercent, FormatBytes(currentUsage));

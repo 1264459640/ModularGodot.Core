@@ -2,13 +2,14 @@ using System.Text.RegularExpressions;
 using Godot;
 using ModularGodot.Contracts.Abstractions.Bases;
 using ModularGodot.Contracts.Abstractions.Logging;
+using ModularGodot.Contracts.Attributes;
 
-
-namespace MF.Infrastructure.Logging;
+namespace ModularGodot.Infrastructure.Logging;
 
 /// <summary>
 /// Godot游戏日志实现
 /// </summary>
+[Injectable]
 public class GodotGameLogger : BaseInfrastructure, IGameLogger
 {
     private static readonly Dictionary<string, Color> DefaultLogColors = new()
@@ -24,7 +25,7 @@ public class GodotGameLogger : BaseInfrastructure, IGameLogger
     private Dictionary<string, Color> _logColors = new(DefaultLogColors);
     private readonly object _lock = new();
     
-    // 支持 Microsoft.Extensions.Logging 风格的命名占位符：{Name} �?{Value:F1}
+    // 支持 Microsoft.Extensions.Logging 风格的命名占位符：{Name} �?{Value:F1}
     private static readonly Regex MessageTemplateRegex = new("\\{(?<name>[A-Za-z_][A-Za-z0-9_]*)(:(?<format>[^}]+))?\\}", RegexOptions.Compiled);
 
     public void LogDebug(string message, params object[] args)
@@ -78,7 +79,7 @@ public class GodotGameLogger : BaseInfrastructure, IGameLogger
             var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
             var logMessage = $"[{timestamp}] [{level}] {formattedMessage}";
             
-            // 控制台输�?
+            // 控制台输�?
             if (_logColors.TryGetValue(level, out var color))
             {
                 GD.PrintRich($"[color={color.ToHtml()}]{logMessage}[/color]");

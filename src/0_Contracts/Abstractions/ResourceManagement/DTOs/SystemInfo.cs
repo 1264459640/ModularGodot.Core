@@ -11,11 +11,11 @@ public class SystemInfo
     public string OperatingSystem { get; set; } = string.Empty;
     
     /// <summary>
-    /// 处理器数�?    /// </summary>
+    /// 处理器数�?    /// </summary>
     public int ProcessorCount { get; set; }
     
     /// <summary>
-    /// 总内�?    /// </summary>
+    /// 总内�?    /// </summary>
     public long TotalMemory { get; set; }
     
     /// <summary>

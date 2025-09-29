@@ -43,7 +43,7 @@ public class ResourceLoadEvent : EventBase
     public string? ErrorMessage { get; }
     
     /// <summary>
-    /// 构造函�?
+    /// 构造函�?
     /// </summary>
     /// <param name="resourcePath">资源路径</param>
     /// <param name="resourceType">资源类型</param>
@@ -93,7 +93,7 @@ public enum ResourceLoadResult
     CacheHit,
     
     /// <summary>
-    /// 缓存未命�?
+    /// 缓存未命�?
     /// </summary>
     CacheMiss
 }

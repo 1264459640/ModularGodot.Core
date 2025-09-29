@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -File:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(ls:*)",
+      "Bash(dotnet tool install:*)",
+      "Bash(sh automated-build-merge.sh -v)",
+      "Bash(powershell -ExecutionPolicy Bypass -File \".\\manual-merge-pack-improved.ps1\" -Verbose)",
+      "Bash(python -c \"print(''Individual modules total size:'', 26624 + 8704 + 60928 + 4608)\")",
+      "Bash(python -c \"print(''Final merged size:'', 8918528); print(''Individual modules total size:'', 100864); print(''Ratio:'', 8918528/100864)\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

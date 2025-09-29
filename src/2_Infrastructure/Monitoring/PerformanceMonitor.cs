@@ -3,12 +3,14 @@ using System.Diagnostics;
 using ModularGodot.Contracts.Abstractions.Bases;
 using ModularGodot.Contracts.Abstractions.Logging;
 using ModularGodot.Contracts.Abstractions.Monitoring;
+using ModularGodot.Contracts.Attributes;
 
-namespace MF.Infrastructure.Monitoring;
+namespace ModularGodot.Infrastructure.Monitoring;
 
 /// <summary>
 /// 性能监控实现
 /// </summary>
+[Injectable]
 public class PerformanceMonitor : BaseInfrastructure, IPerformanceMonitor
 {
     private readonly IGameLogger _logger;
@@ -45,7 +47,7 @@ public class PerformanceMonitor : BaseInfrastructure, IPerformanceMonitor
                 metricData.Max = Math.Max(metricData.Max, value);
                 metricData.LastUpdated = DateTime.UtcNow;
                 
-                // 保持最�?000个�?
+                // 保持最�?000个�?
                 if (metricData.Values.Count > 1000)
                 {
                     metricData.Values.RemoveAt(0);
@@ -98,7 +100,7 @@ public class PerformanceMonitor : BaseInfrastructure, IPerformanceMonitor
                 timerData.MaxTime = TimeSpan.FromTicks(Math.Max(timerData.MaxTime.Ticks, duration.Ticks));
                 timerData.LastUpdated = DateTime.UtcNow;
                 
-                // 保持最�?000个�?
+                // 保持最�?000个�?
                 if (timerData.Durations.Count > 1000)
                 {
                     timerData.Durations.RemoveAt(0);
@@ -160,7 +162,7 @@ public class PerformanceMonitor : BaseInfrastructure, IPerformanceMonitor
         {
             _logger.LogInformation("Disposing PerformanceMonitor");
             
-            // 完成所有活跃的计时�?
+            // 完成所有活跃的计时�?
             foreach (var timer in _activeTimers.Values)
             {
                 timer.Dispose();
@@ -194,7 +196,7 @@ internal class MetricData
 }
 
 /// <summary>
-/// 计时器数�?
+/// 计时器数�?
 /// </summary>
 internal class TimerData
 {
@@ -209,7 +211,7 @@ internal class TimerData
 }
 
 /// <summary>
-/// 活跃计时�?
+/// 活跃计时�?
 /// </summary>
 internal class ActiveTimer : IDisposable
 {
