@@ -2,16 +2,16 @@
 using MediatR;
 using ModularGodot.Contracts.Abstractions.Messaging;
 
-namespace MF.Infrastructure.Messaging;
+namespace ModularGodot.Infrastructure.Messaging;
 
 // Этот класс-обертка инкапсулирует нашу команду и реализует IRequest от MediatR
 // Этот класс-обертка инкапсулирует нашу команду и реализует IRequest от MediatR
-internal class MediatRRequestAdapter<TResponse> : IRequest<TResponse>
+internal class QueryHandlerWrapper<TResponse> : IRequest<TResponse>
 {
     // Он содержит НАСТОЯЩУЮ команду/запрос
     public object Request { get; }
 
-    public MediatRRequestAdapter(object request)
+    public QueryHandlerWrapper(object request)
     {
         // Убедитесь, что это либо ICommand, либо IQuery
         if (request is not ICommand<TResponse> && request is not IQuery<TResponse>)
