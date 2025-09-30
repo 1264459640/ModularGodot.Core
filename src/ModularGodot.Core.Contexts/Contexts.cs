@@ -3,18 +3,23 @@ using ModularGodot.Contracts;
 
 namespace ModularGodot.Contexts
 {
-    public class Contexts : LazySingleton<Contexts>,IDisposable
+    public class Contexts : IDisposable
     {
-        private readonly IContainer _container;
-
-        public Contexts()
+        private static readonly Lazy<IContainer> _containerLazy = new Lazy<IContainer>(() =>
         {
             var builder = new ContainerBuilder();
 
             builder.RegisterModule<SingleModule>();
             builder.RegisterModule<MediatorModule>();
 
-            _container = builder.Build();
+            return builder.Build();
+        });
+
+        private readonly IContainer _container;
+
+        public Contexts()
+        {
+            _container = _containerLazy.Value;
         }
 
         public T ResolveService<T>() where T : class
@@ -34,7 +39,7 @@ namespace ModularGodot.Contexts
 
         public void Dispose()
         {
-            _container.Dispose();
+            // 不实际处置容器，因为它是静态的并在所有实例间共享
         }
     }
 }

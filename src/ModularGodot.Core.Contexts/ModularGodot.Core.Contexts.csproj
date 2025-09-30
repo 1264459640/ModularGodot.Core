@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>ModularGodot.Contexts</AssemblyName>
+    <RootNamespace>ModularGodot.Contexts</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <PackageId>ModularGodot.Core.Contexts</PackageId>
+    <Description>Contexts layer for ModularGodot.Core - Dependency injection configuration</Description>
+    <PackageTags>godot;modular;framework;contexts;di</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="8.4.0" />
+    <PackageReference Include="MediatR" Version="13.0.0" />
+    <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="13.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ModularGodot.Core.Contracts\ModularGodot.Core.Contracts.csproj" />
+    <ProjectReference Include="..\ModularGodot.Core.Infrastructure\ModularGodot.Core.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

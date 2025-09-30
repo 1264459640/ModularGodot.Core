@@ -8,6 +8,9 @@
     <RootNamespace>ModularGodot.Contracts</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <PackageId>ModularGodot.Core.Contracts</PackageId>
+    <Description>Contracts layer for ModularGodot.Core - Interface definitions and DTOs</Description>
+    <PackageTags>godot;modular;framework;contracts</PackageTags>
   </PropertyGroup>
 
 </Project>

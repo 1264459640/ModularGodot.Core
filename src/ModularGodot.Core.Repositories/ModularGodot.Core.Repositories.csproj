@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>ModularGodot.Repositories</AssemblyName>
+    <RootNamespace>ModularGodot.Repositories</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <PackageId>ModularGodot.Core.Repositories</PackageId>
+    <Description>Repositories layer for ModularGodot.Core - Data access layer</Description>
+    <PackageTags>godot;modular;framework;repositories</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ModularGodot.Core.Contracts\ModularGodot.Core.Contracts.csproj" />
+    <ProjectReference Include="..\ModularGodot.Core.Contexts\ModularGodot.Core.Contexts.csproj" />
+  </ItemGroup>
+
+</Project>

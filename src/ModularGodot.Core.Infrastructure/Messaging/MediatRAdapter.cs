@@ -16,12 +16,19 @@ public class MediatRAdapter : IDispatcher
 
     public Task<TResponse> Send<TResponse>(ICommand<TResponse> command, CancellationToken ct = default)
     {
-        var wrapper = new CommandWrapper<ICommand<TResponse>, TResponse>(command);
+        // 使用具体的命令类型而不是接口类型
+        var wrapper = (IRequest<TResponse>)Activator.CreateInstance(
+            typeof(CommandWrapper<,>).MakeGenericType(command.GetType(), typeof(TResponse)),
+            command);
         return _mediatR.Send(wrapper, ct);
     }
+
     public Task<TResponse> Send<TResponse>(IQuery<TResponse> query, CancellationToken ct = default)
     {
-        var wrapper = new QueryWrapper<IQuery<TResponse>, TResponse>(query);
+        // 使用具体的查询类型而不是接口类型
+        var wrapper = (IRequest<TResponse>)Activator.CreateInstance(
+            typeof(QueryWrapper<,>).MakeGenericType(query.GetType(), typeof(TResponse)),
+            query);
         return _mediatR.Send(wrapper, ct);
     }
 }

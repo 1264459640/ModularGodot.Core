@@ -73,7 +73,60 @@ cd ModularGodot.Core
 dotnet build src/ModularGodot.Core.sln
 ```
 
-### 3. 基本使用
+### 3. NuGet 包结构
+
+本项目现在支持两种使用方式：
+
+#### 方式一：使用独立的 NuGet 包（推荐）
+
+每个架构层都可作为独立的 NuGet 包使用，便于按需引入：
+
+- `ModularGodot.Core.Contracts` - 契约层，包含接口定义和 DTO
+- `ModularGodot.Core.Contexts` - 上下文层，包含依赖注入配置
+- `ModularGodot.Core.Infrastructure` - 基础设施层，包含具体实现
+- `ModularGodot.Core.Repositories` - 仓储层，包含数据访问功能
+
+包之间的依赖关系遵循架构层次：
+```
+ModularGodot.Core.Repositories
+  ↓ 依赖
+ModularGodot.Core.Infrastructure
+  ↓ 依赖
+ModularGodot.Core.Contexts
+  ↓ 依赖
+ModularGodot.Core.Contracts
+```
+
+#### 方式二：使用完整框架包
+
+`ModularGodot.Core` 包含所有层的功能，适合快速开发：
+
+```xml
+<PackageReference Include="ModularGodot.Core" Version="1.0.0" />
+```
+
+### 4. 构建和打包
+
+项目提供了多种构建选项：
+
+#### 构建独立包
+```bash
+# 构建所有独立包
+dotnet pack src/ModularGodot.Core.sln -c Release -o packages
+
+# 或者构建单个包
+dotnet pack src/ModularGodot.Core.Contracts/ModularGodot.Core.Contracts.csproj -c Release -o packages
+dotnet pack src/ModularGodot.Core.Contexts/ModularGodot.Core.Contexts.csproj -c Release -o packages
+dotnet pack src/ModularGodot.Core.Infrastructure/ModularGodot.Core.Infrastructure.csproj -c Release -o packages
+dotnet pack src/ModularGodot.Core.Repositories/ModularGodot.Core.Repositories.csproj -c Release -o packages
+```
+
+#### 构建完整框架包
+```bash
+dotnet pack src/ModularGodot.Core/ModularGodot.Core.csproj -c Release -o packages
+```
+
+### 5. 基本使用
 
 #### 事件系统使用示例
 

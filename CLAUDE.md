@@ -74,6 +74,36 @@ cd tools
 .\manual-merge-pack-final-fixed.ps1 -SkipOutputCleanup
 ```
 
+### Build Individual NuGet Packages
+To build individual NuGet packages:
+```bash
+# Build Contracts package
+dotnet pack src/ModularGodot.Core.Contracts/ModularGodot.Core.Contracts.csproj -c Release -o packages
+
+# Build Contexts package
+dotnet pack src/ModularGodot.Core.Contexts/ModularGodot.Core.Contexts.csproj -c Release -o packages
+
+# Build Infrastructure package
+dotnet pack src/ModularGodot.Core.Infrastructure/ModularGodot.Core.Infrastructure.csproj -c Release -o packages
+
+# Build Repositories package
+dotnet pack src/ModularGodot.Core.Repositories/ModularGodot.Core.Repositories.csproj -c Release -o packages
+
+# Build full framework package
+dotnet pack src/ModularGodot.Core/ModularGodot.Core.csproj -c Release -o packages
+```
+
+### Build All NuGet Packages
+To build all NuGet packages at once:
+```bash
+dotnet pack src/ModularGodot.Core.sln -c Release -o packages
+```
+
+Or using the new multi-package build script:
+```bash
+.\build-multiple-packages.ps1
+```
+
 ### Cleanup Temporary Files (New)
 To cleanup temporary files and directories:
 ```bash
@@ -83,7 +113,13 @@ cd tools
 
 ## 🧪 Testing
 
-Tests are located in the `4_UniTests` directory. To run tests:
+Integration tests have been moved to a separate test project located at `D:\GodotProjects\ModularGodot.Core.Test`. To run tests:
+```bash
+cd ../ModularGodot.Core.Test/src/ModularGodot.Core.Test
+dotnet test
+```
+
+Unit tests are located in the `4_UniTests` directory. To run unit tests:
 ```bash
 dotnet test src/4_UniTests/
 ```
@@ -124,6 +160,9 @@ dotnet test src/4_UniTests/
 2. **Implement functionality** in `2_Infrastructure`
 3. **Register services** in `1_Contexts`
 4. **Write tests** in `4_UniTests`
+5. **Create NuGet packages** in `src/ModularGodot.Core.*` directories
+   - Each package project should reference the corresponding implementation project
+   - Package projects should define proper dependencies in their .csproj files
 
 ## ⚙️ Configuration
 

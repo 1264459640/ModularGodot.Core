@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>ModularGodot.Core</PackageId>
+    <Description>Full ModularGodot.Core framework - Enterprise-grade modular framework for Godot 4.4 game development</Description>
+    <PackageTags>godot;modular;framework;game-development</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ModularGodot.Core.Contracts" Version="1.0.0" />
+    <PackageReference Include="ModularGodot.Core.Contexts" Version="1.0.0" />
+    <PackageReference Include="ModularGodot.Core.Infrastructure" Version="1.0.0" />
+    <PackageReference Include="ModularGodot.Core.Repositories" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>
