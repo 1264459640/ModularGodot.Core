@@ -3,43 +3,50 @@ using ModularGodot.Contracts;
 
 namespace ModularGodot.Contexts
 {
-    public class Contexts : IDisposable
+    public class Contexts : LazySingleton<Contexts>,IDisposable
     {
-        private static readonly Lazy<IContainer> _containerLazy = new Lazy<IContainer>(() =>
-        {
-            var builder = new ContainerBuilder();
-
-            builder.RegisterModule<SingleModule>();
-            builder.RegisterModule<MediatorModule>();
-
-            return builder.Build();
-        });
-
         private readonly IContainer _container;
+        private bool _disposed;
 
         public Contexts()
         {
-            _container = _containerLazy.Value;
+            var builder = new ContainerBuilder();
+            builder.RegisterModule<SingleModule>();
+            builder.RegisterModule<MediatorModule>();
+            _container = builder.Build();
         }
 
         public T ResolveService<T>() where T : class
         {
+            CheckDisposed();
             return _container.Resolve<T>();
         }
 
         public bool TryResolveService<T>(out T service) where T : class
         {
+            CheckDisposed();
             return _container.TryResolve(out service);
         }
 
         public bool IsServiceRegistered<T>() where T : class
         {
+            CheckDisposed();
             return _container.IsRegistered<T>();
+        }
+
+        private void CheckDisposed()
+        {
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(Contexts));
         }
 
         public void Dispose()
         {
-            // 不实际处置容器，因为它是静态的并在所有实例间共享
+            if (!_disposed)
+            {
+                _container?.Dispose();
+                _disposed = true;
+            }
         }
     }
 }

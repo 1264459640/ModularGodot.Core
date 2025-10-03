@@ -12,8 +12,8 @@ namespace ModularGodot.Infrastructure.Caching;
 /// <summary>
 /// 内存缓存服务实现
 /// </summary>
-/// /// 
-[Injectable]
+/// ///
+[Injectable(Lifetime.Singleton)]
 public class MemoryCacheService : BaseInfrastructure, ICacheService
 {
     private readonly IMemoryCache _memoryCache;

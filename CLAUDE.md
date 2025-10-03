@@ -2,195 +2,152 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## 🏗️ Architecture Overview
+## Project Overview
 
-This is a modular Godot framework built with a layered architecture pattern using modern C# design patterns. The architecture follows clean architecture principles with clear separation of concerns:
+ModularGodot.Core is an enterprise-level framework designed for Godot game development, featuring a layered architecture and modern C# design patterns. The project provides complete infrastructure support including:
 
-### Layered Structure
+- Layered architecture with clear separation of concerns
+- Event-driven system based on R3 reactive event system
+- Mediator pattern for decoupled command and query processing
+- Resource management with intelligent caching and memory monitoring
+- Performance monitoring with real-time metrics collection
+- Dependency injection based on Autofac IoC container
 
-```
-src/
-├── 0_Contracts/          # Contract layer - interface definitions and DTOs
-│   ├── Abstractions/     # Core abstract interfaces
-│   ├── Attributes/       # Custom attributes
-│   └── Events/          # Event definitions
-├── 1_Contexts/          # Context layer - dependency injection configuration
-├── 2_Infrastructure/    # Infrastructure layer - concrete implementations
-│   ├── Caching/         # Cache services
-│   ├── Logging/         # Logging services
-│   ├── Messaging/       # Message passing
-│   ├── Monitoring/      # Performance monitoring
-│   ├── ResourceLoading/ # Resource loading
-│   └── ResourceManagement/ # Resource management
-├── 3_Repositories/      # Repository layer - data access
-└── ModularGodot.Core/   # Core project - package generation
-```
-
-## 🚀 Common Commands
+## Development Commands
 
 ### Build Commands
 
-To build the entire solution:
 ```bash
+# Build the entire solution
 dotnet build src/ModularGodot.Core.sln
+
+# Build with specific configuration
+dotnet build src/ModularGodot.Core.sln -c Release
+
+# Build individual projects
+dotnet build src/ModularGodot.Core.Contracts/ModularGodot.Core.Contracts.csproj
+dotnet build src/ModularGodot.Core.Contexts/ModularGodot.Core.Contexts.csproj
+dotnet build src/ModularGodot.Core.Infrastructure/ModularGodot.Core.Infrastructure.csproj
+dotnet build src/ModularGodot.Core.Repositories/ModularGodot.Core.Repositories.csproj
 ```
 
-To build and package everything using the PowerShell script:
-```bash
-.\build-and-pack.ps1
-```
+### NuGet Package Commands
 
-To build with a specific configuration:
 ```bash
-.\build-and-pack.ps1 -Configuration Release
-```
+# Pack all individual packages
+dotnet pack src/ModularGodot.Core.sln -c Release -o packages
 
-To build with verbose output:
-```bash
-.\build-and-pack.ps1 -Verbose
-```
-
-### Clean Build
-```bash
-.\build-and-pack.ps1 -SkipCleanup:$false
-```
-
-### Manual Merge and Pack (New)
-To manually merge and pack using ILRepack from the tools directory:
-```bash
-cd tools
-.\manual-merge-pack-final-fixed.ps1
-```
-
-To run with verbose output:
-```bash
-cd tools
-.\manual-merge-pack-final-fixed.ps1 -Verbose
-```
-
-To skip output directory cleanup:
-```bash
-cd tools
-.\manual-merge-pack-final-fixed.ps1 -SkipOutputCleanup
-```
-
-### Build Individual NuGet Packages
-To build individual NuGet packages:
-```bash
-# Build Contracts package
+# Pack individual packages
 dotnet pack src/ModularGodot.Core.Contracts/ModularGodot.Core.Contracts.csproj -c Release -o packages
-
-# Build Contexts package
 dotnet pack src/ModularGodot.Core.Contexts/ModularGodot.Core.Contexts.csproj -c Release -o packages
-
-# Build Infrastructure package
 dotnet pack src/ModularGodot.Core.Infrastructure/ModularGodot.Core.Infrastructure.csproj -c Release -o packages
-
-# Build Repositories package
 dotnet pack src/ModularGodot.Core.Repositories/ModularGodot.Core.Repositories.csproj -c Release -o packages
 
-# Build full framework package
+# Pack complete framework package
 dotnet pack src/ModularGodot.Core/ModularGodot.Core.csproj -c Release -o packages
 ```
 
-### Build All NuGet Packages
-To build all NuGet packages at once:
+### PowerShell Scripts
+
 ```bash
-dotnet pack src/ModularGodot.Core.sln -c Release -o packages
+# Enhanced build and pack with cleanup
+./tools/enhanced-build-pack.ps1 -Configuration Release
+
+# Cleanup build artifacts
+./tools/cleanup.ps1
 ```
 
-Or using the new multi-package build script:
-```bash
-.\build-multiple-packages.ps1
-```
-
-### Cleanup Temporary Files (New)
-To cleanup temporary files and directories:
-```bash
-cd tools
-.\cleanup-temp-files.ps1
-```
-
-## 🧪 Testing
-
-Integration tests have been moved to a separate test project located at `D:\GodotProjects\ModularGodot.Core.Test`. To run tests:
-```bash
-cd ../ModularGodot.Core.Test/src/ModularGodot.Core.Test
-dotnet test
-```
-
-Unit tests are located in the `4_UniTests` directory. To run unit tests:
-```bash
-dotnet test src/4_UniTests/
-```
-
-## 📦 Key Components
+## Key Architectural Components
 
 ### Event System
-- **IEventBus**: Event publishing and subscription interface
-- **IEventSubscriber**: Subscription-only interface
-- **R3EventBus**: High-performance event bus implementation based on R3
+
+The event system is built on R3 reactive extensions:
+
+- `IEventBus`: Event publishing and subscription interface
+- `R3EventBus`: High-performance event bus implementation based on R3
+- Supports async/sync publishing, conditional subscriptions, and one-time subscriptions
 
 ### Mediator Pattern
-- **IMyMediator**: Custom mediator interface (no MediatR dependency)
-- **ICommand/IQuery**: Command and query interfaces
-- **MediatRAdapter**: MediatR adapter implementation
+
+The mediator pattern uses MediatR with custom adapters:
+
+- `IDispatcher`: Custom mediator interface (no MediatR dependency)
+- `IMyMediator`: Custom mediator interface (no MediatR dependency)
+- `MediatRAdapter`: MediatR adapter implementation with:
+  - Full cancellation token support (including timeouts and cooperative cancellation)
+  - Exception propagation to callers
+  - Compile-time type safety through generic constraints
+  - Singleton dependency injection configuration
+  - Custom HandlerNotFoundException for missing handlers
+- `ICommand/IQuery`: Command and query interfaces
+- `ICommandHandler/IQueryHandler`: Command and query handler interfaces
+- `CommandWrapper/QueryWrapper`: MediatR request wrappers for type-safe adaptation
+- `CommandHandlerWrapper/QueryHandlerWrapper`: MediatR handler wrappers that bridge framework interfaces and MediatR
+
+**Implementation Details**:
+- Uses generic constraints for compile-time type safety
+- Configured through Autofac dependency injection with Singleton registration
+- Optimized for <1ms median routing time performance
+- Automatically wraps framework commands/queries as MediatR requests
+- Automatically wraps handlers as MediatR request handlers
 
 ### Cache System
-- **ICacheService**: Cache service abstraction
-- **MemoryCacheService**: Memory cache implementation
+
+Resource caching with configurable strategies:
+
+- `ICacheService`: Cache service abstraction
+- `MemoryCacheService`: Memory cache implementation
+- Configurable cache strategies (ResourceCacheStrategy enum)
 
 ### Monitoring System
-- **IPerformanceMonitor**: Performance monitoring interface
-- **IMemoryMonitor**: Memory monitoring interface
 
-## 🔧 Technology Stack
+Performance and memory monitoring:
 
-- **Godot 4.4.1** - Game engine
-- **.NET 9.0** - Runtime platform
-- **Autofac 8.4.0** - IoC container
-- **MediatR 13.0.0** - Mediator pattern implementation
-- **R3 1.3.0** - Reactive programming library
-- **Microsoft.Extensions.Caching.Memory 9.0.9** - Memory caching
-- **System.Reactive 6.0.2** - Rx.NET
+- `IPerformanceMonitor`: Performance monitoring interface
+- `IMemoryMonitor`: Memory monitoring interface
+- Real-time metrics collection and reporting
 
-## 📁 Project Structure Guidelines
+## Dependency Injection
 
-1. **Define interfaces** in `0_Contracts/Abstractions`
-2. **Implement functionality** in `2_Infrastructure`
-3. **Register services** in `1_Contexts`
-4. **Write tests** in `4_UniTests`
-5. **Create NuGet packages** in `src/ModularGodot.Core.*` directories
-   - Each package project should reference the corresponding implementation project
-   - Package projects should define proper dependencies in their .csproj files
+The project uses Autofac for dependency injection with custom attributes:
 
-## ⚙️ Configuration
+- `[Injectable(Lifetime.Singleton/Scoped/Transient)]`: Marks classes for automatic registration
+- `Lifetime` enum: Defines service lifecycles (Singleton, Scoped, Transient)
+- Module-based configuration in the Contexts layer
 
-The project now supports configuration through a `.env` file located in the project root. This file can be used to customize various aspects of the build and packaging process.
+## NuGet Package Structure
 
-### Configuration Variables
+The project supports multiple usage patterns:
 
-- `BUILD_CONFIGURATION` - Build configuration (Release/Debug)
-- `OUTPUT_BASE_DIR` - Base output directory name
-- `BUILD_TEMP_DIR` - Build temporary directory name
-- `COLLECTED_DLLS_DIR` - Collected DLLs directory name
-- `PACKAGE_OUTPUT_DIR` - Package output directory name
-- `CLEANUP_TEMP_FILES` - Whether to cleanup temporary files
-- `CLEANUP_OUTPUT_DIR` - Whether to cleanup output directory
-- `VERBOSE_OUTPUT` - Enable verbose output
-- `ILREPACK_PATH_1` - Primary path to ILRepack tool
-- `ILREPACK_PATH_2` - Secondary path to ILRepack tool
+1. **Individual Layer Packages** (Recommended):
+   - `ModularGodot.Core.Contracts` - Contracts layer
+   - `ModularGodot.Core.Contexts` - Contexts layer
+   - `ModularGodot.Core.Infrastructure` - Infrastructure layer
+   - `ModularGodot.Core.Repositories` - Repositories layer
 
-### Tools Directory
+2. **Complete Framework Package**:
+   - `ModularGodot.Core` - Contains all layers
 
-Custom scripts and tools have been moved to the `tools/` directory:
-- `manual-merge-pack-final-fixed.ps1` - Manual merge and packaging script
-- `cleanup-temp-files.ps1` - Temporary files cleanup script
+The dependency hierarchy follows the architecture layers:
+```
+ModularGodot.Core.Repositories
+  ↓ Depends on
+ModularGodot.Core.Infrastructure
+  ↓ Depends on
+ModularGodot.Core.Contexts
+  ↓ Depends on
+ModularGodot.Core.Contracts
+```
 
-## 🎯 Development Principles
+## Documentation
 
-- Prefer interfaces over concrete classes
-- Follow asynchronous programming patterns
-- Use event-driven architecture appropriately
-- Pay attention to memory management and performance optimization
-- Write clear documentation and comments
+For detailed architecture information, see [ARCHITECTURE.md](docs/ARCHITECTURE.md)
+
+For NuGet package documentation, see:
+- [NuGet Packages](docs/NUGET_PACKAGES.md)
+
+For plugin architecture documentation, see:
+- [Plugin Architecture](docs/PLUGIN_ARCHITECTURE.md)
+
+For dependency injection documentation, see:
+- [Dependency Injection](docs/DEPENDENCY_INJECTION.md)

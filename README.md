@@ -1,58 +1,78 @@
 # ModularGodot.Core
 
-一个基于 Godot 4.4 的模块化游戏开发框架，采用分层架构和现代 C# 设计模式。
+一个基于 Godot 4.4 的插件化游戏开发框架，采用模块化架构和现代 C# 设计模式。
 
 ## 🎯 项目概述
 
-ModularGodot.Core 是一个为 Godot 游戏开发设计的企业级框架，提供了完整的基础设施支持，包括：
+ModularGodot.Core 是一个为 Godot 游戏开发设计的企业级框架，以插件化架构为核心。框架通过模块化设计和自动依赖注入机制，让开发者能够轻松创建可扩展的功能插件，实现真正的即插即用。
 
-- **分层架构**：清晰的职责分离和依赖管理
+项目提供了完整的基础设施支持，包括：
+
+- **插件化架构**：以插件为核心的设计理念，支持动态扩展
+- **自动依赖注入**：基于 Autofac 的 IoC 容器，简化服务注册和解析
 - **事件驱动**：基于 R3 的响应式事件系统
 - **中介者模式**：解耦的命令和查询处理
 - **资源管理**：智能缓存和内存监控
 - **性能监控**：实时性能指标收集
-- **依赖注入**：基于 Autofac 的 IoC 容器
 
-## 🏗️ 架构设计
+## 🏗️ 插件化架构设计
 
-### 分层结构
+### 插件架构核心优势
+
+ModularGodot.Core 以插件化架构为核心，提供了强大的扩展能力：
+
+1. **核心可扩展性**：通过插件机制实现功能的动态扩展
+2. **松耦合设计**：插件间通过契约接口通信，降低依赖关系
+3. **即插即用**：插件可以独立开发、测试和部署
+4. **团队协作**：不同团队可以并行开发不同的插件模块
+5. **自动集成**：通过依赖注入机制实现插件的自动发现和集成
+
+### 插件结构
+
+插件项目采用双包结构设计（参见[插件架构文档](docs/PLUGIN_ARCHITECTURE.md)）：
 
 ```
-src/
-├── 0_Contracts/          # 契约层 - 接口定义和数据传输对象
-│   ├── Abstractions/     # 核心抽象接口
-│   ├── Attributes/       # 自定义特性
-│   └── Events/          # 事件定义
-├── 1_Contexts/          # 上下文层 - 依赖注入配置
-├── 2_Infrastructure/    # 基础设施层 - 具体实现
-│   ├── Caching/         # 缓存服务
-│   ├── Logging/         # 日志服务
-│   ├── Messaging/       # 消息传递
-│   ├── Monitoring/      # 性能监控
-│   ├── ResourceLoading/ # 资源加载
-│   └── ResourceManagement/ # 资源管理
-└── 3_Repositories/      # 仓储层 - 数据访问
+PluginName/
+├── PluginName.Contracts/     # 共享契约包 - 接口、事件、命令定义
+│   ├── Commands/            # 命令定义
+│   ├── Events/              # 事件定义
+│   ├── Interfaces/          # 接口定义
+│   └── DTOs/                # 数据传输对象
+└── PluginName/              # 本体包 - 具体实现
+    ├── Services/            # 服务实现
+    ├── Infrastructure/      # 基础设施实现
+    └── Handlers/            # 命令和事件处理器
 ```
 
-### 核心组件
+### 自动依赖注入机制
 
-#### 🔄 事件系统
-- **IEventBus**: 事件发布和订阅接口
-- **IEventSubscriber**: 仅订阅功能的接口
-- **R3EventBus**: 基于 R3 的高性能事件总线实现
+框架采用声明式依赖注入，通过自动化容器配置简化了服务管理（参见[依赖注入文档](docs/DEPENDENCY_INJECTION.md)）：
 
-#### 📨 中介者模式
-- **IMyMediator**: 自定义中介者接口（无 MediatR 依赖）
-- **ICommand/IQuery**: 命令和查询接口
-- **MediatRAdapter**: MediatR 适配器实现
+1. **契约自动注册**：插件只需定义接口和实现，框架自动处理依赖关系
+2. **生命周期管理**：通过 `Lifetime` 枚举定义服务生命周期（Transient/Scoped/Singleton）
+3. **处理器自动发现**：命令和查询处理器无需标记特性即可自动注入
+4. **事件自动订阅**：通过构造函数注入实现事件处理器的自动订阅
 
-#### 💾 缓存系统
-- **ICacheService**: 缓存服务抽象
-- **MemoryCacheService**: 内存缓存实现
+```csharp
+// 插件服务实现 - 自动注册
+[Injectable(Lifetime.Scoped)]
+public class UserService : IUserService
+{
+    public UserService(IUserRepository repository)
+    {
+        // 依赖自动注入
+    }
+}
 
-#### 📊 监控系统
-- **IPerformanceMonitor**: 性能监控接口
-- **IMemoryMonitor**: 内存监控接口
+// 命令处理器 - 自动发现，无需标记特性
+public class CreateUserHandler : ICommandHandler<CreateUserCommand, UserDto>
+{
+    public async Task<UserDto> Handle(CreateUserCommand command, CancellationToken cancellationToken)
+    {
+        // 处理逻辑
+    }
+}
+```
 
 ## 🚀 快速开始
 
@@ -60,49 +80,59 @@ src/
 
 - .NET 9.0
 - Godot 4.4.1
-- Visual Studio 2022 或 JetBrains Rider
+- **Windows**: Visual Studio 2022 或 JetBrains Rider
+- **Linux**: VS Code 或 JetBrains Rider
 
-### 2. 项目结构
+### 2. 核心架构层
 
-```bash
-# 克隆项目
-git clone <repository-url>
-cd ModularGodot.Core
+框架本身也是一个核心插件，包含以下基础层：
 
-# 构建解决方案
-dotnet build src/ModularGodot.Core.sln
+```
+src/
+├── ModularGodot.Core.Contracts/  # 核心契约层 - 基础接口和事件定义
+│   ├── Abstractions/            # 核心抽象接口
+│   ├── Attributes/              # 自定义特性
+│   └── Events/                 # 核心事件定义
+├── ModularGodot.Core.Contexts/   # 核心上下文层 - 依赖注入配置
+├── ModularGodot.Core.Infrastructure/  # 核心基础设施层 - 基础服务实现
+│   ├── Caching/                # 缓存服务
+│   ├── Logging/                # 日志服务
+│   ├── Messaging/              # 消息传递
+│   ├── Monitoring/             # 性能监控
+│   ├── ResourceLoading/        # 资源加载
+│   └── ResourceManagement/     # 资源管理
+└── ModularGodot.Core.Repositories/  # 核心仓储层 - 数据访问
 ```
 
 ### 3. NuGet 包结构
 
-本项目现在支持两种使用方式：
+框架支持灵活的插件化使用方式：
 
-#### 方式一：使用独立的 NuGet 包（推荐）
+#### 方式一：使用完整框架包（推荐）
 
-每个架构层都可作为独立的 NuGet 包使用，便于按需引入：
-
-- `ModularGodot.Core.Contracts` - 契约层，包含接口定义和 DTO
-- `ModularGodot.Core.Contexts` - 上下文层，包含依赖注入配置
-- `ModularGodot.Core.Infrastructure` - 基础设施层，包含具体实现
-- `ModularGodot.Core.Repositories` - 仓储层，包含数据访问功能
-
-包之间的依赖关系遵循架构层次：
-```
-ModularGodot.Core.Repositories
-  ↓ 依赖
-ModularGodot.Core.Infrastructure
-  ↓ 依赖
-ModularGodot.Core.Contexts
-  ↓ 依赖
-ModularGodot.Core.Contracts
-```
-
-#### 方式二：使用完整框架包
-
-`ModularGodot.Core` 包含所有层的功能，适合快速开发：
+作为核心插件使用，提供完整的基础设施：
 
 ```xml
 <PackageReference Include="ModularGodot.Core" Version="1.0.0" />
+```
+
+完整框架包自动包含所有核心依赖：
+- `ModularGodot.Core.Contracts` - 核心契约层
+- `ModularGodot.Core.Contexts` - 核心上下文层
+- `ModularGodot.Core.Infrastructure` - 核心基础设施层
+- `ModularGodot.Core.Repositories` - 核心仓储层
+
+#### 方式二：按需使用独立层包
+
+对于需要更精细控制的场景，可以按需引用独立层包：
+
+```xml
+<!-- 只需要核心契约层 -->
+<PackageReference Include="ModularGodot.Core.Contracts" Version="1.0.0" />
+
+<!-- 需要核心上下文和契约层 -->
+<PackageReference Include="ModularGodot.Core.Contexts" Version="1.0.0" />
+<PackageReference Include="ModularGodot.Core.Contracts" Version="1.0.0" />
 ```
 
 ### 4. 构建和打包
@@ -126,62 +156,24 @@ dotnet pack src/ModularGodot.Core.Repositories/ModularGodot.Core.Repositories.cs
 dotnet pack src/ModularGodot.Core/ModularGodot.Core.csproj -c Release -o packages
 ```
 
-### 5. 基本使用
+#### 一键打包脚本
 
-#### 事件系统使用示例
+项目提供了 PowerShell 脚本以简化构建和打包过程：
 
-```csharp
-// 订阅事件
-var eventBus = container.Resolve<IEventBus>();
-var subscription = eventBus.Subscribe<ResourceLoadEvent>(evt => 
-{
-    Console.WriteLine($"资源加载完成: {evt.ResourcePath}");
-});
+```bash
+# 使用增强型构建和打包脚本（推荐）
+./tools/enhanced-build-pack.ps1 -Configuration Release
 
-// 发布事件
-await eventBus.PublishAsync(new ResourceLoadEvent(
-    resourcePath: "res://textures/player.png",
-    resourceType: "Texture2D",
-    result: ResourceLoadResult.Success,
-    loadTime: TimeSpan.FromMilliseconds(50),
-    resourceSize: 1024,
-    fromCache: false
-));
-
-// 取消订阅
-subscription.Dispose();
-```
-
-#### 中介者模式使用示例
-
-```csharp
-// 定义命令
-public class LoadResourceCommand : ICommand<Resource>
-{
-    public string ResourcePath { get; }
-    public LoadResourceCommand(string resourcePath) => ResourcePath = resourcePath;
-}
-
-// 定义处理器
-public class LoadResourceHandler : IMyCommandHandler<LoadResourceCommand, Resource>
-{
-    public async Task<Resource> Handle(LoadResourceCommand command, CancellationToken cancellationToken)
-    {
-        // 实现资源加载逻辑
-        return await LoadResourceAsync(command.ResourcePath);
-    }
-}
-
-// 使用中介者
-var mediator = container.Resolve<IMyMediator>();
-var resource = await mediator.Send(new LoadResourceCommand("res://scenes/main.tscn"));
+# 清理构建产物
+./tools/cleanup.ps1
 ```
 
 ## 📚 详细文档
 
-- [架构设计文档](docs/Architecture.md) - 详细的架构说明和设计原则
-- [使用示例](docs/Examples.md) - 完整的使用示例和最佳实践
-- [API 参考](docs/API-Reference.md) - 详细的 API 文档
+- [架构设计文档](docs/ARCHITECTURE.md) - 详细的架构说明和设计原则
+- [NuGet 包文档](docs/NUGET_PACKAGES.md) - NuGet 包结构和使用说明
+- [插件架构文档](docs/PLUGIN_ARCHITECTURE.md) - 插件开发和集成指南
+- [依赖注入文档](docs/DEPENDENCY_INJECTION.md) - 依赖注入机制和使用说明
 
 ## 🛠️ 技术栈
 
@@ -204,26 +196,27 @@ var resource = await mediator.Send(new LoadResourceCommand("res://scenes/main.ts
 
 ## 🎨 设计原则
 
-### SOLID 原则
-- **单一职责原则**: 每个类只有一个变化的理由
-- **开闭原则**: 对扩展开放，对修改关闭
-- **里氏替换原则**: 子类可以替换父类
-- **接口隔离原则**: 客户端不应依赖不需要的接口
-- **依赖倒置原则**: 依赖抽象而非具体实现
+### 插件化设计原则
+- **关注点分离**：核心框架与业务插件分离
+- **契约驱动**：通过接口定义插件间契约
+- **自动发现**：插件自动注册和注入
+- **松耦合**：插件间通过事件和命令通信
 
-### 分层架构原则
-- **依赖方向**: 只能向内层依赖，不能反向依赖
-- **接口隔离**: 通过接口定义层间契约
-- **关注点分离**: 每层专注于特定职责
+### SOLID 原则
+- **单一职责原则**: 每个插件专注于特定功能领域
+- **开闭原则**: 对扩展开放，对修改关闭
+- **里氏替换原则**: 插件实现可以替换接口定义
+- **接口隔离原则**: 客户端不应依赖不需要的接口
+- **依赖倒置原则**: 插件依赖抽象而非具体实现
 
 ## 🔧 开发指南
 
-### 添加新功能
+### 创建新插件
 
-1. **定义接口** - 在 `0_Contracts/Abstractions` 中定义抽象接口
-2. **实现功能** - 在 `2_Infrastructure` 中提供具体实现
-3. **配置依赖** - 在 `1_Contexts` 中注册服务
-4. **编写测试** - 确保功能正确性
+1. **定义契约** - 在插件的 Contracts 包中定义接口、事件和命令
+2. **实现功能** - 在插件的本体包中提供具体实现
+3. **配置注入** - 使用 `[Injectable]` 特性标记服务类
+4. **编写测试** - 确保插件功能正确性
 
 ### 最佳实践
 

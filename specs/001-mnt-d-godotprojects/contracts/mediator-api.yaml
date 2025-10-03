@@ -1,0 +1,108 @@
+openapi: 3.0.0
+info:
+  title: Mediator Pattern Adapter API
+  description: API contracts for the Mediator Pattern Adapter in ModularGodot.Core
+  version: 1.0.0
+
+paths:
+  /dispatcher/send-command:
+    post:
+      summary: Send a command through the dispatcher
+      operationId: sendCommand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommandRequest'
+      responses:
+        '200':
+          description: Command processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResponse'
+        '400':
+          description: Bad request
+        '404':
+          description: Command handler not found
+        '500':
+          description: Internal server error
+
+  /dispatcher/send-query:
+    post:
+      summary: Send a query through the dispatcher
+      operationId: sendQuery
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+      responses:
+        '200':
+          description: Query processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '400':
+          description: Bad request
+        '404':
+          description: Query handler not found
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    CommandRequest:
+      type: object
+      properties:
+        commandType:
+          type: string
+          description: The type of command to execute
+        payload:
+          type: object
+          description: Command-specific data
+      required:
+        - commandType
+        - payload
+
+    CommandResponse:
+      type: object
+      properties:
+        result:
+          type: object
+          description: The result of the command execution
+        success:
+          type: boolean
+          description: Whether the command executed successfully
+        error:
+          type: string
+          description: Error message if execution failed
+
+    QueryRequest:
+      type: object
+      properties:
+        queryType:
+          type: string
+          description: The type of query to execute
+        parameters:
+          type: object
+          description: Query-specific parameters
+      required:
+        - queryType
+        - parameters
+
+    QueryResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          description: The data returned by the query
+        success:
+          type: boolean
+          description: Whether the query executed successfully
+        error:
+          type: string
+          description: Error message if execution failed

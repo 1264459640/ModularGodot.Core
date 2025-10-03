@@ -11,7 +11,7 @@ namespace ModularGodot.Infrastructure.EventBus;
 /// <summary>
 /// 基于R3的事件总线实现
 /// </summary>
-[Injectable]
+[Injectable(Lifetime.Singleton)]
 public class R3EventBus : BaseInfrastructure, IEventBus
 {
     private readonly ConcurrentDictionary<Type, System.Reactive.Subjects.Subject<object>> _subjects = new();

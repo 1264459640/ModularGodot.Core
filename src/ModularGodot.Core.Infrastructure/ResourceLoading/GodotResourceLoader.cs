@@ -11,7 +11,7 @@ namespace ModularGodot.Infrastructure.ResourceLoading;
 /// <summary>
 /// Godot 资源加载器实�?- 集成资源缓存服务
 /// </summary>
-[Injectable]
+[Injectable(Lifetime.Singleton)]
 public class GodotResourceLoader : BaseInfrastructure, IResourceLoader
 {
     private readonly IResourceCacheService _cacheService;

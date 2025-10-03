@@ -10,7 +10,7 @@ namespace ModularGodot.Infrastructure.Monitoring;
 /// <summary>
 /// 性能监控实现
 /// </summary>
-[Injectable]
+[Injectable(Lifetime.Singleton)]
 public class PerformanceMonitor : BaseInfrastructure, IPerformanceMonitor
 {
     private readonly IGameLogger _logger;

@@ -9,7 +9,7 @@ namespace ModularGodot.Infrastructure.Logging;
 /// <summary>
 /// Godot游戏日志实现
 /// </summary>
-[Injectable]
+[Injectable(Lifetime.Singleton)]
 public class GodotGameLogger : BaseInfrastructure, IGameLogger
 {
     private static readonly Dictionary<string, Color> DefaultLogColors = new()

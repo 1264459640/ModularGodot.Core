@@ -16,7 +16,7 @@ namespace ModularGodot.Infrastructure.ResourceManagement;
 /// <summary>
 /// 资源管理�?- 系统核心协调组件
 /// </summary>
-[Injectable]
+[Injectable(Lifetime.Singleton)]
 public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResourceMonitorService
 {
     private readonly ICacheService _cacheService;

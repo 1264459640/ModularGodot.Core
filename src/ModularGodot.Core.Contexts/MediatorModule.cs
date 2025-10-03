@@ -5,6 +5,9 @@ using MediatR.Extensions.Autofac.DependencyInjection.Builder;
 using ModularGodot.Contracts.Abstractions.Messaging;
 using ModularGodot.Infrastructure.Messaging;
 using System.Reflection;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace ModularGodot.Contexts;
 
@@ -15,29 +18,28 @@ public class MediatorModule : Autofac.Module
         // 确保加载测试程序集
         var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
 
-        // 主动加载测试程序集（如果尚未加载）
-        try
+        // 从配置获取程序集路径并加载
+        var assemblyPaths = AssemblyLoadingConfiguration.GetAssemblyPathsFromConfiguration();
+        foreach (var assemblyPath in assemblyPaths)
         {
-            var testAssemblyPath = "D:/GodotProjects/ModularGodot.Core/src/ModularGodot.Core.Tests/bin/Debug/net9.0/ModularGodot.Core.Tests.dll";
-            if (System.IO.File.Exists(testAssemblyPath))
+            try
             {
-                var testAssembly = Assembly.LoadFrom(testAssemblyPath);
-                if (!loadedAssemblies.Contains(testAssembly))
+                if (File.Exists(assemblyPath))
                 {
-                    loadedAssemblies.Add(testAssembly);
+                    var assembly = Assembly.LoadFrom(assemblyPath);
+                    if (!loadedAssemblies.Contains(assembly))
+                    {
+                        loadedAssemblies.Add(assembly);
+                    }
                 }
             }
-        }
-        catch
-        {
-            // 如果无法加载测试程序集，继续使用已加载的程序集
+            catch
+            {
+                // 如果无法加载程序集，继续使用已加载的程序集
+            }
         }
 
         var assembliesToScan = loadedAssemblies.Distinct().ToList();
-
-        builder.RegisterType<MediatRAdapter>()
-            .As<IDispatcher>()
-            .InstancePerLifetimeScope();
 
         // 注册所有 ICommandHandler<T, TRes> 和 IQueryHandler<T, TRes>
         foreach (var assembly in assembliesToScan)

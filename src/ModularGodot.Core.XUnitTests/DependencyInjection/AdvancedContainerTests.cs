@@ -1,0 +1,71 @@
+using Xunit;
+using ModularGodot.Contracts.Abstractions.Services;
+
+namespace ModularGodot.Core.XUnitTests.DependencyInjection
+{
+    public class AdvancedContainerTests : TestBase
+    {
+        [Fact]
+        public void IsServiceRegistered_ShouldReturnTrue_ForRegisteredServices()
+        {
+            // Act
+            var isRegistered = TestContext.IsServiceRegistered<ITestService>();
+
+            // Assert
+            Assert.True(isRegistered);
+        }
+
+        [Fact]
+        public void IsServiceRegistered_ShouldReturnFalse_ForNonRegisteredServices()
+        {
+            // Arrange
+            // Using a service interface that we know is not registered
+            // IDisposable is a standard .NET interface, not registered in our container
+
+            // Act
+            var isRegistered = TestContext.IsServiceRegistered<IDisposable>();
+
+            // Assert
+            Assert.False(isRegistered);
+        }
+
+        [Fact]
+        public void TryResolveService_ShouldReturnTrue_ForRegisteredServices()
+        {
+            // Arrange
+            ITestService service;
+
+            // Act
+            var result = TryResolveService(out service);
+
+            // Assert
+            Assert.True(result);
+            Assert.NotNull(service);
+        }
+
+        [Fact]
+        public void TryResolveService_ShouldReturnFalse_ForNonRegisteredServices()
+        {
+            // Arrange
+            IDisposable service;
+
+            // Act
+            var result = TryResolveService(out service);
+
+            // Assert
+            Assert.False(result);
+            Assert.Null(service);
+        }
+
+        [Fact]
+        public void ResolveService_ShouldThrowException_ForNonRegisteredServices()
+        {
+            // Arrange
+            // Using a service interface that we know is not registered
+
+            // Act & Assert
+            Assert.Throws<Autofac.Core.Registration.ComponentNotRegisteredException>(
+                () => ResolveService<IDisposable>());
+        }
+    }
+}

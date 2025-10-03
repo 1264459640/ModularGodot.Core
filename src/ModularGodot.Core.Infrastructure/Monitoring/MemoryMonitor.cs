@@ -8,7 +8,7 @@ namespace ModularGodot.Infrastructure.Monitoring;
 /// <summary>
 /// 内存监控服务实现
 /// </summary>
-[Injectable]
+[Injectable(Lifetime.Singleton)]
 public class MemoryMonitor : BaseInfrastructure, IMemoryMonitor
 {
     private readonly IGameLogger _logger;
