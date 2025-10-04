@@ -1,7 +1,5 @@
-using System;
 using Xunit;
-using ModularGodot.Contracts.Abstractions.Messaging;
-using ModularGodot.Core.XUnitTests.Events;
+using ModularGodot.Core.Contracts.Abstractions.Messaging;
 
 namespace ModularGodot.Core.XUnitTests.Events
 {

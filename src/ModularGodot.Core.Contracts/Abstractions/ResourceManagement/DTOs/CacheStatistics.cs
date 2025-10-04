@@ -1,4 +1,4 @@
-namespace ModularGodot.Contracts.Abstractions.ResourceManagement.DTOs;
+namespace ModularGodot.Core.Contracts.Abstractions.ResourceManagement.DTOs;
 
 /// <summary>
 /// 缓存统计信息
@@ -11,7 +11,7 @@ public class CacheStatistics
     public int TotalItems { get; set; }
     
     /// <summary>
-    /// 缓存总大小（字节�?
+    /// 缓存总大小（字节）
     /// </summary>
     public long TotalSize { get; set; }
     
@@ -21,22 +21,22 @@ public class CacheStatistics
     public int HitCount { get; set; }
     
     /// <summary>
-    /// 缓存未命中次�?
+    /// 缓存未命中次数
     /// </summary>
     public int MissCount { get; set; }
     
     /// <summary>
-    /// 缓存命中�?
+    /// 缓存命中率
     /// </summary>
     public double HitRate => (HitCount + MissCount) > 0 ? (double)HitCount / (HitCount + MissCount) : 0;
     
     /// <summary>
-    /// 过期项数�?
+    /// 过期项数量
     /// </summary>
     public int ExpiredItems { get; set; }
     
     /// <summary>
-    /// 最后更新时�?
+    /// 最后更新时间
     /// </summary>
     public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
 }

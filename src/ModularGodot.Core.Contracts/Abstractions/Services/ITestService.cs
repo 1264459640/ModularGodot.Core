@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
-
-namespace ModularGodot.Contracts.Abstractions.Services
+namespace ModularGodot.Core.Contracts.Abstractions.Services
 {
     /// <summary>
     /// 测试服务接口

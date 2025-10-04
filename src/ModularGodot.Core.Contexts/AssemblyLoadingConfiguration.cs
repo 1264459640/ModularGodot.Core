@@ -1,8 +1,4 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-namespace ModularGodot.Contexts
+namespace ModularGodot.Core.Contexts
 {
     /// <summary>
     /// 程序集加载配置
@@ -25,19 +21,7 @@ namespace ModularGodot.Contexts
                 Path.Combine(basePath, "ModularGodot.Core.Repositories.dll")
             };
 
-            // 如果存在测试目录，添加测试程序集路径
-            var testPath = Path.Combine(basePath, "test", "ModularGodot.Core.Tests.dll");
-            if (File.Exists(testPath))
-            {
-                defaultPaths.Add(testPath);
-            }
-
-            // 添加XUnit测试程序集路径
-            var xunitTestPath = Path.Combine(basePath, "ModularGodot.Core.XUnitTests.dll");
-            if (File.Exists(xunitTestPath))
-            {
-                defaultPaths.Add(xunitTestPath);
-            }
+    
 
             return defaultPaths.Where(path => File.Exists(path));
         }
@@ -49,7 +33,7 @@ namespace ModularGodot.Contexts
         public static IEnumerable<string> GetAssemblyPathsFromConfiguration()
         {
             // 尝试从环境变量获取程序集路径
-            var assemblyPathsEnv = System.Environment.GetEnvironmentVariable("ASSEMBLY_PATHS");
+            var assemblyPathsEnv = Environment.GetEnvironmentVariable("ASSEMBLY_PATHS");
             if (!string.IsNullOrEmpty(assemblyPathsEnv))
             {
                 return assemblyPathsEnv.Split(';')

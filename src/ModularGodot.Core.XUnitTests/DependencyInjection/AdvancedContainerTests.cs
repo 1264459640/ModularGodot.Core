@@ -1,5 +1,5 @@
 using Xunit;
-using ModularGodot.Contracts.Abstractions.Services;
+using ModularGodot.Core.Contracts.Abstractions.Services;
 
 namespace ModularGodot.Core.XUnitTests.DependencyInjection
 {
@@ -12,7 +12,7 @@ namespace ModularGodot.Core.XUnitTests.DependencyInjection
             var isRegistered = TestContext.IsServiceRegistered<ITestService>();
 
             // Assert
-            Assert.True(isRegistered);
+            Assert.True((bool)isRegistered);
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace ModularGodot.Core.XUnitTests.DependencyInjection
             var isRegistered = TestContext.IsServiceRegistered<IDisposable>();
 
             // Assert
-            Assert.False(isRegistered);
+            Assert.False((bool)isRegistered);
         }
 
         [Fact]

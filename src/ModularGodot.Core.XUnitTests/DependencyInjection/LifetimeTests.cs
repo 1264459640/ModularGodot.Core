@@ -1,7 +1,5 @@
 using Xunit;
-using ModularGodot.Contracts.Attributes;
-using ModularGodot.Contracts.Abstractions.Services;
-using ModularGodot.Core.Test;
+using ModularGodot.Core.Contracts.Abstractions.Services;
 
 namespace ModularGodot.Core.XUnitTests.DependencyInjection
 {
@@ -11,10 +9,10 @@ namespace ModularGodot.Core.XUnitTests.DependencyInjection
         public void TestService_ShouldBeRegisteredAsTransient()
         {
             // Arrange
-            var service1 = global::ModularGodot.Contexts.Contexts.Instance.ResolveService<ITestService>();
+            var service1 = Contexts.Contexts.Instance.ResolveService<ITestService>();
 
             // Act
-            var service2 = global::ModularGodot.Contexts.Contexts.Instance.ResolveService<ITestService>();
+            var service2 = Contexts.Contexts.Instance.ResolveService<ITestService>();
 
             // Assert
             // For transient services, each resolve should create a new instance
@@ -28,10 +26,10 @@ namespace ModularGodot.Core.XUnitTests.DependencyInjection
         public void DITestService_ShouldBeRegisteredAsSingleton()
         {
             // Arrange
-            var diTest1 = global::ModularGodot.Contexts.Contexts.Instance.ResolveService<IDITest>();
+            var diTest1 = Contexts.Contexts.Instance.ResolveService<IDITest>();
 
             // Act
-            var diTest2 = global::ModularGodot.Contexts.Contexts.Instance.ResolveService<IDITest>();
+            var diTest2 = Contexts.Contexts.Instance.ResolveService<IDITest>();
 
             // Assert
             // For singleton services, the same instance should be returned

@@ -1,12 +1,14 @@
-namespace ModularGodot.Contracts.Abstractions.Bases;
+namespace ModularGodot.Core.Contracts.Abstractions.Bases;
 
 /// <summary>
 /// 基础设施层的抽象基类，提供通用的资源管理和生命周期控制功能
 /// </summary>
 public abstract class BaseInfrastructure : IDisposable
 {
-    protected bool _disposed; // 释放标记
-    protected readonly CancellationTokenSource CancellationTokenSource = new();
+    /// <summary>
+    /// 释放标记
+    /// </summary>
+    protected bool _disposed; 
 
     /// <summary>
     /// 获取对象是否已释�?
@@ -24,8 +26,10 @@ public abstract class BaseInfrastructure : IDisposable
             throw new ObjectDisposedException(GetType().Name);
         }
     }
-
-    // 实现 IDisposable.Dispose()
+    
+    /// <summary>
+    /// 实现 IDisposable.Dispose()
+    /// </summary>
     public void Dispose()
     {
         Dispose(true);
@@ -39,17 +43,10 @@ public abstract class BaseInfrastructure : IDisposable
     protected virtual void Dispose(bool disposing)
     {
         if (_disposed) return;
-        Unsubscribe();
-        CancellationTokenSource.Cancel();
-        CancellationTokenSource.Dispose();
 
         _disposed = true;
     }
-
-    /// <summary>
-    /// 取消订阅事件，派生类应重写此方法以取消订阅相关事�?
-    /// </summary>
-    protected virtual void Unsubscribe() { }
+    
 
     // 终结器（析构函数），用于未显式调用Dispose时的补救
     ~BaseInfrastructure()

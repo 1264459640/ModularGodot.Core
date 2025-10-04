@@ -1,7 +1,7 @@
+using ModularGodot.Core.Contracts.Abstractions.Services;
+using ModularGodot.Core.Infrastructure.Services;
 using Xunit;
-using ModularGodot.Contracts.Abstractions.Services;
-using ModularGodot.Core.Test;
-using ModularGodot.Infrastructure.Services;
+
 
 namespace ModularGodot.Core.XUnitTests.DependencyInjection
 {
@@ -11,7 +11,7 @@ namespace ModularGodot.Core.XUnitTests.DependencyInjection
         public void DITest_ShouldHaveDependencyInjectedCorrectly()
         {
             // Arrange
-            var diTest = global::ModularGodot.Contexts.Contexts.Instance.ResolveService<IDITest>();
+            var diTest = Contexts.Contexts.Instance.ResolveService<IDITest>();
 
             // Act
             // The DITest class has a constructor dependency on ITestService
@@ -28,7 +28,7 @@ namespace ModularGodot.Core.XUnitTests.DependencyInjection
         public void TestService_ShouldBeResolvedThroughContainer()
         {
             // Arrange & Act
-            var testService = global::ModularGodot.Contexts.Contexts.Instance.ResolveService<ITestService>();
+            var testService = Contexts.Contexts.Instance.ResolveService<ITestService>();
 
             // Assert
             Assert.NotNull(testService);

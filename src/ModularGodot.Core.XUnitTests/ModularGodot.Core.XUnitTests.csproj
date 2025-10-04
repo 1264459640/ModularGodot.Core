@@ -5,6 +5,14 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
+        <!-- 跨平台构建优化 -->
+        <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>true</AppendRuntimeIdentifierToOutputPath>
+        <!-- 动态输出路径：根据环境自动设置 -->
+        <OutputPath Condition="'$(IsWSL)' == 'true'">bin\wsl\$(Configuration)\</OutputPath>
+        <OutputPath Condition="'$(IsWindows)' == 'true'">bin\win\$(Configuration)\</OutputPath>
+        <BaseIntermediateOutputPath Condition="'$(IsWSL)' == 'true'">obj\wsl\</BaseIntermediateOutputPath>
+        <BaseIntermediateOutputPath Condition="'$(IsWindows)' == 'true'">obj\win\</BaseIntermediateOutputPath>
     </PropertyGroup>
 
     <ItemGroup>
@@ -26,7 +34,7 @@
       <ProjectReference Include="..\ModularGodot.Core.Contracts\ModularGodot.Core.Contracts.csproj" />
       <ProjectReference Include="..\ModularGodot.Core.Infrastructure\ModularGodot.Core.Infrastructure.csproj" />
       <ProjectReference Include="..\ModularGodot.Core.Repositories\ModularGodot.Core.Repositories.csproj" />
-      <ProjectReference Include="..\ModularGodot.Core.Test\ModularGodot.Core.Test.csproj" />
     </ItemGroup>
+
 
 </Project>

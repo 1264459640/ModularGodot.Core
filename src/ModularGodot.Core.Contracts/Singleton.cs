@@ -1,4 +1,4 @@
-namespace ModularGodot.Contracts;
+namespace ModularGodot.Core.Contracts;
 
 public class LazySingleton<T> : IDisposable where T : new()
 {

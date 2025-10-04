@@ -1,6 +1,4 @@
 using Xunit;
-using ModularGodot.Contracts.Abstractions.Services;
-using ModularGodot.Core.Test;
 
 namespace ModularGodot.Core.XUnitTests.DependencyInjection
 {
@@ -10,7 +8,7 @@ namespace ModularGodot.Core.XUnitTests.DependencyInjection
         public void DITest_ShouldResolveAndExecuteSuccessfully()
         {
             // Arrange
-            var service = global::ModularGodot.Contexts.Contexts.Instance.ResolveService<IDITest>();
+            var service = Contexts.Contexts.Instance.ResolveService<IDITest>();
 
             // Act & Assert
             Assert.NotNull(service);

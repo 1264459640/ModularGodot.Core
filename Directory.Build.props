@@ -1,5 +1,8 @@
 <Project>
+  <!-- 极度简化方案：只强制AnyCPU平台，解决Debug|linux配置无效问题 -->
   <PropertyGroup>
+    <Platform>AnyCPU</Platform>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <Version>0.1.0</Version>
     <PackageVersion>0.1.0</PackageVersion>
     <Authors>ModularGodot Team</Authors>

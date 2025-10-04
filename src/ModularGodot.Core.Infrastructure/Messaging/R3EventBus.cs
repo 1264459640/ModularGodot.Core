@@ -1,15 +1,16 @@
 using System.Collections.Concurrent;
-using ModularGodot.Contracts.Abstractions.Bases;
-using ModularGodot.Contracts.Abstractions.Messaging;
-using ModularGodot.Contracts.Abstractions.Logging;
+using ModularGodot.Core.Contracts.Abstractions.Bases;
+using ModularGodot.Core.Contracts.Abstractions.Logging;
+using ModularGodot.Core.Contracts.Abstractions.Messaging;
+using ModularGodot.Core.Contracts.Attributes;
 using R3;
 using ObservableExtensions = System.ObservableExtensions;
-using ModularGodot.Contracts.Attributes;
 
-namespace ModularGodot.Infrastructure.EventBus;
+namespace ModularGodot.Core.Infrastructure.Messaging;
 
 /// <summary>
-/// 基于R3的事件总线实现
+/// 基于R3的事件总线实现类
+/// 提供事件发布和订阅功能，支持同步和异步操作
 /// </summary>
 [Injectable(Lifetime.Singleton)]
 public class R3EventBus : BaseInfrastructure, IEventBus
@@ -29,6 +30,13 @@ public class R3EventBus : BaseInfrastructure, IEventBus
         _logger.LogInformation("R3EventBus initialized");
     }
     
+    /// <summary>
+    /// 异步发布事件
+    /// </summary>
+    /// <typeparam name="TEvent">事件类型</typeparam>
+    /// <param name="event">要发布的事件实例</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>异步任务</returns>
     public async Task PublishAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : EventBase
     {
         if (IsDisposed)
@@ -36,14 +44,14 @@ public class R3EventBus : BaseInfrastructure, IEventBus
             _logger.LogWarning("Attempted to publish event on disposed EventBus: {EventType}", typeof(TEvent).Name);
             return;
         }
-        
+
         try
         {
             _logger.LogDebug("Publishing event asynchronously: {EventType}, EventId: {EventId}", typeof(TEvent).Name, @event.EventId);
-            
+
             var subject = GetOrCreateSubject<TEvent>();
             await Task.Run(() => subject.OnNext(@event), cancellationToken);
-            
+
             _logger.LogDebug("Event published successfully: {EventType}", typeof(TEvent).Name);
         }
         catch (Exception ex)
@@ -53,6 +61,11 @@ public class R3EventBus : BaseInfrastructure, IEventBus
         }
     }
     
+    /// <summary>
+    /// 同步发布事件
+    /// </summary>
+    /// <typeparam name="TEvent">事件类型</typeparam>
+    /// <param name="event">要发布的事件实例</param>
     public void Publish<TEvent>(TEvent @event) where TEvent : EventBase
     {
         if (IsDisposed)
@@ -60,14 +73,14 @@ public class R3EventBus : BaseInfrastructure, IEventBus
             _logger.LogWarning("Attempted to publish event on disposed EventBus: {EventType}", typeof(TEvent).Name);
             return;
         }
-        
+
         try
         {
             _logger.LogDebug("Publishing event synchronously: {EventType}, EventId: {EventId}", typeof(TEvent).Name, @event.EventId);
-            
+
             var subject = GetOrCreateSubject<TEvent>();
             subject.OnNext(@event);
-            
+
             _logger.LogDebug("Event published successfully: {EventType}", typeof(TEvent).Name);
         }
         catch (Exception ex)
@@ -77,14 +90,20 @@ public class R3EventBus : BaseInfrastructure, IEventBus
         }
     }
     
+    /// <summary>
+    /// 订阅事件
+    /// </summary>
+    /// <typeparam name="TEvent">事件类型</typeparam>
+    /// <param name="handler">事件处理函数</param>
+    /// <returns>订阅句柄，用于取消订阅</returns>
     public IDisposable Subscribe<TEvent>(Action<TEvent> handler) where TEvent : EventBase
     {
         CheckDisposed();
-        
+
         try
         {
             _logger.LogDebug("Subscribing to event: {EventType}", typeof(TEvent).Name);
-            
+
             var subject = GetOrCreateSubject<TEvent>();
             var subscription = ObservableExtensions.Subscribe<object>(subject, evt =>
             {
@@ -98,7 +117,7 @@ public class R3EventBus : BaseInfrastructure, IEventBus
                     // 不抛出异常，避免影响其他订阅者
                 }
             });
-            
+
             _logger.LogDebug("Subscribed to event: {EventType}", typeof(TEvent).Name);
             return subscription;
         }
@@ -109,6 +128,13 @@ public class R3EventBus : BaseInfrastructure, IEventBus
         }
     }
     
+    /// <summary>
+    /// 异步订阅事件
+    /// </summary>
+    /// <typeparam name="TEvent">事件类型</typeparam>
+    /// <param name="handler">异步事件处理函数</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>订阅句柄，用于取消订阅</returns>
     public IDisposable Subscribe<TEvent>(Func<TEvent, CancellationToken, Task> handler, CancellationToken cancellationToken = default) where TEvent : EventBase
     {
         return Subscribe<TEvent>(evt =>
@@ -128,6 +154,13 @@ public class R3EventBus : BaseInfrastructure, IEventBus
         });
     }
     
+    /// <summary>
+    /// 条件订阅事件
+    /// </summary>
+    /// <typeparam name="TEvent">事件类型</typeparam>
+    /// <param name="filter">事件过滤条件</param>
+    /// <param name="handler">事件处理函数</param>
+    /// <returns>订阅句柄，用于取消订阅</returns>
     public IDisposable Subscribe<TEvent>(Func<TEvent, bool> filter, Action<TEvent> handler) where TEvent : EventBase
     {
         return Subscribe<TEvent>(evt =>
@@ -139,6 +172,12 @@ public class R3EventBus : BaseInfrastructure, IEventBus
         });
     }
     
+    /// <summary>
+    /// 一次性订阅事件
+    /// </summary>
+    /// <typeparam name="TEvent">事件类型</typeparam>
+    /// <param name="handler">事件处理函数</param>
+    /// <returns>订阅句柄，用于取消订阅</returns>
     public IDisposable SubscribeOnce<TEvent>(Action<TEvent> handler) where TEvent : EventBase
     {
         IDisposable? subscription = null;
@@ -158,6 +197,11 @@ public class R3EventBus : BaseInfrastructure, IEventBus
 
 
     
+    /// <summary>
+    /// 获取或创建事件主题
+    /// </summary>
+    /// <typeparam name="TEvent">事件类型</typeparam>
+    /// <returns>事件主题</returns>
     private System.Reactive.Subjects.Subject<object> GetOrCreateSubject<TEvent>() where TEvent : EventBase
     {
         var eventType = typeof(TEvent);
@@ -170,22 +214,26 @@ public class R3EventBus : BaseInfrastructure, IEventBus
         });
     }
     
+    /// <summary>
+    /// 释放事件总线资源
+    /// </summary>
+    /// <param name="disposing">是否释放托管资源</param>
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
             _logger.LogInformation("Disposing R3EventBus");
-            
+
             _disposables.Dispose();
             foreach (var subject in _subjects.Values)
             {
                 subject.Dispose();
             }
             _subjects.Clear();
-            
+
             _logger.LogInformation("R3EventBus disposed");
         }
-        
+
         base.Dispose(disposing);
     }
 }

@@ -1,4 +1,4 @@
-namespace ModularGodot.Contracts.Abstractions.ResourceManagement.DTOs;
+namespace ModularGodot.Core.Contracts.Abstractions.ResourceManagement.DTOs;
 
 /// <summary>
 /// 内存压力事件参数
@@ -6,7 +6,8 @@ namespace ModularGodot.Contracts.Abstractions.ResourceManagement.DTOs;
 public class MemoryPressureEventArgs : EventArgs
 {
     /// <summary>
-    /// 当前内存使用�?    /// </summary>
+    /// 当前内存使用量
+    /// </summary>
     public long CurrentUsage { get; set; }
     
     /// <summary>
@@ -15,7 +16,8 @@ public class MemoryPressureEventArgs : EventArgs
     public long PreviousUsage { get; set; }
     
     /// <summary>
-    /// 内存阈�?    /// </summary>
+    /// 内存阈值
+    /// </summary>
     public long Threshold { get; set; }
     
     /// <summary>
@@ -24,6 +26,7 @@ public class MemoryPressureEventArgs : EventArgs
     public MemoryPressureLevel PressureLevel { get; set; }
     
     /// <summary>
-    /// 检测时�?    /// </summary>
+    /// 检测时间
+    /// </summary>
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 }

@@ -1,4 +1,4 @@
-namespace ModularGodot.Contracts.Attributes;
+namespace ModularGodot.Core.Contracts.Attributes;
 
 /// <summary>
 /// 定义服务的生命周期作用域

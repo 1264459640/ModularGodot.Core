@@ -1,4 +1,4 @@
-﻿namespace ModularGodot.Contracts.Abstractions.Logging;
+﻿namespace ModularGodot.Core.Contracts.Abstractions.Logging;
 
 /// <summary>
 /// 游戏日志接口 - Standard级别

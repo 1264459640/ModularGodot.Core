@@ -41,6 +41,18 @@ dotnet test --filter "FullyQualifiedName~ContainerTests"
 dotnet test --filter "Name=ResolveService_ShouldReturnValidServiceInstance"
 ```
 
+### 定期清理构建（解决依赖问题）
+
+在运行测试前，如果遇到依赖解析问题，建议使用以下命令清理并重新构建：
+
+```bash
+# 清理构建
+dotnet clean src/ModularGodot.Core.XUnitTests/ModularGodot.Core.XUnitTests.csproj
+
+# 重新构建
+dotnet build src/ModularGodot.Core.XUnitTests/ModularGodot.Core.XUnitTests.csproj
+```
+
 ## 📊 测试覆盖范围
 
 ### 依赖注入测试

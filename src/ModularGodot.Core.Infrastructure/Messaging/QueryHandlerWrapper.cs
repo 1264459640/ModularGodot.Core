@@ -1,31 +1,31 @@
 using MediatR;
-using ModularGodot.Contracts.Abstractions.Messaging;
+using ModularGodot.Core.Contracts.Abstractions.Messaging;
 
-namespace ModularGodot.Infrastructure.Messaging;
+namespace ModularGodot.Core.Infrastructure.Messaging;
 
 /// <summary>
-/// Wrapper class that adapts IQueryHandler to MediatR's IRequestHandler
-/// Provides a bridge between the framework's query handler interface and MediatR
+/// 查询处理器包装器类
+/// 适配IQueryHandler到MediatR的IRequestHandler，提供框架查询处理器接口与MediatR之间的桥梁
 /// </summary>
-/// <typeparam name="TQuery">The query type that must implement IQuery&lt;TResponse&gt;</typeparam>
-/// <typeparam name="TResponse">The response type</typeparam>
+/// <typeparam name="TQuery">查询类型，必须实现IQuery&lt;TResponse&gt;接口</typeparam>
+/// <typeparam name="TResponse">响应类型</typeparam>
 public class QueryHandlerWrapper<TQuery, TResponse> : IRequestHandler<QueryWrapper<TQuery, TResponse>, TResponse>
     where TQuery : IQuery<TResponse>
 {
     private readonly IQueryHandler<TQuery, TResponse> _handler;
 
     /// <summary>
-    /// Initializes a new instance of the QueryHandlerWrapper class
+    /// 初始化查询处理器包装器实例
     /// </summary>
-    /// <param name="handler">The actual query handler to delegate to</param>
+    /// <param name="handler">实际要委托的查询处理器</param>
     public QueryHandlerWrapper(IQueryHandler<TQuery, TResponse> handler) => _handler = handler;
 
     /// <summary>
-    /// Handles the query by delegating to the actual query handler
+    /// 处理查询，通过委托给实际的查询处理器
     /// </summary>
-    /// <param name="request">The wrapped query request</param>
-    /// <param name="ct">Cancellation token for cooperative cancellation</param>
-    /// <returns>The response from the query handler</returns>
+    /// <param name="request">包装的查询请求</param>
+    /// <param name="ct">用于协作取消的取消令牌</param>
+    /// <returns>来自查询处理器的响应</returns>
     public Task<TResponse> Handle(QueryWrapper<TQuery, TResponse> request, CancellationToken ct)
         => _handler.Handle(request.Query, ct);
 }

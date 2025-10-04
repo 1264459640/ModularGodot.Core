@@ -1,31 +1,31 @@
 using MediatR;
-using ModularGodot.Contracts.Abstractions.Messaging;
+using ModularGodot.Core.Contracts.Abstractions.Messaging;
 
-namespace ModularGodot.Infrastructure.Messaging;
+namespace ModularGodot.Core.Infrastructure.Messaging;
 
 /// <summary>
-/// Wrapper class that adapts ICommandHandler to MediatR's IRequestHandler
-/// Provides a bridge between the framework's command handler interface and MediatR
+/// 命令处理器包装器类
+/// 适配ICommandHandler到MediatR的IRequestHandler，提供框架命令处理器接口与MediatR之间的桥梁
 /// </summary>
-/// <typeparam name="TCommand">The command type that must implement ICommand&lt;TResponse&gt;</typeparam>
-/// <typeparam name="TResponse">The response type</typeparam>
+/// <typeparam name="TCommand">命令类型，必须实现ICommand&lt;TResponse&gt;接口</typeparam>
+/// <typeparam name="TResponse">响应类型</typeparam>
 public class CommandHandlerWrapper<TCommand, TResponse> : IRequestHandler<CommandWrapper<TCommand, TResponse>, TResponse>
     where TCommand : ICommand<TResponse>
 {
     private readonly ICommandHandler<TCommand, TResponse> _handler;
 
     /// <summary>
-    /// Initializes a new instance of the CommandHandlerWrapper class
+    /// 初始化命令处理器包装器实例
     /// </summary>
-    /// <param name="handler">The actual command handler to delegate to</param>
+    /// <param name="handler">实际要委托的命令处理器</param>
     public CommandHandlerWrapper(ICommandHandler<TCommand, TResponse> handler) => _handler = handler;
 
     /// <summary>
-    /// Handles the command by delegating to the actual command handler
+    /// 处理命令，通过委托给实际的命令处理器
     /// </summary>
-    /// <param name="request">The wrapped command request</param>
-    /// <param name="ct">Cancellation token for cooperative cancellation</param>
-    /// <returns>The response from the command handler</returns>
+    /// <param name="request">包装的命令请求</param>
+    /// <param name="ct">用于协作取消的取消令牌</param>
+    /// <returns>来自命令处理器的响应</returns>
     public Task<TResponse> Handle(CommandWrapper<TCommand, TResponse> request, CancellationToken ct)
         => _handler.Handle(request.Command, ct);
 }

@@ -1,4 +1,4 @@
-namespace ModularGodot.Contracts.Abstractions.ResourceManagement.DTOs;
+namespace ModularGodot.Core.Contracts.Abstractions.ResourceManagement.DTOs;
 
 /// <summary>
 /// 内存压力级别
@@ -6,7 +6,8 @@ namespace ModularGodot.Contracts.Abstractions.ResourceManagement.DTOs;
 public enum MemoryPressureLevel
 {
     /// <summary>
-    /// 低压�?    /// </summary>
+    /// 低压级
+    /// </summary>
     Low,
     
     /// <summary>
@@ -15,7 +16,8 @@ public enum MemoryPressureLevel
     Medium,
     
     /// <summary>
-    /// 高压�?    /// </summary>
+    /// 高压级
+    /// </summary>
     High,
     
     /// <summary>

@@ -1,9 +1,5 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+using ModularGodot.Core.Contracts.Abstractions.Messaging;
 using Xunit;
-using ModularGodot.Contracts.Abstractions.Messaging;
-using ModularGodot.Core.XUnitTests.Events;
 
 namespace ModularGodot.Core.XUnitTests.Events
 {

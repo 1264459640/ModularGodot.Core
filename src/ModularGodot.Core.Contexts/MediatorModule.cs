@@ -1,17 +1,14 @@
+using System.Reflection;
 using Autofac;
 using MediatR;
 using MediatR.Extensions.Autofac.DependencyInjection;
 using MediatR.Extensions.Autofac.DependencyInjection.Builder;
-using ModularGodot.Contracts.Abstractions.Messaging;
-using ModularGodot.Infrastructure.Messaging;
-using System.Reflection;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using ModularGodot.Core.Contracts.Abstractions.Messaging;
+using ModularGodot.Core.Infrastructure.Messaging;
 
-namespace ModularGodot.Contexts;
+namespace ModularGodot.Core.Contexts;
 
-public class MediatorModule : Autofac.Module
+internal class MediatorModule : Autofac.Module
 {
     protected override void Load(ContainerBuilder builder)
     {

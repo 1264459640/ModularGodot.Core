@@ -1,20 +1,20 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using ModularGodot.Contracts.Events.ResourceManagement;
-using ModularGodot.Contracts.Abstractions.Bases;
-using ModularGodot.Contracts.Abstractions.Caching;
-using ModularGodot.Contracts.Abstractions.Messaging;
-using ModularGodot.Contracts.Abstractions.Monitoring;
-using ModularGodot.Contracts.Abstractions.ResourceManagement;
-using ModularGodot.Contracts.Abstractions.ResourceManagement.DTOs;
-using ModularGodot.Contracts.Enums;
-using MemoryPressureLevel = ModularGodot.Contracts.Events.ResourceManagement.MemoryPressureLevel;
-using ModularGodot.Contracts.Attributes;
+using ModularGodot.Core.Contracts.Abstractions.Bases;
+using ModularGodot.Core.Contracts.Abstractions.Caching;
+using ModularGodot.Core.Contracts.Abstractions.Messaging;
+using ModularGodot.Core.Contracts.Abstractions.Monitoring;
+using ModularGodot.Core.Contracts.Abstractions.ResourceManagement;
+using ModularGodot.Core.Contracts.Abstractions.ResourceManagement.DTOs;
+using ModularGodot.Core.Contracts.Attributes;
+using ModularGodot.Core.Contracts.Enums;
+using ModularGodot.Core.Contracts.Events.ResourceManagement;
+using MemoryPressureLevel = ModularGodot.Core.Contracts.Events.ResourceManagement.MemoryPressureLevel;
 
-namespace ModularGodot.Infrastructure.ResourceManagement;
+namespace ModularGodot.Core.Infrastructure.ResourceManagement;
 
 /// <summary>
-/// 资源管理�?- 系统核心协调组件
+/// 资源管理器 - 系统核心协调组件
 /// </summary>
 [Injectable(Lifetime.Singleton)]
 public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResourceMonitorService
@@ -141,7 +141,7 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
             var expiration = GetExpirationFromStrategy(cacheStrategy);
             await _cacheService.SetAsync(key, resource, expiration, cancellationToken);
             
-            // 记录缓存项，即便是永久缓存（LongLived）也要追�?
+            // 记录缓存项，即便是永久缓存（LongLived）也要跟踪
             var expiryTime = expiration.HasValue ? DateTime.UtcNow.Add(expiration.Value) : DateTime.MaxValue;
             _cacheItems.TryAdd(key, expiryTime);
             
@@ -277,7 +277,7 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
         _config.EnablePerformanceMonitoring = config.EnablePerformanceMonitoring;
         _config.MaxCacheItems = config.MaxCacheItems;
         
-        // 更新内存监控器配�?
+        // 更新内存监控器配置
         _memoryMonitor.MemoryPressureThreshold = config.MemoryPressureThreshold;
         
         return Task.CompletedTask;
@@ -318,7 +318,7 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
             var itemsBeforeCleanup = _cacheItems.Count;
             var now = DateTime.UtcNow;
             
-            // 清理过期�?
+            // 清理过期项
             var expiredKeys = _cacheItems
                 .Where(kvp => kvp.Value < now)
                 .Select(kvp => kvp.Key)
@@ -331,7 +331,7 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
             }
             
             var itemsAfterCleanup = _cacheItems.Count;
-            var memoryFreed = (itemsBeforeCleanup - itemsAfterCleanup) * 1024; // 估算释放的内�?
+            var memoryFreed = (itemsBeforeCleanup - itemsAfterCleanup) * 1024; // 估算释放的内存
             
             // 发布清理事件
             await _eventBus.PublishAsync(new CacheCleanupEvent(reason, itemsBeforeCleanup, itemsAfterCleanup, memoryFreed));
@@ -351,7 +351,7 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
                 _performanceMonitor.RecordCounter("cache_cleanup_errors");
             }
             
-            // 可以考虑记录日志或发布错误事�?
+            // 可以考虑记录日志或发布错误事件
         }
     }
     

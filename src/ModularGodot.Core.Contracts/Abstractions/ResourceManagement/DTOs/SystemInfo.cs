@@ -1,4 +1,4 @@
-namespace ModularGodot.Contracts.Abstractions.ResourceManagement.DTOs;
+namespace ModularGodot.Core.Contracts.Abstractions.ResourceManagement.DTOs;
 
 /// <summary>
 /// 系统信息
@@ -11,11 +11,13 @@ public class SystemInfo
     public string OperatingSystem { get; set; } = string.Empty;
     
     /// <summary>
-    /// 处理器数�?    /// </summary>
+    /// 处理器数量
+    /// </summary>
     public int ProcessorCount { get; set; }
     
     /// <summary>
-    /// 总内�?    /// </summary>
+    /// 总内存
+    /// </summary>
     public long TotalMemory { get; set; }
     
     /// <summary>

@@ -4,8 +4,6 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>ModularGodot.Infrastructure</AssemblyName>
-    <RootNamespace>ModularGodot.Infrastructure</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <PackageId>ModularGodot.Core.Infrastructure</PackageId>

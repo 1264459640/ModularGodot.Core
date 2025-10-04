@@ -1,5 +1,5 @@
 using Xunit;
-using ModularGodot.Contracts.Abstractions.Services;
+using ModularGodot.Core.Contracts.Abstractions.Services;
 
 namespace ModularGodot.Core.XUnitTests.DependencyInjection
 {

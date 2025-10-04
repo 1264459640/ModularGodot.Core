@@ -1,4 +1,4 @@
-namespace ModularGodot.Infrastructure.Caching;
+namespace ModularGodot.Core.Infrastructure.Caching;
 
 /// <summary>
 /// 缓存配置

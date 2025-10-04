@@ -1,4 +1,4 @@
-namespace ModularGodot.Contracts.Attributes;
+namespace ModularGodot.Core.Contracts.Attributes;
 
 /// <summary>
 /// 标记类可以被依赖注入容器注册的特性

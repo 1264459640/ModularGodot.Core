@@ -1,4 +1,4 @@
-namespace ModularGodot.Contracts.Abstractions.Messaging;
+namespace ModularGodot.Core.Contracts.Abstractions.Messaging;
 
 /// <summary>
 /// 仅订阅事件的接口，提供订阅功能但不包含发布功能

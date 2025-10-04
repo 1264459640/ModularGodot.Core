@@ -1,6 +1,5 @@
 using Xunit;
-using ModularGodot.Contracts.Abstractions.Services;
-using ModularGodot.Core.Test;
+using ModularGodot.Core.Contracts.Abstractions.Services;
 
 namespace ModularGodot.Core.XUnitTests.DependencyInjection
 {
@@ -14,7 +13,7 @@ namespace ModularGodot.Core.XUnitTests.DependencyInjection
         public void OriginalTestServiceTest_ShouldResolveAndPrintMessage()
         {
             // Arrange
-            var service1 = global::ModularGodot.Contexts.Contexts.Instance.ResolveService<ITestService>();
+            var service1 = Contexts.Contexts.Instance.ResolveService<ITestService>();
 
             // Act
             var result = service1.PrintMessage("Hello World!");
@@ -28,7 +27,7 @@ namespace ModularGodot.Core.XUnitTests.DependencyInjection
         public void OriginalDITest_ShouldResolveAndRun()
         {
             // Arrange
-            var service = global::ModularGodot.Contexts.Contexts.Instance.ResolveService<IDITest>();
+            var service = Contexts.Contexts.Instance.ResolveService<IDITest>();
 
             // Act & Assert
             Assert.NotNull(service);

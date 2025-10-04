@@ -4,12 +4,12 @@ namespace ModularGodot.Core.XUnitTests
 {
     public class TestBase : IDisposable
     {
-        protected global::ModularGodot.Contexts.Contexts TestContext { get; private set; }
+        protected Contexts.Contexts TestContext { get; private set; }
         private bool _disposed;
 
         public TestBase()
         {
-            TestContext = global::ModularGodot.Contexts.Contexts.Instance;
+            TestContext = Contexts.Contexts.Instance;
         }
 
         protected T ResolveService<T>() where T : class

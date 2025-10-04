@@ -1,4 +1,4 @@
-namespace ModularGodot.Contracts.Enums;
+namespace ModularGodot.Core.Contracts.Enums;
 
 /// <summary>
 /// 资源缓存策略枚举

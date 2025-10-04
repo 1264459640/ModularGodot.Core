@@ -1,9 +1,5 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
-using ModularGodot.Contracts.Abstractions.Messaging;
-using ModularGodot.Infrastructure.Messaging;
+using ModularGodot.Core.Contracts.Abstractions.Messaging;
 
 namespace ModularGodot.Core.XUnitTests.Mediator
 {
