@@ -75,13 +75,17 @@ As a game developer using ModularGodot.Core, I need a stable and reliable event 
 
 ### Functional Requirements
 - **FR-001**: System MUST prevent memory leaks by properly cleaning up all event subscriptions and subjects when no longer needed
-- **FR-002**: System MUST handle concurrent event publishing and subscription without race conditions or deadlocks
+- **FR-002**: System MUST handle concurrent event publishing and subscription using fine-grained locks to balance performance with data consistency, without race conditions or deadlocks
 - **FR-003**: System MUST ensure that one-time subscriptions are automatically disposed after the first event is received
 - **FR-004**: System MUST maintain stable memory usage over extended periods of operation with target limit of 100MB
 - **FR-005**: System MUST prevent test host process crashes during unit test execution
 - **FR-006**: System MUST gracefully handle disposed state by throwing EventBusDisposedException without unhandled exceptions
 - **FR-007**: System MUST provide proper resource cleanup when the event bus is disposed
 - **FR-008**: System MUST support high-frequency event operations (up to 1,000 events/second) without accumulating zombie resources
+- **FR-009**: System MUST implement basic observability through simple log messages on critical operations and minimal performance metrics
+- **FR-010**: System MUST validate event format validity before processing and log errors without interruption of normal system operation
+- **FR-011**: System MUST integrate with external logging and metrics collection systems
+- **FR-012**: System MUST implement basic security by validating event format before processing
 
 ### Key Entities *(include if feature involves data)*
 - **Event Bus**: Central component responsible for managing event publishing and subscription lifecycle
@@ -116,6 +120,13 @@ As a game developer using ModularGodot.Core, I need a stable and reliable event 
 - Q: 性能规模要求 - 长期运行和高频事件操作的具体性能目标是什么？ → A: 桌面游戏（每秒最多1000个事件，内存<100MB）
 - Q: 错误处理策略 - 优雅处理已释放状态的具体行为是什么？ → A: 抛出业务异常（EventBusDisposedException）
 - Q: 测试环境模拟策略 - 如何验证测试主体进程不崩溃？ → A: 混合策略（单元测试+模拟压力测试）
+
+### Session 2025-10-05
+- Q: 事件总线系统可观测性级别是多少？ → A: 基础：简单日志消息和最少的指标
+- Q: 事件总线系统安全级别是怎样的？ → A: 基础：仅验证发布的事件格式有效
+- Q: 外部服务集成需求是什么？ → A: 有限：仅与日志系统或指标收集系统集成
+- Q: 无效事件的错误处理方式是什么？ → A: 记录错误：记录错误信息，但继续系统正常运行
+- Q: 多线程环境下锁定策略应该是怎样的？ → A: 平衡：使用细粒度锁以平衡性能和数据一致性
 
 ---
 

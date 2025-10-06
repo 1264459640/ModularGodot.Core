@@ -1,15 +1,17 @@
 using System;
+using ModularGodot.Core.XUnitTests.TestInfrastructure;
 
 namespace ModularGodot.Core.XUnitTests
 {
     public class TestBase : IDisposable
     {
-        protected Contexts.Contexts TestContext { get; private set; }
+        protected TestContext TestContext { get; private set; }
+        
         private bool _disposed;
 
         public TestBase()
         {
-            TestContext = Contexts.Contexts.Instance;
+            TestContext = new TestContext();
         }
 
         protected T ResolveService<T>() where T : class
@@ -24,6 +26,12 @@ namespace ModularGodot.Core.XUnitTests
             return TestContext.TryResolveService(out service);
         }
 
+        protected Mocks.MockGameLogger GetTestLogger()
+        {
+            CheckDisposed();
+            return TestContext.GetMockLogger();
+        }
+
         private void CheckDisposed()
         {
             if (_disposed)
@@ -34,8 +42,7 @@ namespace ModularGodot.Core.XUnitTests
         {
             if (!_disposed)
             {
-                // Note: We don't dispose the Context here as it's a singleton
-                // and other tests may still need it
+                TestContext?.Dispose();
                 _disposed = true;
             }
         }

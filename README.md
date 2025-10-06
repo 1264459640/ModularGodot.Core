@@ -11,6 +11,7 @@ ModularGodot.Core 是一个为 Godot 游戏开发设计的企业级框架，以�
 - **插件化架构**：以插件为核心的设计理念，支持动态扩展
 - **自动依赖注入**：基于 Autofac 的 IoC 容器，简化服务注册和解析
 - **事件驱动**：基于 R3 的响应式事件系统
+- **事件总线**：线程安全、资源高效的事件总线实现
 - **中介者模式**：解耦的命令和查询处理
 - **资源管理**：智能缓存和内存监控
 - **性能监控**：实时性能指标收集
@@ -70,6 +71,69 @@ public class CreateUserHandler : ICommandHandler<CreateUserCommand, UserDto>
     public async Task<UserDto> Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
         // 处理逻辑
+    }
+}
+```
+
+### 事件总线系统
+
+框架提供了基于 R3 的增强型事件总线系统，支持线程安全操作和高效的资源管理：
+
+1. **订阅管理模式**：通过返回订阅 ID 实现精确的订阅管理
+2. **自动资源清理**：订阅资源自动管理，防止内存泄漏
+3. **线程安全保障**：基于 ReaderWriterLockSlim 实现线程安全
+4. **一次订阅功能**：支持处理单次事件并自动清理订阅
+5. **性能监控集成**：内置发布/订阅计数器用于监控
+
+```csharp
+// 使用注入的事件总线
+public class GameService
+{
+    private readonly IEventBus _eventBus;
+    private string _subscriptionId;
+
+    public GameService(IEventBus eventBus)
+    {
+        _eventBus = eventBus;
+    }
+
+    public async Task SubscribeToEvents()
+    {
+        // 异步订阅，返回订阅ID用于取消订阅
+        _subscriptionId = await _eventBus.Subscribe<GameStartedEvent>(async (e) =>
+        {
+            // 事件处理逻辑
+            await HandleGameStart(e);
+        });
+    }
+
+    public async Task SubscribeOnce()
+    {
+        // 一次性订阅，处理首次事件后自动清理
+        await _eventBus.SubscribeOnce<PlayerWonEvent>(async (e) =>
+        {
+            // 独立处理逻辑
+            await HandleWin(e);
+        });
+    }
+
+    public async Task PublishEvent()
+    {
+        var gameStartEvent = new GameStartedEvent
+        {
+            EventId = Guid.NewGuid().ToString(),
+            Timestamp = DateTime.UtcNow,
+            Source = "GameService"
+        };
+
+        // 发布事件
+        await _eventBus.Publish(gameStartEvent);
+    }
+
+    public async Task Cleanup()
+    {
+        // 使用订阅ID进行取消订阅
+        await _eventBus.Unsubscribe(_subscriptionId);
     }
 }
 ```
@@ -174,6 +238,8 @@ dotnet pack src/ModularGodot.Core/ModularGodot.Core.csproj -c Release -o package
 - [NuGet 包文档](docs/NUGET_PACKAGES.md) - NuGet 包结构和使用说明
 - [插件架构文档](docs/PLUGIN_ARCHITECTURE.md) - 插件开发和集成指南
 - [依赖注入文档](docs/DEPENDENCY_INJECTION.md) - 依赖注入机制和使用说明
+- [中介者模式使用指南](docs/MEDIATOR_USAGE.md) - 命令/查询中介模式使用说明
+- [事件系统使用指南](docs/EVENT_SYSTEM_USAGE.md) - R3事件系统使用说明
 
 ## 🛠️ 技术栈
 

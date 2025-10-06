@@ -10,10 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ModularGodot.Core.Contracts" Version="1.0.0" />
-    <PackageReference Include="ModularGodot.Core.Contexts" Version="1.0.0" />
-    <PackageReference Include="ModularGodot.Core.Infrastructure" Version="1.0.0" />
-    <PackageReference Include="ModularGodot.Core.Repositories" Version="1.0.0" />
+    <ProjectReference Include="..\ModularGodot.Core.Contracts\ModularGodot.Core.Contracts.csproj" />
+    <PackageReference Include="..\ModularGodot.Core.Infrastructure\ModularGodot.Core.Contexts.csproj" />
+    <ProjectReference Include="..\ModularGodot.Core.Infrastructure\ModularGodot.Core.Infrastructure.csproj" />
+    <PackageReference Include="..\ModularGodot.Core.Infrastructure\ModularGodot.Core.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

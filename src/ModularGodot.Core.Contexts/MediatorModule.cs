@@ -71,5 +71,10 @@ internal class MediatorModule : Autofac.Module
         builder.RegisterGeneric(typeof(QueryHandlerWrapper<,>))
             .As(typeof(IRequestHandler<,>))
             .InstancePerLifetimeScope();
+
+        // Register the enhanced R3 event bus as the IEventBus implementation (singleton lifetime)
+        builder.RegisterType<R3EventBus>()
+            .As<IEventBus>()
+            .SingleInstance();
     }
 }
