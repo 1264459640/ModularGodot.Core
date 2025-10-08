@@ -47,7 +47,6 @@ src/
 中介者模式使用 MediatR 和自定义适配器：
 
 - `IDispatcher`: 自定义中介者接口（无 MediatR 依赖）
-- `IMyMediator`: 自定义中介者接口（无 MediatR 依赖）
 - `MediatRAdapter`: MediatR 适配器实现，提供：
   - 完整的取消令牌支持（包括超时和协作取消）
   - 异常传播到调用者

@@ -5,10 +5,11 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Version>0.1.0</Version>
     <PackageVersion>0.1.0</PackageVersion>
-    <Authors>ModularGodot Team</Authors>
+    <Authors>BananaPeel</Authors>
     <Company>ModularGodot</Company>
     <Copyright>Copyright © ModularGodot 2025</Copyright>
     <PackageProjectUrl>https://github.com/ModularGodot/Core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ModularGodot/Core</RepositoryUrl>
+    <PackageOutputPath>/mnt/d/GodotProjects/ModularGodot.Core/packages</PackageOutputPath>
   </PropertyGroup>
 </Project>

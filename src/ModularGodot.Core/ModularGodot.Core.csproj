@@ -7,13 +7,40 @@
     <PackageId>ModularGodot.Core</PackageId>
     <Description>Full ModularGodot.Core framework - Enterprise-grade modular framework for Godot 4.4 game development</Description>
     <PackageTags>godot;modular;framework;game-development</PackageTags>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <ContentTargetFolders>contentFiles</ContentTargetFolders>
+    <DisableContentFilesProjectOutputGroup>false</DisableContentFilesProjectOutputGroup>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ModularGodot.Core.Contracts\ModularGodot.Core.Contracts.csproj" />
-    <PackageReference Include="..\ModularGodot.Core.Infrastructure\ModularGodot.Core.Contexts.csproj" />
+    <ProjectReference Include="..\ModularGodot.Core.Contexts\ModularGodot.Core.Contexts.csproj" />
     <ProjectReference Include="..\ModularGodot.Core.Infrastructure\ModularGodot.Core.Infrastructure.csproj" />
-    <PackageReference Include="..\ModularGodot.Core.Infrastructure\ModularGodot.Core.Repositories.csproj" />
+    <ProjectReference Include="..\ModularGodot.Core.Repositories\ModularGodot.Core.Repositories.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GodotSharp" Version="4.5.0" />
+  </ItemGroup>
+
+  <!-- Include AutoLoads files in the tools directory of the NuGet package -->
+  <ItemGroup>
+    <None Include="AutoLoads\**\*.cs">
+      <Pack>true</Pack>
+      <PackagePath>tools\AutoLoads\%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <!-- Include Install/Uninstall scripts -->
+  <ItemGroup>
+    <None Include="tools\install.ps1">
+      <Pack>true</Pack>
+      <PackagePath>tools</PackagePath>
+    </None>
+    <None Include="tools\uninstall.ps1">
+      <Pack>true</Pack>
+      <PackagePath>tools</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

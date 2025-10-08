@@ -140,6 +140,28 @@ public class GameService
 
 ## 🚀 快速开始
 
+### 0. Godot Integration
+
+#### Global Service Node
+
+The project provides a `GodotGlobalService` node for easy access to core services in Godot environments:
+
+1. Add the `GodotGlobalService` node to the root of your scene tree
+2. Access core services through the singleton instance:
+
+```csharp
+// Get the global service instance
+var globalService = GodotGlobalService.Instance;
+
+// Resolve the dispatcher interface
+var dispatcher = globalService.ResolveDispatcher();
+
+// Resolve the event bus interface
+var eventBus = globalService.ResolveEventBus();
+```
+
+For detailed usage examples, see: [ServiceUsageExample.cs](src/ModularGodot.Core/Examples/ServiceUsageExample.cs)
+
 ### 1. 环境要求
 
 - .NET 9.0

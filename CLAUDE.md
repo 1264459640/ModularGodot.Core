@@ -31,6 +31,17 @@ dotnet build src/ModularGodot.Core.Infrastructure/ModularGodot.Core.Infrastructu
 dotnet build src/ModularGodot.Core.Repositories/ModularGodot.Core.Repositories.csproj
 ```
 
+### Test Commands
+
+```bash
+# Run Godot scene-based integration tests
+# Open the project in Godot editor and run test scenes
+# Select test scenes and click RunTest button
+
+# Build the test project
+dotnet build src/ModularGodot.Core.Test/ModularGodot.Core.Test.csproj
+```
+
 ### NuGet Package Commands
 
 ```bash
@@ -114,6 +125,53 @@ The project uses Autofac for dependency injection with custom attributes:
 - `[Injectable(Lifetime.Singleton/Scoped/Transient)]`: Marks classes for automatic registration
 - `Lifetime` enum: Defines service lifecycles (Singleton, Scoped, Transient)
 - Module-based configuration in the Contexts layer
+
+## Godot Integration
+
+### Global Service Node
+
+The project provides a `GodotGlobalService` node for easy access to core services in Godot environments:
+
+1. Add the `GodotGlobalService` node to the root of your scene tree
+2. Access core services through the singleton instance:
+
+```csharp
+// Get the global service instance
+var globalService = GodotGlobalService.Instance;
+
+// Resolve the dispatcher interface
+var dispatcher = globalService.ResolveDispatcher();
+
+// Resolve the event bus interface
+var eventBus = globalService.ResolveEventBus();
+```
+
+### Key Components
+
+- `GodotGlobalService`: Global singleton node for service resolution
+- Located in `src/ModularGodot.Core/GlobalServices/`
+- Provides access to `IDispatcher` and `IEventBus` interfaces
+- Manages the lifecycle of the dependency injection container
+
+## Integration Testing
+
+The project now includes comprehensive Godot scene-based integration tests to verify component communication and package completeness:
+
+### Test Structure
+- **Mediator Communication Tests**: Verify command and query routing through the Mediator pattern using Godot scenes
+- **EventBus Communication Tests**: Validate event publishing and subscription through the R3 EventBus using Godot scenes
+- **Package Completeness Tests**: Ensure all NuGet packages are present and functional using Godot scenes
+
+### Test Execution
+- Integration tests are implemented as Godot scenes in the ModularGodot.Core.Test project
+- Tests depend only on ModularGodot.Core and ModularGodot.Core.Contracts packages
+- Tests access mediator and event bus through MiddlewareProvider AutoLoad singleton
+- Tests can be run directly in the Godot editor by selecting scenes and clicking RunTest buttons
+- Tests are designed to run only in development environments
+- Only successful scenarios are validated (no error handling tests)
+
+### Godot Scene Testing
+Integration tests use Godot scenes to simulate production-like scenarios within the Godot engine environment. Tests leverage the MiddlewareProvider AutoLoad to access framework services.
 
 ## NuGet Package Structure
 

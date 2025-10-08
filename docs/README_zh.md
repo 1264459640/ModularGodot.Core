@@ -56,6 +56,28 @@ src/
 
 ## 🚀 快速开始
 
+### 0. Godot 集成
+
+#### 全局服务节点
+
+项目提供了 `GodotGlobalService` 节点，用于在 Godot 环境中轻松访问核心服务：
+
+1. 将 `GodotGlobalService` 节点添加到场景树的根节点
+2. 通过单例实例访问核心服务：
+
+```csharp
+// 获取全局服务实例
+var globalService = GodotGlobalService.Instance;
+
+// 解析中介者接口
+var dispatcher = globalService.ResolveDispatcher();
+
+// 解析事件总线接口
+var eventBus = globalService.ResolveEventBus();
+```
+
+详细使用示例请参考：[ServiceUsageExample.cs](src/ModularGodot.Core/Examples/ServiceUsageExample.cs)
+
 ### 1. 环境要求
 
 - .NET 9.0
