@@ -123,10 +123,6 @@ VERBOSE="${VERBOSE_OUTPUT:-false}"
 SKIP_CLEANUP="${CLEANUP_TEMP_FILES:-true}"
 OUTPUT_DIRECTORY="${PACKAGE_OUTPUT_DIR:-packages}"
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-BUILD_TEMP_DIR_NAME="${BUILD_TEMP_DIR:-build_temp}"
-BUILD_TEMP_DIR="$PROJECT_ROOT/$BUILD_TEMP_DIR_NAME"
-COLLECTED_DLLS_DIR_NAME="${COLLECTED_DLLS_DIR:-collected_dlls}"
-COLLECTED_DLLS_DIR="$BUILD_TEMP_DIR/$COLLECTED_DLLS_DIR_NAME"
 
 # Parse command line arguments
 FORCE_REBUILD=false
@@ -207,8 +203,6 @@ load_env_file "$PROJECT_ROOT/.env"
 
 # Create necessary directories
 mkdir -p "$OUTPUT_DIRECTORY"
-mkdir -p "$BUILD_TEMP_DIR"
-mkdir -p "$COLLECTED_DLLS_DIR"
 
 # Define packages to build
 declare -A ALL_PACKAGES=(
@@ -312,8 +306,7 @@ print_info "Packages output directory: $OUTPUT_DIRECTORY"
 
 # Cleanup if not skipped
 if [ "$DO_CLEANUP" = "true" ]; then
-    print_info "Cleaning up temporary files..."
-    remove_directory_safely "$BUILD_TEMP_DIR"
+    print_info "Skipping temporary files cleanup (no temporary files to clean)"
 fi
 
 if [ "$BUILD_SUCCESS" = "true" ]; then

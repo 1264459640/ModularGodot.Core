@@ -4,11 +4,11 @@
 本指南提供了运行集成测试的说明，这些测试验证ModularGodot.Core框架中的组件通信和包完整性。
 
 ## 先决条件
-- .NET 6.0或更高版本
+- .NET 9.0或更高版本
 - 支持.NET的Godot引擎
 - 所有ModularGodot.Core NuGet包（Contracts, Contexts, Infrastructure, Repositories, Core）
 - 访问ModularGodot.Core.Test项目
-- Godot.NET.Sdk/4.4.1
+- Godot.NET.Sdk/4.5.0
 
 ## 运行集成测试
 

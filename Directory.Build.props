@@ -12,4 +12,5 @@
     <RepositoryUrl>https://github.com/ModularGodot/Core</RepositoryUrl>
     <PackageOutputPath>/mnt/d/GodotProjects/ModularGodot.Core/packages</PackageOutputPath>
   </PropertyGroup>
+
 </Project>

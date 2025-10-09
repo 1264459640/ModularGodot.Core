@@ -254,6 +254,55 @@ dotnet pack src/ModularGodot.Core/ModularGodot.Core.csproj -c Release -o package
 ./tools/cleanup.ps1
 ```
 
+### 5. 集成测试
+
+框架提供了完整的集成测试套件，用于验证组件间的协作和通信：
+
+#### 测试项目结构
+```
+src/ModularGodot.Core.Test/
+├── Models/                  # 测试数据模型
+├── Scenes/                  # Godot测试场景
+├── Services/                # 测试服务
+├── Tests/                   # 单元测试
+└── MainTestScene.tscn      # 主测试场景
+```
+
+#### 运行集成测试
+
+1. **在Godot编辑器中运行**：
+   - 打开Godot编辑器并加载`ModularGodot.Core.Test`项目
+   - 选择要测试的场景文件（如`MediatorTestScene.tscn`）
+   - 点击场景中的"RunTest"按钮执行测试
+
+2. **批量运行所有测试**：
+   - 打开`MainTestScene.tscn`
+   - 点击"RunAllTests"按钮运行所有测试
+
+3. **通过命令行构建和测试**：
+   ```bash
+   # 构建测试项目
+   dotnet build src/ModularGodot.Core.Test/ModularGodot.Core.Test.csproj
+
+   # 运行单元测试
+   dotnet test src/ModularGodot.Core.Test/
+   ```
+
+#### 测试类别
+
+- **中介者通信测试**：验证命令和查询处理
+- **事件总线通信测试**：验证事件发布和订阅
+- **包完整性测试**：验证NuGet包加载和功能
+- **测试隔离测试**：验证测试独立执行能力
+
+#### 性能要求
+
+- 单个测试执行时间 < 100ms
+- 中介者路由时间 < 1ms
+- 事件总线发布时间 < 10ms
+
+详细信息请参阅[集成测试文档](docs/INTEGRATION_TESTING.md)。
+
 ## 📚 详细文档
 
 - [架构设计文档](docs/ARCHITECTURE.md) - 详细的架构说明和设计原则

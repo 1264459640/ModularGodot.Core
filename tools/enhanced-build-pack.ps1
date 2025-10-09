@@ -83,13 +83,6 @@ if (-not $OutputDirectory) { $OutputDirectory = "$PSScriptRoot\..\packages" }
 
 # Path configuration
 $ProjectRoot = "$PSScriptRoot\.."
-$BuildTempDirName = $env:BUILD_TEMP_DIR
-if (-not $BuildTempDirName) { $BuildTempDirName = "build_temp" }
-$BuildTempDir = "$ProjectRoot\$BuildTempDirName"
-
-$CollectedDllsDirName = $env:COLLECTED_DLLS_DIR
-if (-not $CollectedDllsDirName) { $CollectedDllsDirName = "collected_dlls" }
-$CollectedDllsDir = "$BuildTempDir\$CollectedDllsDirName"
 
 Write-Host "Starting enhanced build and pack process..." -ForegroundColor Green
 Write-Host "Configuration: $Configuration" -ForegroundColor Cyan
@@ -99,8 +92,6 @@ if ($IncludeSymbols) { Write-Host "Include Symbols: Enabled" -ForegroundColor Cy
 
 # Create necessary directories
 New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null
-New-Item -ItemType Directory -Path $BuildTempDir -Force | Out-Null
-New-Item -ItemType Directory -Path $CollectedDllsDir -Force | Out-Null
 
 # Define packages to build with their project paths and dependencies
 $AllPackages = @(
@@ -272,8 +263,7 @@ try {
 
     # Cleanup if not skipped
     if (-not $SkipCleanup) {
-        Write-Host "Cleaning up temporary files..." -ForegroundColor Yellow
-        Remove-DirectorySafely $BuildTempDir
+        Write-Host "Skipping temporary files cleanup (no temporary files to clean)" -ForegroundColor Yellow
     }
 
     exit 0

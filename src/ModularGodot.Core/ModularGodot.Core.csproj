@@ -10,6 +10,10 @@
     <IncludeContentInPack>true</IncludeContentInPack>
     <ContentTargetFolders>contentFiles</ContentTargetFolders>
     <DisableContentFilesProjectOutputGroup>false</DisableContentFilesProjectOutputGroup>
+    <!-- Source package settings -->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <SuppressDependenciesWhenPacking>false</SuppressDependenciesWhenPacking>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,24 +27,14 @@
     <PackageReference Include="GodotSharp" Version="4.5.0" />
   </ItemGroup>
 
-  <!-- Include AutoLoads files in the tools directory of the NuGet package -->
+  <!-- Include AutoLoads files as content files that will be added to the project -->
   <ItemGroup>
-    <None Include="AutoLoads\**\*.cs">
+    <Content Include="AutoLoads\**\*.cs">
       <Pack>true</Pack>
-      <PackagePath>tools\AutoLoads\%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
-    </None>
-  </ItemGroup>
-
-  <!-- Include Install/Uninstall scripts -->
-  <ItemGroup>
-    <None Include="tools\install.ps1">
-      <Pack>true</Pack>
-      <PackagePath>tools</PackagePath>
-    </None>
-    <None Include="tools\uninstall.ps1">
-      <Pack>true</Pack>
-      <PackagePath>tools</PackagePath>
-    </None>
+      <PackagePath>contentFiles\cs\any\AutoLoads\%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
