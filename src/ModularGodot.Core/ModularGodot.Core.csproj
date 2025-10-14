@@ -27,14 +27,23 @@
     <PackageReference Include="GodotSharp" Version="4.5.0" />
   </ItemGroup>
 
-  <!-- Include AutoLoads files as content files that will be added to the project -->
+  <!-- Exclude AutoLoads from local compilation -->
   <ItemGroup>
-    <Content Include="AutoLoads\**\*.cs">
+    <Compile Remove="AutoLoads\**\*.cs" />
+  </ItemGroup>
+
+  <!-- Package MiddlewareProvider and the custom .targets file for consumers -->
+  <ItemGroup>
+    <!-- 1. The source file to be copied -->
+    <Content Include="AutoLoads\MiddlewareProvider.cs">
       <Pack>true</Pack>
-      <PackagePath>contentFiles\cs\any\AutoLoads\%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackagePath>content\AutoLoads</PackagePath>
     </Content>
+    <!-- 2. The MSBuild targets file that performs the copy -->
+    <None Include="ModularGodot.Core.targets">
+      <Pack>true</Pack>
+      <PackagePath>build</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

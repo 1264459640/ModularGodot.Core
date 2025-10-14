@@ -1,0 +1,27 @@
+<Project>
+  <Target Name="CopyMiddlewareProvider" BeforeTargets="CoreCompile">
+    <PropertyGroup>
+      <MiddlewareProviderSource>$(MSBuildThisFileDirectory)..\content\AutoLoads\MiddlewareProvider.cs</MiddlewareProviderSource>
+      <MiddlewareProviderDestDir>$(ProjectDir)AutoLoads</MiddlewareProviderDestDir>
+      <MiddlewareProviderDest>$(MiddlewareProviderDestDir)\MiddlewareProvider.cs</MiddlewareProviderDest>
+    </PropertyGroup>
+
+    <!-- Ensure the destination directory exists -->
+    <MakeDir Directories="$(MiddlewareProviderDestDir)" Condition="!Exists('$(MiddlewareProviderDestDir)')" />
+
+    <ItemGroup>
+      <MiddlewareProviderDestFile Include="$(MiddlewareProviderDest)" />
+    </ItemGroup>
+
+    <Copy
+      SourceFiles="$(MiddlewareProviderSource)"
+      DestinationFiles="@(MiddlewareProviderDestFile)"
+      SkipUnchangedFiles="true"
+      Condition="Exists('$(MiddlewareProviderSource)') AND !Exists('$(MiddlewareProviderDest)')"
+    />
+
+    <!-- <ItemGroup>
+      <Compile Include="$(MiddlewareProviderDest)" Condition="Exists('$(MiddlewareProviderDest)') AND '$(EnableDefaultCompileItems)' == 'true'" />
+    </ItemGroup> -->
+  </Target>
+</Project>

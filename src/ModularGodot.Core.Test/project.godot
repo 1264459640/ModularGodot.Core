@@ -1,0 +1,50 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="ModularGodot.Core.Test"
+config/features=PackedStringArray("4.5", "C#")
+config/icon="res://icon.png"
+run/delta_sync_after_draw=false
+
+[autoload]
+
+MiddlewareProvider="*res://AutoLoads/MiddlewareProvider.cs"
+
+[dotnet]
+
+project/assembly_name="ModularGodot.Core.Test"
+
+[editor_plugins]
+
+enabled=PackedStringArray("C#")
+
+[gui]
+
+common/drop_mouse_on_gui_input_disabled=true
+
+[input]
+
+debug/quit_alt_enter=true
+
+[locale]
+
+include/regions_in_tree=false
+locale_filter/mode=1
+
+[logging]
+
+file_logging/enable_file_logging=false
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"
+environment/default_clear_color="0.185294,0.185294,0.185294,1"

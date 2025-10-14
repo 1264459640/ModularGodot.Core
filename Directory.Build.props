@@ -10,7 +10,7 @@
     <Copyright>Copyright © ModularGodot 2025</Copyright>
     <PackageProjectUrl>https://github.com/ModularGodot/Core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ModularGodot/Core</RepositoryUrl>
-    <PackageOutputPath>/mnt/d/GodotProjects/ModularGodot.Core/packages</PackageOutputPath>
+    <PackageOutputPath>D:/GodotProjects/ModularGodot.Core/packages</PackageOutputPath>
   </PropertyGroup>
 
 </Project>

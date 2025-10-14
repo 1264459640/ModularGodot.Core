@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://mediatortestscene001"]
+
+[ext_resource type="Script" path="res://Scenes/MediatorTestScene.cs" id="1"]
+
+[node name="MediatorTestScene" type="Node"]
+script = ExtResource("1")

@@ -1,0 +1,22 @@
+<Project Sdk="Godot.NET.Sdk/4.5.0">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ModularGodot.Core" Version="0.1.0" ExcludeAssets="ContentFiles" />
+        <PackageReference Include="ModularGodot.Core.Contracts" Version="0.1.0" />
+        <PackageReference Include="ModularGodot.Core.Contexts" Version="0.1.0" />
+        <PackageReference Include="ModularGodot.Core.Infrastructure" Version="0.1.0" />
+        <PackageReference Include="ModularGodot.Core.Repositories" Version="0.1.0" />
+    </ItemGroup>
+
+    <!-- 本地包源配置 -->
+    <PropertyGroup>
+        <RestoreSources>$(RestoreSources);../../packages;https://api.nuget.org/v3/index.json</RestoreSources>
+    </PropertyGroup>
+
+</Project>
