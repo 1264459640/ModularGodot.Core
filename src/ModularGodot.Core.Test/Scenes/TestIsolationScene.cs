@@ -1,7 +1,6 @@
 using Godot;
 using ModularGodot.Core.Test.Models;
 using ModularGodot.Core.Test.Scenes;
-using ModularGodot.Core.Test.Services;
 using System;
 using System.Diagnostics;
 
@@ -16,7 +15,7 @@ public partial class TestIsolationScene : BaseTestScene
         _instanceId = System.Threading.Interlocked.Increment(ref _testInstanceCount);
         TestDescription = "验证测试隔离和副作用预防";
         base._Ready();
-        _testLogger.LogInfo($"TestIsolationScene 实例 {_instanceId} ready", _sceneName);
+        GD.Print($"TestIsolationScene 实例 {_instanceId} ready", _sceneName);
     }
 
     /// <summary>
@@ -25,16 +24,16 @@ public partial class TestIsolationScene : BaseTestScene
     /// <param name="stopwatch">计时器</param>
     protected override void ExecuteTest(Stopwatch stopwatch)
     {
-        _testLogger.LogInfo($"实例 {_instanceId} 开始执行测试隔离测试", _sceneName);
+        GD.Print($"实例 {_instanceId} 开始执行测试隔离测试", _sceneName);   
 
         // 验证测试隔离
         // 检查是否有其他实例正在运行
         if (_testInstanceCount > 1)
         {
-            _testLogger.LogWarning($"检测到多个测试实例同时运行: {_testInstanceCount}", _sceneName);
+            GD.PrintErr($"检测到多个测试实例同时运行: {_testInstanceCount}", _sceneName);
         }
 
-        _testLogger.LogDebug("模拟测试操作", _sceneName);
+        GD.Print($"模拟测试操作", _sceneName);
         // 模拟一些测试操作
         // 这里可以添加具体的测试隔离验证逻辑
         System.Threading.Thread.Sleep(10); // 模拟一些工作
@@ -48,7 +47,7 @@ public partial class TestIsolationScene : BaseTestScene
         if (what == NotificationPredelete)
         {
             // 清理资源
-            _testLogger.LogInfo($"TestIsolationScene 实例 {_instanceId} 被释放", _sceneName);
+            GD.Print($"TestIsolationScene 实例 {_instanceId} 被释放", _sceneName);
         }
     }
 }

@@ -6,6 +6,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="ModularGodot.Core" Version="0.1.0" ExcludeAssets="ContentFiles" />
         <PackageReference Include="ModularGodot.Core.Contracts" Version="0.1.0" />
@@ -18,5 +22,9 @@
     <PropertyGroup>
         <RestoreSources>$(RestoreSources);../../packages;https://api.nuget.org/v3/index.json</RestoreSources>
     </PropertyGroup>
+
+    <ItemGroup>
+    <Compile Remove="MiddlewareProvider.cs" />
+    </ItemGroup>
 
 </Project>

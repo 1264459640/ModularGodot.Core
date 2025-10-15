@@ -1,7 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://coxec27n5mgnp"]
+[gd_scene format=3 uid="uid://eventbustestscene001"]
 
-[ext_resource type="Script" uid="uid://2b2apo5e81fa" path="res://Scenes/EventBusTestScene.cs" id="1"]
+[ext_resource type="Script" path="res://Scenes/EventBusTestScene.cs" id="1"]
 
 [node name="EventBusTestScene" type="Node"]
 script = ExtResource("1")
-TestDescription = "验证事件总线的组件通信"

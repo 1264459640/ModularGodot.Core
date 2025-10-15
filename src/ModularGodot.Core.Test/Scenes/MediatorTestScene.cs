@@ -19,17 +19,17 @@ public partial class MediatorTestScene : BaseTestScene
     /// <param name="stopwatch">计时器</param>
     protected override void ExecuteTest(Stopwatch stopwatch)
     {
-        _testLogger.LogDebug("尝试解析中介者服务", _sceneName);
+        GD.Print("尝试解析中介者服务", _sceneName);
         // 获取中介者实例
         var mediator = MiddlewareProvider.Instance.ResolveDispatcher();
         if (mediator == null)
         {
             _testResult = CreateFailureResult("无法解析中介者服务", stopwatch);
-            _testLogger.LogError("测试失败: 无法解析中介者服务", _sceneName);
+            GD.PrintErr("测试失败: 无法解析中介者服务", _sceneName);
             return;
         }
 
-        _testLogger.LogDebug("中介者服务解析成功", _sceneName);
+        GD.Print("中介者服务解析成功", _sceneName);
         // 这里可以添加具体的中介者测试逻辑
         // 例如发送测试命令或查询
 

@@ -1,6 +1,7 @@
 using Godot;
 using ModularGodot.Core.Contracts.Abstractions.Messaging;
 
+
 namespace ModularGodot.Core.AutoLoads;
 
 /// <summary>

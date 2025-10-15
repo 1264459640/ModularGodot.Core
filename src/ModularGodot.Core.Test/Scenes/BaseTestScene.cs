@@ -1,6 +1,5 @@
 using Godot;
 using ModularGodot.Core.Test.Models;
-using ModularGodot.Core.Test.Services;
 using System.Diagnostics;
 
 namespace ModularGodot.Core.Test.Scenes
@@ -12,16 +11,12 @@ namespace ModularGodot.Core.Test.Scenes
     {
         protected TestResult _testResult;
         protected bool _testExecuted = false;
-        protected TestConfiguration _testConfiguration;
-        protected TestLogger _testLogger;
         protected string _sceneName;
 
         public override void _Ready()
         {
             _sceneName = GetType().Name;
-            _testConfiguration = TestConfiguration.Instance;
-            _testLogger = new TestLogger(_testConfiguration);
-            _testLogger.LogInfo($"{_sceneName} 初始化完成", _sceneName);
+            GD.Print($"{_sceneName} 初始化完成", _sceneName);
 
             // Add a button to run the test
             var runButton = new Button();
@@ -30,7 +25,7 @@ namespace ModularGodot.Core.Test.Scenes
             AddChild(runButton);
         }
 
-        [Godot.Export]
+        [Export]
         public string TestDescription { get; set; } = "测试场景";
 
         /// <summary>
@@ -38,26 +33,12 @@ namespace ModularGodot.Core.Test.Scenes
         /// </summary>
         public void RunTest()
         {
-            _testLogger.LogInfo($"开始执行测试: {TestDescription}", _sceneName);
+            GD.Print($"开始执行测试: {TestDescription}", _sceneName);
 
-            // 检查是否应该运行测试
-            if (!_testConfiguration.ShouldRunTests())
-            {
-                _testResult = new TestResult
-                {
-                    SceneName = _sceneName,
-                    Status = TestExecutionStatus.Skipped,
-                    Message = "测试仅在开发环境中运行",
-                    ExecutionTimeMs = 0,
-                    CompletedAt = DateTime.Now
-                };
-                _testLogger.LogWarning("测试未在开发环境中运行，跳过执行", _sceneName);
-                return;
-            }
 
             if (_testExecuted)
             {
-                _testLogger.LogInfo("测试已执行，跳过重复执行", _sceneName);
+                GD.Print("测试已执行，跳过重复执行", _sceneName);
                 return;
             }
 
@@ -69,7 +50,7 @@ namespace ModularGodot.Core.Test.Scenes
                 ExecuteTest(stopwatch);
 
                 _testExecuted = true;
-                _testLogger.LogInfo($"测试通过: {TestDescription} - 执行时间: {stopwatch.ElapsedMilliseconds}ms", _sceneName);
+                GD.Print($"测试通过: {TestDescription} - 执行时间: {stopwatch.ElapsedMilliseconds}ms", _sceneName);
             }
             catch (Exception ex)
             {
@@ -82,7 +63,7 @@ namespace ModularGodot.Core.Test.Scenes
                     ExecutionTimeMs = stopwatch.ElapsedMilliseconds,
                     CompletedAt = DateTime.Now
                 };
-                _testLogger.LogError($"测试失败: {ex.Message}", _sceneName);
+                GD.PrintErr($"测试失败: {ex.Message}", _sceneName);
             }
         }
 
@@ -108,7 +89,7 @@ namespace ModularGodot.Core.Test.Scenes
         {
             _testResult = null;
             _testExecuted = false;
-            _testLogger.LogInfo("测试状态已重置", _sceneName);
+            GD.Print("测试状态已重置", _sceneName);
         }
 
         /// <summary>
