@@ -12,7 +12,7 @@ public partial class TestIsolationScene : BaseTestScene
 
     public override void _Ready()
     {
-        _instanceId = System.Threading.Interlocked.Increment(ref _testInstanceCount);
+        _instanceId = Interlocked.Increment(ref _testInstanceCount);
         TestDescription = "验证测试隔离和副作用预防";
         base._Ready();
         GD.Print($"TestIsolationScene 实例 {_instanceId} ready", _sceneName);
@@ -36,7 +36,7 @@ public partial class TestIsolationScene : BaseTestScene
         GD.Print($"模拟测试操作", _sceneName);
         // 模拟一些测试操作
         // 这里可以添加具体的测试隔离验证逻辑
-        System.Threading.Thread.Sleep(10); // 模拟一些工作
+        Thread.Sleep(10); // 模拟一些工作
 
         _testResult = CreateSuccessResult($"测试隔离验证通过 (实例 {_instanceId})", stopwatch);
         _testExecuted = true;

@@ -40,68 +40,81 @@ public class MemoryCacheService : BaseInfrastructure, ICacheService
         _logger.LogInformation("MemoryCacheService initialized with config: {Config}", _config);
     }
     
-    public Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default) where T : class
+    /// <summary>
+    /// 获取缓存值
+    /// </summary>
+    /// <typeparam name="T">值类型</typeparam>
+    /// <param name="key">缓存键</param>
+    /// <returns>缓存值，如果不存在则返回null</returns>
+    public T? Get<T>(string key) where T : class
     {
         CheckDisposed();
-        
+
         try
         {
             if (_memoryCache.TryGetValue(key, out var value))
             {
                 Interlocked.Increment(ref _hits);
                 _logger.LogDebug("Cache hit: {Key}", key);
-                
+
                 // 更新访问时间
                 if (_entries.TryGetValue(key, out var entry))
                 {
                     entry.LastAccessed = DateTime.UtcNow;
                 }
-                
-                return Task.FromResult(value as T);
+
+                return value as T;
             }
-            
+
             Interlocked.Increment(ref _misses);
             _logger.LogDebug("Cache miss: {Key}", key);
-            return Task.FromResult<T?>(null);
+            return null;
         }
         catch (Exception ex)
         {
             Interlocked.Increment(ref _errors);
             _logger.LogError(ex, "Error getting cache value for key: {Key}", key);
-            return Task.FromResult<T?>(null);
+            return null;
         }
     }
-    
-    public Task SetAsync<T>(string key, T value, TimeSpan? expiration = null, CancellationToken cancellationToken = default) where T : class
+
+    /// <summary>
+    /// 设置缓存值
+    /// </summary>
+    /// <typeparam name="T">值类型</typeparam>
+    /// <param name="key">缓存键</param>
+    /// <param name="value">缓存值</param>
+    /// <param name="expiration">过期时间</param>
+    public void Set<T>(string key, T value, TimeSpan? expiration = null) where T : class
     {
         CheckDisposed();
-        
+
         try
         {
             var options = new MemoryCacheEntryOptions();
-            
+
             // 设置过期时间
             var actualExpiration = expiration ?? _config.DefaultExpiration;
             if (actualExpiration != TimeSpan.Zero)
             {
                 options.AbsoluteExpirationRelativeToNow = actualExpiration;
             }
-            
+
             // 设置缓存大小限制
             options.Size = CalculateSize(value);
-            
+
             // 设置缓存优先�?
             options.Priority = CacheItemPriority.Normal;
-            
+
             // 设置过期回调
             options.PostEvictionCallbacks.Add(new PostEvictionCallbackRegistration
             {
                 EvictionCallback = OnCacheEvicted,
                 State = key
             });
-            
+
             _memoryCache.Set(key, value, options);
-            
+
             // 记录缓存条目信息
             var entry = new CacheEntry
             {
@@ -111,13 +124,11 @@ public class MemoryCacheService : BaseInfrastructure, ICacheService
                 LastAccessed = DateTime.UtcNow,
                 ExpiresAt = actualExpiration != TimeSpan.Zero ? DateTime.UtcNow.Add(actualExpiration) : null
             };
-            
+
             _entries.AddOrUpdate(key, entry, (k, v) => entry);
-            
+
             Interlocked.Increment(ref _sets);
             _logger.LogDebug("Cache set: {Key}, Size: {Size}, Expiration: {Expiration}", key, options.Size, actualExpiration);
-            
-            return Task.CompletedTask;
         }
         catch (Exception ex)
         {
@@ -126,25 +137,32 @@ public class MemoryCacheService : BaseInfrastructure, ICacheService
             throw;
         }
     }
-    
-    public Task<bool> ExistsAsync(string key, CancellationToken cancellationToken = default)
+
+    /// <summary>
+    /// 检查缓存键是否存在
+    /// </summary>
+    /// <param name="key">缓存键</param>
+    /// <returns>是否存在</returns>
+    public bool Exists(string key)
     {
         CheckDisposed();
-        
-        return Task.FromResult(_memoryCache.TryGetValue(key, out _));
+
+        return _memoryCache.TryGetValue(key, out _);
     }
-    
-    public Task RemoveAsync(string key, CancellationToken cancellationToken = default)
+
+    /// <summary>
+    /// 移除缓存键
+    /// </summary>
+    /// <param name="key">缓存键</param>
+    public void Remove(string key)
     {
         CheckDisposed();
-        
+
         try
         {
             _memoryCache.Remove(key);
             _entries.TryRemove(key, out _);
             _logger.LogDebug("Cache removed: {Key}", key);
-            
-            return Task.CompletedTask;
         }
         catch (Exception ex)
         {
@@ -153,22 +171,23 @@ public class MemoryCacheService : BaseInfrastructure, ICacheService
             throw;
         }
     }
-    
-    public Task ClearAsync(CancellationToken cancellationToken = default)
+
+    /// <summary>
+    /// 清空所有缓存
+    /// </summary>
+    public void Clear()
     {
         CheckDisposed();
-        
+
         try
         {
             if (_memoryCache is MemoryCache mc)
             {
                 mc.Compact(1.0); // 清空所有缓�?
             }
-            
+
             _entries.Clear();
             _logger.LogInformation("Cache cleared");
-            
-            return Task.CompletedTask;
         }
         catch (Exception ex)
         {

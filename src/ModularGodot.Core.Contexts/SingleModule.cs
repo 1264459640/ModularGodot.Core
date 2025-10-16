@@ -6,7 +6,7 @@ using ModularGodot.Core.Contracts.Attributes;
 
 namespace ModularGodot.Core.Contexts;
 
-internal class SingleModule : Autofac.Module
+public class SingleModule : Autofac.Module
 {
 
     protected override void Load(ContainerBuilder builder)

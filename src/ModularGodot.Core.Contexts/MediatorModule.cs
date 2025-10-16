@@ -8,7 +8,7 @@ using ModularGodot.Core.Infrastructure.Messaging;
 
 namespace ModularGodot.Core.Contexts;
 
-internal class MediatorModule : Autofac.Module
+public class MediatorModule : Autofac.Module
 {
     protected override void Load(ContainerBuilder builder)
     {

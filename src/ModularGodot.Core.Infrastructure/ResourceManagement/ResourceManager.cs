@@ -63,15 +63,15 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
     }
     
     #region IResourceCacheService Implementation
-    
-    public async Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default) where T : class
+
+    public T? Get<T>(string key) where T : class
     {
         var stopwatch = Stopwatch.StartNew();
-        
+
         try
         {
-            var result = await _cacheService.GetAsync<T>(key, cancellationToken);
-            
+            var result = _cacheService.Get<T>(key);
+
             lock (_lockObject)
             {
                 _totalRequests++;
@@ -84,46 +84,43 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
                     _missCount++;
                 }
             }
-            
+
             _responseTimes.Enqueue(stopwatch.Elapsed);
-            
-            // 限制响应时间队列大小
+
             if (_responseTimes.Count > 1000)
             {
                 _responseTimes.TryDequeue(out _);
             }
-            
-            // 记录性能指标
+
             if (_config.EnablePerformanceMonitoring)
             {
-                _performanceMonitor.RecordTimer("resource_cache_get", stopwatch.Elapsed, 
+                _performanceMonitor.RecordTimer("resource_cache_get", stopwatch.Elapsed,
                     new Dictionary<string, string> { { "hit", (result != null).ToString() } });
             }
-            
-            // 发布资源加载事件
-            await _eventBus.PublishAsync(new ResourceLoadEvent(
-                key, 
-                typeof(T).Name, 
-                result != null ? ResourceLoadResult.CacheHit : ResourceLoadResult.CacheMiss, 
-                stopwatch.Elapsed, 
-                0, 
-                result != null), cancellationToken);
-            
+
+            _eventBus.Publish(new ResourceLoadEvent(
+                key,
+                typeof(T).Name,
+                result != null ? ResourceLoadResult.CacheHit : ResourceLoadResult.CacheMiss,
+                stopwatch.Elapsed,
+                0,
+                result != null));
+
             return result;
         }
         catch (Exception ex)
         {
             Interlocked.Increment(ref _errorCount);
-            
-            await _eventBus.PublishAsync(new ResourceLoadEvent(
-                key, 
-                typeof(T).Name, 
-                ResourceLoadResult.Failed, 
-                stopwatch.Elapsed, 
-                0, 
-                false, 
-                ex.Message), cancellationToken);
-            
+
+            _eventBus.Publish(new ResourceLoadEvent(
+                key,
+                typeof(T).Name,
+                ResourceLoadResult.Failed,
+                stopwatch.Elapsed,
+                0,
+                false,
+                ex.Message));
+
             throw;
         }
         finally
@@ -131,21 +128,19 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
             stopwatch.Stop();
         }
     }
-    
-    public async Task SetAsync<T>(string key, T resource, ResourceCacheStrategy cacheStrategy = ResourceCacheStrategy.Default, CancellationToken cancellationToken = default) where T : class
+
+    public void Set<T>(string key, T resource, ResourceCacheStrategy cacheStrategy = ResourceCacheStrategy.Default) where T : class
     {
         var stopwatch = Stopwatch.StartNew();
-        
+
         try
         {
             var expiration = GetExpirationFromStrategy(cacheStrategy);
-            await _cacheService.SetAsync(key, resource, expiration, cancellationToken);
-            
-            // 记录缓存项，即便是永久缓存（LongLived）也要跟踪
+            _cacheService.Set(key, resource, expiration);
+
             var expiryTime = expiration.HasValue ? DateTime.UtcNow.Add(expiration.Value) : DateTime.MaxValue;
             _cacheItems.TryAdd(key, expiryTime);
-            
-            // 记录性能指标
+
             if (_config.EnablePerformanceMonitoring)
             {
                 _performanceMonitor.RecordTimer("resource_cache_set", stopwatch.Elapsed);
@@ -157,37 +152,37 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
             stopwatch.Stop();
         }
     }
-    
-    public async Task RemoveAsync(string key, CancellationToken cancellationToken = default)
+
+    public void Remove(string key)
     {
-        await _cacheService.RemoveAsync(key, cancellationToken);
+        _cacheService.Remove(key);
         _cacheItems.TryRemove(key, out _);
-        
+
         if (_config.EnablePerformanceMonitoring)
         {
             _performanceMonitor.RecordCounter("resource_cache_items_removed");
         }
     }
-    
-    public async Task CleanupAsync(CancellationToken cancellationToken = default)
+
+    public void Cleanup()
     {
-        await PerformCleanup(CacheCleanupReason.Manual);
+        PerformCleanup(CacheCleanupReason.Manual);
     }
-    
-    public async Task<bool> ExistsAsync(string key, CancellationToken cancellationToken = default)
+
+    public bool Exists(string key)
     {
-        return await _cacheService.ExistsAsync(key, cancellationToken);
+        return _cacheService.Exists(key);
     }
-    
+
     #endregion
     
     #region IResourceMonitorService Implementation
-    
-    public Task<CacheStatistics> GetCacheStatisticsAsync(CancellationToken cancellationToken = default)
+
+    public CacheStatistics GetCacheStatistics()
     {
         var now = DateTime.UtcNow;
         var expiredCount = _cacheItems.Values.Count(expiry => expiry < now);
-        
+
         lock (_lockObject)
         {
             var stats = new CacheStatistics
@@ -199,15 +194,15 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
                 ExpiredItems = expiredCount,
                 LastUpdated = DateTime.UtcNow
             };
-            return Task.FromResult(stats);
+            return stats;
         }
     }
-    
-    public Task<MemoryUsage> GetMemoryUsageAsync(CancellationToken cancellationToken = default)
+
+    public MemoryUsage GetMemoryUsage()
     {
         var currentUsage = _memoryMonitor.GetCurrentMemoryUsage();
         var maxUsage = _config.MaxMemorySize;
-        
+
         var usage = new MemoryUsage
         {
             CurrentUsage = currentUsage,
@@ -217,28 +212,28 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
             GCCollectionCount = GC.CollectionCount(0) + GC.CollectionCount(1) + GC.CollectionCount(2),
             LastChecked = DateTime.UtcNow
         };
-        return Task.FromResult(usage);
+        return usage;
     }
-    
-    public async Task<PerformanceReport> GetPerformanceReportAsync(TimeSpan period, CancellationToken cancellationToken = default)
+
+    public PerformanceReport GetPerformanceReport(TimeSpan period)
     {
-        var cacheStats = await GetCacheStatisticsAsync(cancellationToken);
-        var memoryStats = await GetMemoryUsageAsync(cancellationToken);
-        
+        var cacheStats = GetCacheStatistics();
+        var memoryStats = GetMemoryUsage();
+
         var responseTimes = _responseTimes.ToArray();
-        
-        var avgResponseTime = responseTimes.Length > 0 
+
+        var avgResponseTime = responseTimes.Length > 0
             ? TimeSpan.FromTicks((long)responseTimes.Average(t => t.Ticks))
             : TimeSpan.Zero;
-            
-        var fastestTime = responseTimes.Length > 0 
+
+        var fastestTime = responseTimes.Length > 0
             ? responseTimes.Min()
             : TimeSpan.Zero;
-            
-        var slowestTime = responseTimes.Length > 0 
+
+        var slowestTime = responseTimes.Length > 0
             ? responseTimes.Max()
             : TimeSpan.Zero;
-        
+
         int totalRequests;
         int errorCount;
         lock (_lockObject)
@@ -260,13 +255,13 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
             GeneratedAt = DateTime.UtcNow
         };
     }
-    
-    public Task<ResourceSystemConfig> GetConfigurationAsync(CancellationToken cancellationToken = default)
+
+    public ResourceSystemConfig GetConfiguration()
     {
-        return Task.FromResult(_config);
+        return _config;
     }
-    
-    public Task UpdateConfigurationAsync(ResourceSystemConfig config, CancellationToken cancellationToken = default)
+
+    public void UpdateConfiguration(ResourceSystemConfig config)
     {
         // 更新配置逻辑
         _config.MaxMemorySize = config.MaxMemorySize;
@@ -276,69 +271,67 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
         _config.EnableAutoCleanup = config.EnableAutoCleanup;
         _config.EnablePerformanceMonitoring = config.EnablePerformanceMonitoring;
         _config.MaxCacheItems = config.MaxCacheItems;
-        
+
         // 更新内存监控器配置
         _memoryMonitor.MemoryPressureThreshold = config.MemoryPressureThreshold;
-        
-        return Task.CompletedTask;
     }
-    
+
     #endregion
     
     #region Event Handlers
     
-    private async void OnMemoryPressureDetected(long currentUsage)
+    private void OnMemoryPressureDetected(long currentUsage)
     {
         var usagePercentage = _config.MaxMemorySize > 0 ? (double)currentUsage / _config.MaxMemorySize : 0;
         var pressureLevel = GetPressureLevel(usagePercentage);
-        
+
         // 发布内存压力事件
-        await _eventBus.PublishAsync(new MemoryPressureEvent(currentUsage, usagePercentage, pressureLevel));
-        
+        _eventBus.Publish(new MemoryPressureEvent(currentUsage, usagePercentage, pressureLevel));
+
         // 根据压力级别执行清理
         if (pressureLevel >= MemoryPressureLevel.Warning)
         {
-            await PerformCleanup(CacheCleanupReason.MemoryPressure);
+            PerformCleanup(CacheCleanupReason.MemoryPressure);
         }
     }
     
-    private async void OnCleanupTimer(object? state)
+    private void OnCleanupTimer(object? state)
     {
-        await PerformCleanup(CacheCleanupReason.Scheduled);
+        PerformCleanup(CacheCleanupReason.Scheduled);
     }
     
     #endregion
     
     #region Private Methods
     
-    private async Task PerformCleanup(CacheCleanupReason reason)
+    private void PerformCleanup(CacheCleanupReason reason)
     {
         try
         {
             var itemsBeforeCleanup = _cacheItems.Count;
             var now = DateTime.UtcNow;
-            
+
             // 清理过期项
             var expiredKeys = _cacheItems
                 .Where(kvp => kvp.Value < now)
                 .Select(kvp => kvp.Key)
                 .ToList();
-            
+
             foreach (var key in expiredKeys)
             {
-                await _cacheService.RemoveAsync(key);
+                _cacheService.Remove(key);
                 _cacheItems.TryRemove(key, out _);
             }
-            
+
             var itemsAfterCleanup = _cacheItems.Count;
             var memoryFreed = (itemsBeforeCleanup - itemsAfterCleanup) * 1024; // 估算释放的内存
-            
+
             // 发布清理事件
-            await _eventBus.PublishAsync(new CacheCleanupEvent(reason, itemsBeforeCleanup, itemsAfterCleanup, memoryFreed));
-            
+            _eventBus.Publish(new CacheCleanupEvent(reason, itemsBeforeCleanup, itemsAfterCleanup, memoryFreed));
+
             if (_config.EnablePerformanceMonitoring)
             {
-                _performanceMonitor.RecordCounter("cache_cleanup_performed", 1, 
+                _performanceMonitor.RecordCounter("cache_cleanup_performed", 1,
                     new Dictionary<string, string> { { "reason", reason.ToString() } });
                 _performanceMonitor.RecordCounter("cache_items_cleaned", expiredKeys.Count);
             }
@@ -350,7 +343,7 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
             {
                 _performanceMonitor.RecordCounter("cache_cleanup_errors");
             }
-            
+
             // 可以考虑记录日志或发布错误事件
         }
     }

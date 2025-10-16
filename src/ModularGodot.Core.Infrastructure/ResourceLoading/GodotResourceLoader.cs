@@ -47,7 +47,7 @@ public class GodotResourceLoader : BaseInfrastructure, IResourceLoader
             // 1. 根据缓存策略尝试从缓存获取
             if (cacheStrategy != ResourceCacheStrategy.NoCache)
             {
-                result = await _cacheService.GetAsync<T>(path, cancellationToken);
+                result = _cacheService.Get<T>(path);
                 if (result != null)
                 {
                     _statistics.CacheHits++;
@@ -70,7 +70,7 @@ public class GodotResourceLoader : BaseInfrastructure, IResourceLoader
                 _statistics.SuccessfulLoads++;
                 
                 // 3. 根据缓存策略存储到缓存
-                await _cacheService.SetAsync(path, result, cacheStrategy, cancellationToken: cancellationToken);
+                _cacheService.Set(path, result, cacheStrategy);
             }
             else
             {
@@ -149,9 +149,17 @@ public class GodotResourceLoader : BaseInfrastructure, IResourceLoader
             // 1. 根据缓存策略尝试从缓存获取（同步方式）
             if (cacheStrategy != ResourceCacheStrategy.NoCache)
             {
-                // 注意：这里需要同步版本的缓存获取，如果没有则跳过缓存
-                // 为了避免死锁，暂时跳过缓存检查
-                _statistics.CacheMisses++;
+                result = _cacheService.Get<T>(path);
+                if (result != null)
+                {
+                    _statistics.CacheHits++;
+                    _statistics.SuccessfulLoads++;
+                    return result;
+                }
+                else
+                {
+                    _statistics.CacheMisses++;
+                }
             }
             
             // 2. 直接从磁盘加载资源（同步方式）
@@ -160,9 +168,9 @@ public class GodotResourceLoader : BaseInfrastructure, IResourceLoader
             if (result != null)
             {
                 _statistics.SuccessfulLoads++;
-                
-                // 3. 缓存存储也跳过，避免异步调用
-                // TODO: 实现同步缓存存储或使用后台任务
+
+                // 3. 缓存存储
+                _cacheService.Set(path, result, cacheStrategy);
             }
             else
             {
@@ -215,7 +223,7 @@ public class GodotResourceLoader : BaseInfrastructure, IResourceLoader
         _statistics.PreloadCount++;
         
         // 检查是否已在缓存中
-        if (await _cacheService.ExistsAsync(path, cancellationToken))
+        if (_cacheService.Exists(path))
         {
             return;
         }

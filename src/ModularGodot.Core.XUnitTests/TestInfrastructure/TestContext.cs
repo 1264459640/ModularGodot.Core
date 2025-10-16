@@ -22,15 +22,12 @@ namespace ModularGodot.Core.XUnitTests.TestInfrastructure
             var builder = new ContainerBuilder();
 
             // Register test-specific implementations
-            builder.RegisterType<MockGameLogger>()
-                .As<IGameLogger>()
-                .SingleInstance();
-            
-            // 确保注册特别需要的类型
-            builder.RegisterType<Infrastructure.Messaging.R3EventBus>()
-                .As<IEventBus>()
-                .SingleInstance();
-            
+
+            // Register production modules
+            builder.RegisterModule<ModularGodot.Core.Contexts.SingleModule>();
+            builder.RegisterModule<ModularGodot.Core.Contexts.MediatorModule>();
+            builder.RegisterType<MockGameLogger>().As<IGameLogger>().SingleInstance();
+
             _container = builder.Build();
         }
 

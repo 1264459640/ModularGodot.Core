@@ -32,7 +32,7 @@ public partial class PackageTestScene : BaseTestScene
             "ModularGodot.Core"
         };
 
-        var missingAssemblies = new System.Collections.Generic.List<string>();
+        var missingAssemblies = new List<string>();
 
         foreach (var assemblyName in requiredAssemblies)
         {

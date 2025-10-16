@@ -10,7 +10,7 @@ namespace ModularGodot.Core.XUnitTests
         public void Runtime_IsNet9()
         {
             // Arrange & Act
-            var framework = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription;
+            var framework = RuntimeInformation.FrameworkDescription;
 
             // Assert
             Assert.Contains(".NET 9", framework);
@@ -20,7 +20,7 @@ namespace ModularGodot.Core.XUnitTests
         public void OperatingSystem_IsSupported()
         {
             // Arrange & Act
-            var os = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
+            var os = RuntimeInformation.OSDescription;
 
             // Assert
             // This test will pass on supported platforms

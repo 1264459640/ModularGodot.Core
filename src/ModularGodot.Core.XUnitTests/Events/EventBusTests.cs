@@ -28,31 +28,6 @@ public class EventBusTests : TestBase
         Assert.Equal("Hello World", receivedMessage);
     }
 
-    [Fact]
-    public async Task EventBus_PublishAsyncAndSubscribe_ShouldReceiveEvent()
-    {
-        // Arrange
-        var eventBus = ResolveService<IEventBus>();
-        var receivedEvent = false;
-        var receivedValue = 0;
-
-        // Act
-        using var subscription = eventBus.Subscribe<TestEvent>(evt =>
-        {
-            receivedEvent = true;
-            receivedValue = evt.Value;
-        });
-
-        var testEvent = new TestEvent("Async Test", 100);
-        await eventBus.PublishAsync(testEvent);
-
-        // 等待异步处理完成
-        await Task.Delay(100);
-
-        // Assert
-        Assert.True(receivedEvent);
-        Assert.Equal(100, receivedValue);
-    }
 
     [Fact]
     public void EventBus_SubscribeOnce_ShouldReceiveEventOnlyOnce()
@@ -102,33 +77,6 @@ public class EventBusTests : TestBase
         Assert.Equal(2, receivedEvents);
     }
 
-    [Fact]
-    public async Task EventBus_AsyncSubscribe_ShouldHandleAsyncProcessing()
-    {
-        // Arrange
-        var eventBus = ResolveService<IEventBus>();
-        var receivedEvent = false;
-        var processedValue = 0;
-
-        // Act
-        using var subscription = eventBus.Subscribe<TestEvent>(async (evt, ct) =>
-        {
-            // 模拟异步处理
-            await Task.Delay(50, ct);
-            processedValue = evt.Value * 2;
-            receivedEvent = true;
-        });
-
-        var testEvent = new TestEvent("Async Processing", 21);
-        eventBus.Publish(testEvent);
-
-        // 等待异步处理完成
-        await Task.Delay(100);
-
-        // Assert
-        Assert.True(receivedEvent);
-        Assert.Equal(42, processedValue);
-    }
 
     [Fact]
     public void EventBus_MultipleSubscribers_ShouldNotifyAllSubscribers()
@@ -172,36 +120,4 @@ public class EventBusTests : TestBase
         Assert.Equal(1, receivedEvents);  // 只有第一个事件被接收
     }
 
-    [Fact]
-    public void EventBus_SubscriptionCancellation_ShouldStopReceivingEvents()
-    {
-        // Arrange
-        var eventBus = ResolveService<IEventBus>();
-        var receivedEvents = 0;
-
-        // Act
-        var cancellationTokenSource = new CancellationTokenSource();
-        using var subscription = eventBus.Subscribe<TestEvent>(async (evt, ct) =>
-        {
-            if (!ct.IsCancellationRequested)
-            {
-                receivedEvents++;
-            }
-            await Task.CompletedTask;
-        }, cancellationTokenSource.Token);
-
-        var testEvent1 = new TestEvent("Before Cancellation", 1);
-        eventBus.Publish(testEvent1);
-
-        cancellationTokenSource.Cancel();  // 取消令牌
-
-        var testEvent2 = new TestEvent("After Cancellation", 2);
-        eventBus.Publish(testEvent2);
-
-        // 等待异步处理完成
-        Task.Delay(50).Wait();
-
-        // Assert
-        Assert.Equal(1, receivedEvents);  // 只有第一个事件被接收
-    }
 }

@@ -9,39 +9,33 @@ namespace ModularGodot.Core.Contracts.Abstractions.ResourceManagement;
 public interface IResourceMonitorService
 {
     /// <summary>
-    /// 异步获取缓存统计信息
+    /// 获取缓存统计信息
     /// </summary>
-    /// <param name="cancellationToken">取消令牌</param>
     /// <returns>缓存统计</returns>
-    Task<CacheStatistics> GetCacheStatisticsAsync(CancellationToken cancellationToken = default);
-    
+    CacheStatistics GetCacheStatistics();
+
     /// <summary>
-    /// 异步获取内存使用情况
+    /// 获取内存使用情况
     /// </summary>
-    /// <param name="cancellationToken">取消令牌</param>
     /// <returns>内存使用情况</returns>
-    Task<MemoryUsage> GetMemoryUsageAsync(CancellationToken cancellationToken = default);
-    
+    MemoryUsage GetMemoryUsage();
+
     /// <summary>
-    /// 异步获取性能报告
+    /// 获取性能报告
     /// </summary>
     /// <param name="period">统计周期</param>
-    /// <param name="cancellationToken">取消令牌</param>
     /// <returns>性能报告</returns>
-    Task<PerformanceReport> GetPerformanceReportAsync(TimeSpan period, CancellationToken cancellationToken = default);
-    
+    PerformanceReport GetPerformanceReport(TimeSpan period);
+
     /// <summary>
-    /// 异步获取系统配置
+    /// 获取系统配置
     /// </summary>
-    /// <param name="cancellationToken">取消令牌</param>
     /// <returns>系统配置</returns>
-    Task<ResourceSystemConfig> GetConfigurationAsync(CancellationToken cancellationToken = default);
-    
+    ResourceSystemConfig GetConfiguration();
+
     /// <summary>
-    /// 异步更新系统配置
+    /// 更新系统配置
     /// </summary>
     /// <param name="config">新配置</param>
-    /// <param name="cancellationToken">取消令牌</param>
-    /// <returns>更新任务</returns>
-    Task UpdateConfigurationAsync(ResourceSystemConfig config, CancellationToken cancellationToken = default);
+    void UpdateConfiguration(ResourceSystemConfig config);
 }

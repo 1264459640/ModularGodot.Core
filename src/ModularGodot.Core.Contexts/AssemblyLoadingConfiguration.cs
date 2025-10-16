@@ -11,7 +11,7 @@ namespace ModularGodot.Core.Contexts
         /// <returns>程序集路径列表</returns>
         public static IEnumerable<string> GetDefaultAssemblyPaths()
         {
-            var basePath = System.AppDomain.CurrentDomain.BaseDirectory;
+            var basePath = AppDomain.CurrentDomain.BaseDirectory;
 
             // 默认程序集路径
             var defaultPaths = new List<string>
