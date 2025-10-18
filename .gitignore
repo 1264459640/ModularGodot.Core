@@ -15,7 +15,9 @@ bld/
 [Ll]ogs/
 .vscode/
 .spec-workflow/
+.specify/
 .claude/
+specs/
 
 AGENTS.md
 CLAUDE.md
