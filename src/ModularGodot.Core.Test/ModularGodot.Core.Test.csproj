@@ -20,7 +20,7 @@
 
     <!-- 本地包源配置 -->
     <PropertyGroup>
-        <RestoreSources>$(RestoreSources);../../packages </RestoreSources>
+        <RestoreSources>$(RestoreSources);../../packages;https://api.nuget.org/v3/index.json</RestoreSources>
     </PropertyGroup>
 
     <ItemGroup>
