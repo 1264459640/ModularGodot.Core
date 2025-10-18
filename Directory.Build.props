@@ -11,6 +11,11 @@
     <PackageProjectUrl>https://github.com/ModularGodot/Core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ModularGodot/Core</RepositoryUrl>
     <PackageOutputPath>D:/GodotProjects/ModularGodot.Core/packages</PackageOutputPath>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)LICENSE" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
 </Project>

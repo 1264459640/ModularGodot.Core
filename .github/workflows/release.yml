@@ -47,3 +47,6 @@ jobs:
           asset_path: ./packages/ModularGodot.Core.${VERSION#v}.nupkg
           asset_name: ModularGodot.Core.${VERSION#v}.nupkg
           asset_content_type: application/zip
+
+      - name: Push to NuGet
+        run: dotnet nuget push "packages/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
