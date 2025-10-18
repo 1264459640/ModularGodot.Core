@@ -11,7 +11,7 @@ public partial class MiddlewareProvider : Node
 {
     private static MiddlewareProvider _instance;
     private Contexts.Contexts _contexts;
-    private bool _initialized = false;
+    private bool _initialized;
 
     /// <summary>
     /// 获取全局服务实例
@@ -23,20 +23,20 @@ public partial class MiddlewareProvider : Node
     /// </summary>
     public override void _Ready()
     {
+        // Immediately initialize the DI container upon readiness.
+        // This triggers the potentially blocking assembly loading at a safe time.
+        GD.Print("[MiddlewareProvider] Ready");
+        Initialize();
+
         if (_instance == null)
         {
             _instance = this;
-            // 不要释放这个节点，让它在整个应用程序生命周期中存在
-            ProcessMode = ProcessModeEnum.Always;
         }
         else if (_instance != this)
         {
             // 如果已经有实例，移除这个重复的节点
             QueueFree();
-            return;
         }
-
-        Initialize();
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ public partial class MiddlewareProvider : Node
     private void Initialize()
     {
         if (_initialized) return;
-
+        GD.Print("[MiddlewareProvider] Initializing...");
         try
         {
             // 初始化应用程序上下文

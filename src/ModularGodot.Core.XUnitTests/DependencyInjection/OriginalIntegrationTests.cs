@@ -7,13 +7,13 @@ namespace ModularGodot.Core.XUnitTests.DependencyInjection
     /// These tests replicate the original integration tests from the ModularGodot.Core.Test project
     /// but using the xUnit testing framework for better reporting and automation.
     /// </summary>
-    public class OriginalIntegrationTests
+    public class OriginalIntegrationTests : TestBase
     {
         [Fact]
         public void OriginalTestServiceTest_ShouldResolveAndPrintMessage()
         {
             // Arrange
-            var service1 = Contexts.Contexts.Instance.ResolveService<ITestService>();
+            var service1 = TestContext.ResolveService<ITestService>();
 
             // Act
             var result = service1.PrintMessage("Hello World!");
@@ -27,7 +27,7 @@ namespace ModularGodot.Core.XUnitTests.DependencyInjection
         public void OriginalDITest_ShouldResolveAndRun()
         {
             // Arrange
-            var service = Contexts.Contexts.Instance.ResolveService<IDITest>();
+            var service = TestContext.ResolveService<IDITest>();
 
             // Act & Assert
             Assert.NotNull(service);

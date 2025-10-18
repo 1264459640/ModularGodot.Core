@@ -1,11 +1,18 @@
 using Autofac;
+using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using ModularGodot.Core.Contracts;
 using ModularGodot.Core.Contracts.Abstractions.Logging;
 using ModularGodot.Core.Contracts.Abstractions.Messaging;
-using System.Reflection;
+using ModularGodot.Core.Contracts.Abstractions.Services;
+using ModularGodot.Core.Infrastructure.Messaging;
+using ModularGodot.Core.Infrastructure.Services;
+using ModularGodot.Core.XUnitTests.DependencyInjection;
 using ModularGodot.Core.XUnitTests.Mocks;
+using System.Reflection;
+using MediatR.Extensions.Autofac.DependencyInjection;
+using MediatR.Extensions.Autofac.DependencyInjection.Builder;
 
 namespace ModularGodot.Core.XUnitTests.TestInfrastructure
 {
@@ -21,12 +28,46 @@ namespace ModularGodot.Core.XUnitTests.TestInfrastructure
         {
             var builder = new ContainerBuilder();
 
-            // Register test-specific implementations
+            // --- Manual registration replacing SingleModule ---
 
-            // Register production modules
-            builder.RegisterModule<ModularGodot.Core.Contexts.SingleModule>();
-            builder.RegisterModule<ModularGodot.Core.Contexts.MediatorModule>();
+            // MemoryCache and related
+            builder.RegisterInstance(Options.Create(new MemoryCacheOptions())).As<IOptions<MemoryCacheOptions>>().SingleInstance();
+            builder.RegisterType<MemoryCache>().As<IMemoryCache>().SingleInstance();
+
+            // Mock Logger for tests
             builder.RegisterType<MockGameLogger>().As<IGameLogger>().SingleInstance();
+            
+            // EventBus
+            builder.RegisterType<R3EventBus>().As<IEventBus>().SingleInstance();
+
+            // --- Manual registration replacing MediatorModule ---
+
+            // Register our custom wrappers first
+            builder.RegisterGeneric(typeof(CommandHandlerWrapper<,>)).As(typeof(IRequestHandler<,>)).InstancePerLifetimeScope();
+            builder.RegisterGeneric(typeof(QueryHandlerWrapper<,>)).As(typeof(IRequestHandler<,>)).InstancePerLifetimeScope();
+
+            // Register MediatR and its handlers from the current test assembly ONLY
+            var testAssembly = Assembly.GetExecutingAssembly();
+            
+            builder.RegisterAssemblyTypes(testAssembly)
+                .Where(t => t.IsClosedTypeOf(typeof(ICommandHandler<,>)) ||
+                            t.IsClosedTypeOf(typeof(IQueryHandler<,>)))
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+            var mediatrConfig = MediatRConfigurationBuilder
+                .Create("",testAssembly)
+                .WithAllOpenGenericHandlerTypesRegistered()
+                .Build();
+            builder.RegisterMediatR(mediatrConfig);
+
+            // The IDispatcher is our own abstraction, implemented by MediatRAdapter
+            builder.RegisterType<MediatRAdapter>().As<IDispatcher>().InstancePerLifetimeScope();
+
+            // Manually register TestService for dependency injection tests
+            builder.RegisterType<TestService>().As<ITestService>().InstancePerDependency();
+
+            // Manually register DITest for dependency injection tests
+            builder.RegisterType<DITest>().As<IDITest>().SingleInstance();
 
             _container = builder.Build();
         }

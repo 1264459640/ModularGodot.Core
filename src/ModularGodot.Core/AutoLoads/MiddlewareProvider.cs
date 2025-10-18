@@ -1,6 +1,7 @@
 using Godot;
 using ModularGodot.Core.Contracts.Abstractions.Messaging;
 
+
 namespace ModularGodot.Core.AutoLoads;
 
 /// <summary>
@@ -22,6 +23,10 @@ public partial class MiddlewareProvider : Node
     /// </summary>
     public override void _Ready()
     {
+        // Immediately initialize the DI container upon readiness.
+        // This triggers the potentially blocking assembly loading at a safe time.
+        Initialize();
+
         if (_instance == null)
         {
             _instance = this;
@@ -34,8 +39,6 @@ public partial class MiddlewareProvider : Node
             QueueFree();
             return;
         }
-
-        Initialize();
     }
 
     /// <summary>

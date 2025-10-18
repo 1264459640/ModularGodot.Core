@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://eventbustestscene001"]
+[gd_scene load_steps=2 format=3 uid="uid://coxec27n5mgno"]
 
-[ext_resource type="Script" path="res://Scenes/EventBusTestScene.cs" id="1"]
+[ext_resource type="Script" uid="uid://2b2apo5e81fa" path="res://Scenes/EventBusTestScene.cs" id="1"]
 
 [node name="EventBusTestScene" type="Node"]
 script = ExtResource("1")

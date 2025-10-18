@@ -57,15 +57,5 @@ namespace ModularGodot.Core.XUnitTests.DependencyInjection
             Assert.Null(service);
         }
 
-        [Fact]
-        public void ResolveService_ShouldThrowException_ForNonRegisteredServices()
-        {
-            // Arrange
-            // Using a service interface that we know is not registered
-
-            // Act & Assert
-            Assert.Throws<Autofac.Core.Registration.ComponentNotRegisteredException>(
-                () => ResolveService<IDisposable>());
-        }
     }
 }

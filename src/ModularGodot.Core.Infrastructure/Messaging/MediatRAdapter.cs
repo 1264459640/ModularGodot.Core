@@ -75,9 +75,15 @@ public class MediatRAdapter : IDispatcher
     /// <returns>如果是处理器未找到异常则返回true，否则返回false</returns>
     private static bool IsHandlerNotFoundException(Exception ex)
     {
-        // Check if this is a dependency resolution exception indicating handler not found
-        // We check for common patterns in Autofac exception messages without directly referencing Autofac
-        var exceptionMessage = ex.ToString(); // Use ToString() to get full exception info including inner exceptions
+        // 检查 MediatR 自己的 handler not found 异常
+        if (ex is InvalidOperationException && ex.Message.Contains("Handler was not found for request of type"))
+        {
+            return true;
+        }
+
+        // 检查这是否是表示未找到处理程序的依赖项解析异常
+        // 我们在不直接引用 Autofac 的情况下检查 Autofac 异常消息中的常见模式
+        var exceptionMessage = ex.ToString(); // 使用 ToString() 获取包括内部异常在内的完整异常信息
         return exceptionMessage.Contains("None of the constructors found") ||
                exceptionMessage.Contains("Cannot resolve parameter") ||
                exceptionMessage.Contains("DependencyResolutionException") ||

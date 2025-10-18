@@ -9,28 +9,12 @@ namespace ModularGodot.Core.XUnitTests.DependencyInjection
 {
     public class DependencyInjectionTests : TestBase
     {
-        [Fact]
-        public void DITest_ShouldHaveDependencyInjectedCorrectly()
-        {
-            // Arrange
-            var diTest = Contexts.Contexts.Instance.ResolveService<IDITest>();
-
-            // Act
-            // The DITest class has a constructor dependency on ITestService
-            // If the container resolves it successfully, it means DI is working
-
-            // Assert
-            Assert.NotNull(diTest);
-            // We can't directly access the private field, but we can verify
-            // that the Run method works, which indicates the dependency was injected
-            diTest.Run(); // Should not throw
-        }
 
         [Fact]
         public void TestService_ShouldBeResolvedThroughContainer()
         {
             // Arrange & Act
-            var testService = Contexts.Contexts.Instance.ResolveService<ITestService>();
+            var testService = TestContext.ResolveService<ITestService>();
 
             // Assert
             Assert.NotNull(testService);
@@ -40,18 +24,11 @@ namespace ModularGodot.Core.XUnitTests.DependencyInjection
         [Fact]
         public void R3EventBus_ShouldBeResolvedThroughContainer()
         {
-            var testService = Contexts.Contexts.Instance.ResolveService<IEventBus>();
+            var testService = TestContext.ResolveService<IEventBus>();
             
             Assert.NotNull(testService);
             Assert.IsType<R3EventBus>(testService);
         }
 
-        [Fact]
-        public void R3EventBus_ShouldBeResolvedThroughTextContainer()
-        {
-            var testService = TestContext.ResolveService<IEventBus>();
-            Assert.NotNull(testService);
-            Assert.IsType<R3EventBus>(testService);
-        }
     }
 }

@@ -1,6 +1,8 @@
 using System.Collections.Concurrent;
+using Microsoft.Extensions.DependencyInjection;
 using ModularGodot.Core.Contracts.Abstractions.Logging;
 using ModularGodot.Core.Contracts.Abstractions.Messaging;
+using ModularGodot.Core.Contracts.Attributes;
 using R3;
 
 namespace ModularGodot.Core.Infrastructure.Messaging;
@@ -8,6 +10,7 @@ namespace ModularGodot.Core.Infrastructure.Messaging;
 /// <summary>
 /// 基于R3的事件总线实现
 /// </summary>
+[Injectable]
 public class R3EventBus : IEventBus, IDisposable
 {
     private readonly ConcurrentDictionary<Type, Subject<object>> _subjects = new();
