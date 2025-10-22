@@ -1,8 +1,5 @@
 name: Release
 
-permissions:
-  contents: write
-
 on:
   push:
     tags:
@@ -13,9 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      packages: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -26,34 +26,24 @@ jobs:
         run: dotnet restore src/ModularGodot.Core.sln
 
       - name: Get version from tag
-        run: echo "VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
+        run: |
+          # Extract just the tag name without refs/tags/ prefix
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Tag version: $VERSION"
 
       - name: Build and pack
         run: dotnet pack src/ModularGodot.Core.sln -c Release -o packages /p:Version=${VERSION#v}
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        permissions:
-          contents: write
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release and Upload Asset
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
+          files: ./packages/*.nupkg
+          name: Release ${{ env.VERSION }}
           draft: false
           prerelease: false
-
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./packages/ModularGodot.Core.${VERSION#v}.nupkg
-          asset_name: ModularGodot.Core.${VERSION#v}.nupkg
-          asset_content_type: application/zip
 
       - name: Push to NuGet
         run: dotnet nuget push "packages/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
