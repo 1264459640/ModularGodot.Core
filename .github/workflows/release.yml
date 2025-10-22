@@ -43,7 +43,16 @@ jobs:
         run: rm -rf packages/*
 
       - name: Build and pack
-        run: dotnet pack src/ModularGodot.Core.sln -c Release -o packages /p:Version=${{ env.DOTNET_VERSION }} /p:PackageVersion=${{ env.DOTNET_VERSION }}
+        run: |
+          # Build the entire solution first
+          dotnet build src/ModularGodot.Core.sln -c Release /p:Version=${{ env.DOTNET_VERSION }} /p:PackageVersion=${{ env.DOTNET_VERSION }}
+          
+          # Pack only the projects that should be published
+          dotnet pack src/ModularGodot.Core/ModularGodot.Core.csproj -c Release -o packages /p:Version=${{ env.DOTNET_VERSION }} /p:PackageVersion=${{ env.DOTNET_VERSION }}
+          dotnet pack src/ModularGodot.Core.Contracts/ModularGodot.Core.Contracts.csproj -c Release -o packages /p:Version=${{ env.DOTNET_VERSION }} /p:PackageVersion=${{ env.DOTNET_VERSION }}
+          dotnet pack src/ModularGodot.Core.Contexts/ModularGodot.Core.Contexts.csproj -c Release -o packages /p:Version=${{ env.DOTNET_VERSION }} /p:PackageVersion=${{ env.DOTNET_VERSION }}
+          dotnet pack src/ModularGodot.Core.Infrastructure/ModularGodot.Core.Infrastructure.csproj -c Release -o packages /p:Version=${{ env.DOTNET_VERSION }} /p:PackageVersion=${{ env.DOTNET_VERSION }}
+          dotnet pack src/ModularGodot.Core.Repositories/ModularGodot.Core.Repositories.csproj -c Release -o packages /p:Version=${{ env.DOTNET_VERSION }} /p:PackageVersion=${{ env.DOTNET_VERSION }}
 
       - name: Create Release and Upload Asset
         uses: softprops/action-gh-release@v1
