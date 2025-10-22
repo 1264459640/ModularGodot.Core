@@ -3,8 +3,9 @@
   <PropertyGroup>
     <Platform>AnyCPU</Platform>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <Version>0.1.0</Version>
-    <PackageVersion>0.1.0</PackageVersion>
+    <!-- Default version for local development, can be overridden via command line -->
+    <Version Condition="'$(Version)' == ''">0.1.0</Version>
+    <PackageVersion Condition="'$(PackageVersion)' == ''">0.1.0</PackageVersion>
     <Authors>BananaPeel</Authors>
     <Company>ModularGodot</Company>
     <Copyright>Copyright © ModularGodot 2025</Copyright>
