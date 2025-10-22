@@ -37,7 +37,7 @@ jobs:
           echo "DotNet version: $DOTNET_VERSION"
 
       - name: Build and pack
-        run: dotnet pack src/ModularGodot.Core.sln -c Release -o packages /p:Version=${{ env.DOTNET_VERSION }}
+        run: dotnet pack src/ModularGodot.Core.sln -c Release -o packages /p:Version=${{ env.DOTNET_VERSION }} /p:PackageVersion=${{ env.DOTNET_VERSION }}
 
       - name: Create Release and Upload Asset
         uses: softprops/action-gh-release@v1
