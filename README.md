@@ -55,13 +55,13 @@ dotnet add package ModularGodot.Core
 
 ```csharp
 // 获取全局服务实例
-var globalService = GodotGlobalService.Instance;
+var middlewareProvider = MiddlewareProvider.Instance;
 
 // 解析调度器接口
-var dispatcher = globalService.ResolveDispatcher();
+var dispatcher = middlewareProvider.ResolveDispatcher();
 
 // 解析事件总线接口
-var eventBus = globalService.ResolveEventBus();
+var eventBus = middlewareProvider.ResolveEventBus();
 ```
 
 ## 5. 许可证
