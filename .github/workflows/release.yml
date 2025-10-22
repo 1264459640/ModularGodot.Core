@@ -28,18 +28,22 @@ jobs:
       - name: Get version from tag
         run: |
           # Extract just the tag name without refs/tags/ prefix
-          VERSION=${GITHUB_REF#refs/tags/}
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Tag version: $VERSION"
+          TAG_VERSION=${GITHUB_REF#refs/tags/}
+          echo "TAG_VERSION=$TAG_VERSION" >> $GITHUB_ENV
+          # Extract version without 'v' prefix for dotnet build
+          DOTNET_VERSION=${TAG_VERSION#v}
+          echo "DOTNET_VERSION=$DOTNET_VERSION" >> $GITHUB_ENV
+          echo "Tag version: $TAG_VERSION"
+          echo "DotNet version: $DOTNET_VERSION"
 
       - name: Build and pack
-        run: dotnet pack src/ModularGodot.Core.sln -c Release -o packages /p:Version=${VERSION#v}
+        run: dotnet pack src/ModularGodot.Core.sln -c Release -o packages /p:Version=${{ env.DOTNET_VERSION }}
 
       - name: Create Release and Upload Asset
         uses: softprops/action-gh-release@v1
         with:
           files: ./packages/*.nupkg
-          name: Release ${{ env.VERSION }}
+          name: Release ${{ env.TAG_VERSION }}
           draft: false
           prerelease: false
         env:
