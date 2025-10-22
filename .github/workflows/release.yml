@@ -36,6 +36,12 @@ jobs:
           echo "Tag version: $TAG_VERSION"
           echo "DotNet version: $DOTNET_VERSION"
 
+      - name: Clean previous builds
+        run: dotnet clean src/ModularGodot.Core.sln -c Release
+
+      - name: Clean packages directory
+        run: rm -rf packages/*
+
       - name: Build and pack
         run: dotnet pack src/ModularGodot.Core.sln -c Release -o packages /p:Version=${{ env.DOTNET_VERSION }} /p:PackageVersion=${{ env.DOTNET_VERSION }}
 
