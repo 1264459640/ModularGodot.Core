@@ -33,9 +33,23 @@ public class Contexts : LazySingleton<Contexts>, IDisposable
     public T ResolveService<T>() where T : class
     {
         CheckDisposed();
+        
         return _container.Resolve<T>();
     }
-
+    
+    /// <summary>
+    /// 从容器中解析指定实例类型的服务
+    /// </summary>
+    /// <param name="type">用于获取目标服务类型的实例</param>
+    /// <returns>服务实例</returns>
+    /// <exception cref="ObjectDisposedException">当容器已被释放时抛出</exception>
+    /// <exception cref="Autofac.Core.Registration.ComponentNotRegisteredException">当请求的服务未注册时抛出</exception>
+    public object ResolveService(Type type)
+    {
+        CheckDisposed();
+        
+        return _container.Resolve(type);
+    }
     /// <summary>
     /// 尝试从容器中解析指定类型的服务实例
     /// </summary>
