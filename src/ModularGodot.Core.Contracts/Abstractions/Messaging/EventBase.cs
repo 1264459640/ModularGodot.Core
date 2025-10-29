@@ -3,7 +3,7 @@ namespace ModularGodot.Core.Contracts.Abstractions.Messaging;
 /// <summary>
 /// 事件基类
 /// </summary>
-public abstract class EventBase
+public abstract class EventBase : IEvent
 {
     /// <summary>
     /// 事件ID
