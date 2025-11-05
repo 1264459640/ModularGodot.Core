@@ -1,4 +1,4 @@
-<Project Sdk="Godot.NET.Sdk/4.5.1">
+<Project Sdk="Godot.NET.Sdk/4.5.0">
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
@@ -11,11 +11,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ModularGodot.Core\ModularGodot.Core.csproj" />
-        <ProjectReference Include="..\ModularGodot.Core.Contracts\ModularGodot.Core.Contracts.csproj" />
-        <ProjectReference Include="..\ModularGodot.Core.Contexts\ModularGodot.Core.Contexts.csproj" />
-        <ProjectReference Include="..\ModularGodot.Core.Infrastructure\ModularGodot.Core.Infrastructure.csproj" />
-        <ProjectReference Include="..\ModularGodot.Core.Repositories\ModularGodot.Core.Repositories.csproj" />
+        <PackageReference Include="ModularGodot.Core" Version="0.1.0" ExcludeAssets="ContentFiles" />
+        <PackageReference Include="ModularGodot.Core.Contracts" Version="0.1.0" />
+        <PackageReference Include="ModularGodot.Core.Contexts" Version="0.1.0" />
+        <PackageReference Include="ModularGodot.Core.Infrastructure" Version="0.1.0" />
+        <PackageReference Include="ModularGodot.Core.Repositories" Version="0.1.0" />
     </ItemGroup>
 
     <!-- 本地包源配置 -->

@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System.Reflection;
+using Autofac;
+using Microsoft.Extensions.Logging;
 using ModularGodot.Core.Contracts;
 using IContainer = Autofac.IContainer;
 
@@ -18,9 +20,54 @@ public class Contexts : LazySingleton<Contexts>, IDisposable
     public Contexts()
     {
         var builder = new ContainerBuilder();
+        LoadAllReferencedAssemblies();
         builder.RegisterModule<SingleModule>();
         builder.RegisterModule<MediatorModule>();
         _container = builder.Build();
+    }
+
+    private void LoadAllReferencedAssemblies()
+    {
+        var loadedAssemblies = new HashSet<string>(AppDomain.CurrentDomain.GetAssemblies()
+            .Select(a => a.FullName));
+
+        // 使用递归加载所有依赖
+        LoadAssemblyWithDependencies(loadedAssemblies);
+    }
+
+    private void LoadAssemblyWithDependencies(HashSet<string> loadedAssemblies)
+    {
+        var currentCount = loadedAssemblies.Count;
+
+        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies().ToList())
+        {
+            foreach (var refName in assembly.GetReferencedAssemblies())
+            {
+                if (!loadedAssemblies.Contains(refName.FullName))
+                {
+                    try
+                    {
+                        var refAssembly = Assembly.Load(refName);
+                        loadedAssemblies.Add(refName.FullName);
+                    }
+                    catch (FileNotFoundException ex)
+                    {
+                        // 记录缺失的依赖
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+            }
+        }
+
+        // 如果有新程序集加载，继续递归
+        if (loadedAssemblies.Count > currentCount)
+        {
+            LoadAssemblyWithDependencies(loadedAssemblies);
+        }
     }
 
     /// <summary>
@@ -77,10 +124,11 @@ public class Contexts : LazySingleton<Contexts>, IDisposable
     protected override void Dispose(bool disposing)
     {
         if (_disposed) return;
-        if (disposing) {
+        if (disposing)
+        {
             _container?.Dispose();
         }
-            
+
         _disposed = true;
     }
 }
