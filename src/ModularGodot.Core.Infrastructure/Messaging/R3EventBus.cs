@@ -31,7 +31,7 @@ public class R3EventBus : IEventBus, IDisposable
         _logger.LogInformation("R3EventBus initialized");
     }
     
-    public void Publish<TEvent>(TEvent @event) where TEvent : EventBase
+    public void Publish<TEvent>(TEvent @event) where TEvent : IEvent
     {
         if (_disposed)
         {
@@ -48,12 +48,12 @@ public class R3EventBus : IEventBus, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to publish event: {EventType}, EventId: {EventId}", typeof(TEvent).Name, @event.EventId);
+            _logger.LogError(ex, "Failed to publish event: {EventType}, EventId: {EventId}", typeof(TEvent).Name);
             throw;
         }
     }
     
-    public IDisposable Subscribe<TEvent>(Action<TEvent> handler) where TEvent : EventBase
+    public IDisposable Subscribe<TEvent>(Action<TEvent> handler) where TEvent : IEvent
     {
         if (_disposed)
         {
@@ -90,7 +90,7 @@ public class R3EventBus : IEventBus, IDisposable
     }
     
     
-    public IDisposable Subscribe<TEvent>(Func<TEvent, bool> filter, Action<TEvent> handler) where TEvent : EventBase
+    public IDisposable Subscribe<TEvent>(Func<TEvent, bool> filter, Action<TEvent> handler) where TEvent : IEvent
     {
         return Subscribe<TEvent>(evt =>
         {
@@ -101,7 +101,7 @@ public class R3EventBus : IEventBus, IDisposable
         });
     }
     
-    public IDisposable SubscribeOnce<TEvent>(Action<TEvent> handler) where TEvent : EventBase
+    public IDisposable SubscribeOnce<TEvent>(Action<TEvent> handler) where TEvent : IEvent
     {
         IDisposable? subscription = null;
         subscription = Subscribe<TEvent>(evt =>
@@ -120,7 +120,7 @@ public class R3EventBus : IEventBus, IDisposable
     
 
     
-    private Subject<object> GetOrCreateSubject<TEvent>() where TEvent : EventBase
+    private Subject<object> GetOrCreateSubject<TEvent>() where TEvent : IEvent
     {
         var eventType = typeof(TEvent);
         return _subjects.GetOrAdd(eventType, _ =>
