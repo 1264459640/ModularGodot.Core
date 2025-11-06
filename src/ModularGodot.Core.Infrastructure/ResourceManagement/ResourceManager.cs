@@ -23,9 +23,9 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
     private readonly IMemoryMonitor _memoryMonitor;
     private readonly IPerformanceMonitor _performanceMonitor;
     private readonly IEventBus _eventBus;
-    private readonly ResourceSystemConfig _config;
+    private ResourceSystemConfig _config;
     
-    private readonly Timer? _cleanupTimer;
+    private Timer? _cleanupTimer;
     private readonly object _lockObject = new();
     
     // 统计数据
@@ -40,23 +40,16 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
         ICacheService cacheService,
         IMemoryMonitor memoryMonitor,
         IPerformanceMonitor performanceMonitor,
-        IEventBus eventBus,
-        ResourceSystemConfig config)
+        IEventBus eventBus)
     {
         _cacheService = cacheService;
         _memoryMonitor = memoryMonitor;
         _performanceMonitor = performanceMonitor;
         _eventBus = eventBus;
-        _config = config;
+        _config = new ResourceSystemConfig();
         
         // 订阅内存监控事件
         _memoryMonitor.MemoryPressureDetected += OnMemoryPressureDetected;
-        
-        // 启动定时清理
-        if (_config.EnableAutoCleanup)
-        {
-            _cleanupTimer = new Timer(OnCleanupTimer, null, _config.CleanupInterval, _config.CleanupInterval);
-        }
         
         // 启动内存监控
         _memoryMonitor.StartMonitoring();
@@ -274,6 +267,24 @@ public class ResourceManager : BaseInfrastructure, IResourceCacheService, IResou
 
         // 更新内存监控器配置
         _memoryMonitor.MemoryPressureThreshold = config.MemoryPressureThreshold;
+        
+        // 更新定时清理
+        if (_config.EnableAutoCleanup)
+        {
+            if (_cleanupTimer == null)
+            {
+                _cleanupTimer = new Timer(OnCleanupTimer, null, _config.CleanupInterval, _config.CleanupInterval);
+            }
+            else
+            {
+                _cleanupTimer.Change(_config.CleanupInterval, _config.CleanupInterval);
+            }
+        }
+        else if (_cleanupTimer != null)
+        {
+            _cleanupTimer.Dispose();
+            _cleanupTimer = null;
+        }
     }
 
     #endregion

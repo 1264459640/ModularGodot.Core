@@ -2,6 +2,7 @@
 using Autofac;
 using Microsoft.Extensions.Logging;
 using ModularGodot.Core.Contracts;
+using ModularGodot.Core.Infrastructure.ResourceManagement;
 using IContainer = Autofac.IContainer;
 
 namespace ModularGodot.Core.Contexts;
@@ -20,10 +21,11 @@ public class Contexts : LazySingleton<Contexts>, IDisposable
     public Contexts()
     {
         var builder = new ContainerBuilder();
-        LoadAllReferencedAssemblies();
+        // LoadAllReferencedAssemblies();
         builder.RegisterModule<SingleModule>();
         builder.RegisterModule<MediatorModule>();
         _container = builder.Build();
+        _container.Resolve<ResourceManager>();
     }
 
     private void LoadAllReferencedAssemblies()

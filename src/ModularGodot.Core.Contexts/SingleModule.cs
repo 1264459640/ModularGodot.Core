@@ -26,13 +26,19 @@ public class SingleModule : Autofac.Module
         var assembliesToScan = AppDomain.CurrentDomain.GetAssemblies().ToList();
 
         // 根据 InjectableAttribute 特性注册类型，并根据 Lifetime 设置生命周期
-        foreach (var assembly in assembliesToScan.Distinct())
+        foreach (var assembly in assembliesToScan.Distinct().Where(a => !a.FullName.StartsWith("System") && !a.FullName.StartsWith("Microsoft")))
         {
+            var logger = new GodotGameLogger();
+            // logger.LogDebug($"Scanning assembly {assembly.FullName} for injectable types.");
+
             foreach (var type in assembly.GetTypes())
             {
                 var injectableAttribute = type.GetCustomAttribute<InjectableAttribute>();
                 if (injectableAttribute != null)
                 {
+                    
+                    logger.LogDebug($"Registering type {type.Name} with lifetime {injectableAttribute.Lifetime}");
+
                     var registration = builder.RegisterType(type)
                         .AsSelf()
                         .AsImplementedInterfaces();
