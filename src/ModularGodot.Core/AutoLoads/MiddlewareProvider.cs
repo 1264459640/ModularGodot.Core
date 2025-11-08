@@ -1,3 +1,4 @@
+using System.Reflection;
 using Godot;
 using ModularGodot.Core.Contracts.Abstractions.Messaging;
 
@@ -50,7 +51,9 @@ public partial class MiddlewareProvider : Node
 
         try
         {
+
             // 初始化应用程序上下文
+            LoadAllReferencedAssemblies();
             _contexts = Contexts.Contexts.Instance;
             _initialized = true;
             GD.Print("MiddlewareProvider initialized successfully");
@@ -58,6 +61,68 @@ public partial class MiddlewareProvider : Node
         catch (Exception ex)
         {
             GD.PrintErr($"Failed to initialize MiddlewareProvider: {ex.Message}");
+        }
+    }
+
+    private void LoadAllReferencedAssemblies()
+    {
+        var loadedAssemblyNames = new HashSet<string>(AppDomain.CurrentDomain.GetAssemblies().Select(a => a.FullName));
+        var entryAssembly = Assembly.GetExecutingAssembly(); // 从当前测试项目开始
+        
+        LoadAssemblyWithDependencies(entryAssembly, loadedAssemblyNames);
+        
+        foreach (var assemblyName in loadedAssemblyNames.Where(a => !a.StartsWith("System") && !a.StartsWith("Microsoft")))
+        {
+            GD.Print($"Loaded assembly: {assemblyName}");
+        }
+    }
+
+    private void LoadAssemblyWithDependencies(Assembly entryAssembly, HashSet<string> loadedAssemblyNames)
+    {
+        var assembliesToScan = new Queue<Assembly>();
+        assembliesToScan.Enqueue(entryAssembly);
+
+        while (assembliesToScan.Count > 0)
+        {
+            var currentAssembly = assembliesToScan.Dequeue();
+
+            foreach (var referencedAssemblyName in currentAssembly.GetReferencedAssemblies())
+            {
+                if (!loadedAssemblyNames.Contains(referencedAssemblyName.FullName))
+                {
+                    try
+                    {
+                        var loadedAssembly = Assembly.Load(referencedAssemblyName);
+                        loadedAssemblyNames.Add(referencedAssemblyName.FullName);
+                        assembliesToScan.Enqueue(loadedAssembly);
+                    }
+                    catch (FileNotFoundException ex)
+                    {
+                        GD.PrintErr($"Could not load assembly dependency: {ex.FileName}");
+                    }
+                    catch (Exception ex)
+                    {
+                        GD.PrintErr($"An error occurred while loading assembly {referencedAssemblyName.FullName}: {ex.Message}");
+                    }
+                }
+            }
+        }
+    }
+    public T ResolveService<T>() where T : class
+    {
+        if (!_initialized)
+        {
+            GD.PrintErr("MiddlewareProvider not initialized. Call Initialize() first.");
+            return default;
+        }
+        try
+        {
+            return _contexts.ResolveService<T>();
+        }
+        catch (Exception ex)
+        {
+            GD.PrintErr($"Failed to resolve {typeof(T).Name}: {ex.Message}");
+            return default;
         }
     }
 
@@ -70,7 +135,7 @@ public partial class MiddlewareProvider : Node
         if (!_initialized)
         {
             GD.PrintErr("MiddlewareProvider not initialized. Call Initialize() first.");
-            return null;
+            return default;
         }
 
         try
@@ -102,7 +167,7 @@ public partial class MiddlewareProvider : Node
         }
         catch (Exception ex)
         {
-            GD.PrintErr($"Failed to resolve IEventBus: {ex.Message}");
+            GD.PrintErr($"Failed to resolve IEventBus: {ex.ToString()}");
             return null;
         }
     }
