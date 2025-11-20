@@ -1,27 +1,21 @@
 <Project>
-  <Target Name="CopyMiddlewareProvider" BeforeTargets="CoreCompile">
+  <Target Name="CopyModularGodot" BeforeTargets="CoreCompile">
     <PropertyGroup>
-      <MiddlewareProviderSource>$(MSBuildThisFileDirectory)..\content\AutoLoads\MiddlewareProvider.cs</MiddlewareProviderSource>
-      <MiddlewareProviderDestDir>$(ProjectDir)AutoLoads</MiddlewareProviderDestDir>
-      <MiddlewareProviderDest>$(MiddlewareProviderDestDir)\MiddlewareProvider.cs</MiddlewareProviderDest>
+      <ModularGodotSource>$(MSBuildThisFileDirectory)..\content</ModularGodotSource>
+      <ProjectRootDir>$(ProjectDir)ModularGodot</ProjectRootDir>
     </PropertyGroup>
 
-    <!-- Ensure the destination directory exists -->
-    <MakeDir Directories="$(MiddlewareProviderDestDir)" Condition="!Exists('$(MiddlewareProviderDestDir)')" />
-
+    <!-- Get all files from the source addons directory -->
     <ItemGroup>
-      <MiddlewareProviderDestFile Include="$(MiddlewareProviderDest)" />
+      <ModularGodotSourceFiles Include="$(ModularGodotSource)\**\*" />
     </ItemGroup>
 
+    <!-- Copy files preserving directory structure -->
     <Copy
-      SourceFiles="$(MiddlewareProviderSource)"
-      DestinationFiles="@(MiddlewareProviderDestFile)"
+      SourceFiles="@(ModularGodotSourceFiles)"
+      DestinationFiles="@(ModularGodotSourceFiles->'$(ProjectRootDir)\%(RecursiveDir)%(Filename)%(Extension)')"
       SkipUnchangedFiles="true"
-      Condition="Exists('$(MiddlewareProviderSource)') AND !Exists('$(MiddlewareProviderDest)')"
+      Condition="Exists('$(ModularGodotSource)')"
     />
-
-    <!-- <ItemGroup>
-      <Compile Include="$(MiddlewareProviderDest)" Condition="Exists('$(MiddlewareProviderDest)') AND '$(EnableDefaultCompileItems)' == 'true'" />
-    </ItemGroup> -->
   </Target>
 </Project>

@@ -29,15 +29,15 @@
 
   <!-- Exclude AutoLoads from local compilation -->
   <ItemGroup>
-    <Compile Remove="AutoLoads\**\*.cs" />
+    <Compile Remove="ModularGodot\**\*.cs" />
   </ItemGroup>
 
   <!-- Package MiddlewareProvider and the custom .targets file for consumers -->
   <ItemGroup>
     <!-- 1. The source file to be copied -->
-    <Content Include="AutoLoads\MiddlewareProvider.cs">
+    <Content Include="ModularGodot\**\*">
       <Pack>true</Pack>
-      <PackagePath>content\AutoLoads</PackagePath>
+      <PackagePath>content</PackagePath>
     </Content>
     <!-- 2. The MSBuild targets file that performs the copy -->
     <None Include="ModularGodot.Core.targets">
