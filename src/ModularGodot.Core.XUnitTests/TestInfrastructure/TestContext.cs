@@ -5,10 +5,7 @@ using Microsoft.Extensions.Options;
 using ModularGodot.Core.Contracts;
 using ModularGodot.Core.Contracts.Abstractions.Logging;
 using ModularGodot.Core.Contracts.Abstractions.Messaging;
-using ModularGodot.Core.Contracts.Abstractions.Services;
 using ModularGodot.Core.Infrastructure.Messaging;
-using ModularGodot.Core.Infrastructure.Services;
-using ModularGodot.Core.XUnitTests.DependencyInjection;
 using ModularGodot.Core.XUnitTests.Mocks;
 using System.Reflection;
 using MediatR.Extensions.Autofac.DependencyInjection;
@@ -62,13 +59,6 @@ namespace ModularGodot.Core.XUnitTests.TestInfrastructure
 
             // The IDispatcher is our own abstraction, implemented by MediatRAdapter
             builder.RegisterType<MediatRAdapter>().As<IDispatcher>().InstancePerLifetimeScope();
-
-            // Manually register TestService for dependency injection tests
-            builder.RegisterType<TestService>().As<ITestService>().InstancePerDependency();
-
-            // Manually register DITest for dependency injection tests
-            builder.RegisterType<DITest>().As<IDITest>().SingleInstance();
-
             _container = builder.Build();
         }
 
