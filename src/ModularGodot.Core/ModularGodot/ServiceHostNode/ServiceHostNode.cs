@@ -1,4 +1,5 @@
 using Godot;
+using ModularGodot.Core.AutoLoads;
 using ModularGodot.Core.Contracts.Abstractions;
 
 

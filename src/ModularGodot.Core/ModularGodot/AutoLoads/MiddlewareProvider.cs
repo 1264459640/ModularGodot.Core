@@ -175,7 +175,27 @@ public partial class MiddlewareProvider : Node
             return null;
         }
     }
-
+    
+    /// <summary>
+    /// 尝试从依赖注入容器解析服务接口
+    /// </summary>
+    /// <typeparam name="T">要解析的服务类型</typeparam>
+    /// <param name="service">输出参数，返回解析的服务实例（如果成功）</param>
+    /// <returns>如果成功解析则返回true，否则返回false</returns>
+    public bool TryResolveService<T>(out T service) where T : class
+    {
+        service = null; // Initialize service to default
+        if (!_initialized) return false;
+        
+        try
+        {
+            return _contexts.TryResolveService(out service);
+        }
+        catch
+        {
+            return false;
+        }
+    }
     /// <summary>
     /// 尝试解析中介者接口
     /// </summary>
