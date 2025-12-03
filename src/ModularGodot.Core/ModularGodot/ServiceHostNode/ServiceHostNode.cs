@@ -1,15 +1,17 @@
 using Godot;
-using ModularGodot.Core.AutoLoads;
+using ModularGodot.Core.Contracts.Abstractions;
+
 
 namespace ModularGodot.Core.Abstractions
 {
     /// <summary>
     /// ServiceHostNode: 负责将 Godot 物理层的资源“注入”到纯 C# Service 中
     /// TService: 目标服务的接口
-    /// TConfig: 服务所需的配置数据类型
+    /// TConfig: 服务所需的配置数据类型 
     /// </summary>
-    public abstract partial class ServiceHostNode<T,TService, TConfig> : EagerSingletonNode<T> 
-        where TService : class ,T : ServiceHostNode<T,TService, TConfig>
+    public abstract partial class ServiceHostNode<T, TService, TConfig> : EagerSingletonNode<T>
+        where T : ServiceHostNode<T, TService, TConfig>
+        where TService : class
     {
         protected TService Service { get; private set; }
 

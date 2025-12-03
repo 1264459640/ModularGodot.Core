@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GodotSharp" Version="4.5.0" />
+    <PackageReference Include="GodotSharp" Version="4.5.1" />
   </ItemGroup>
 
   <!-- Exclude AutoLoads from local compilation -->
