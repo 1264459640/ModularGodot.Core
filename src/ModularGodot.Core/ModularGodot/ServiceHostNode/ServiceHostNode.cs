@@ -1,6 +1,7 @@
 using Godot;
 using ModularGodot.Core.AutoLoads;
 using ModularGodot.Core.Contracts.Abstractions;
+using ModularGodot.Core.Contracts.Abstractions.Bases;
 
 
 namespace ModularGodot.Core.Abstractions
@@ -12,7 +13,8 @@ namespace ModularGodot.Core.Abstractions
     /// </summary>
     public abstract partial class ServiceHostNode<T, TService, TConfig> : EagerSingletonNode<T>
         where T : ServiceHostNode<T, TService, TConfig>
-        where TService : class
+        where TConfig : class
+        where TService : class, IService<TConfig>
     {
         protected TService Service { get; private set; }
 
