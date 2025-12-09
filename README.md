@@ -1,4 +1,4 @@
-# 1. 项目名称/标题
+# 1. 项目名称
 
 ModularGodot.Core
 
