@@ -53,7 +53,10 @@ namespace ModularGodot.Core.Abstractions
         /// <summary>
         /// 子类需实现：调用 Service 的具体配置方法
         /// </summary>
-        protected abstract void ConfigureService(TService service, TConfig config);
+        protected virtual void ConfigureService(TService service, TConfig config)
+        {
+            service.Initialize(config);
+        }
 
         /// <summary>
         /// 可选：清理逻辑
